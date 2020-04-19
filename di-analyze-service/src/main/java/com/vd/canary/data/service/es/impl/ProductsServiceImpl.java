@@ -1,6 +1,7 @@
 package com.vd.canary.data.service.es.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.vd.canary.core.bo.ResponseBO;
 import com.vd.canary.core.util.ResponseUtil;
@@ -27,6 +28,7 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 
@@ -117,10 +119,17 @@ public class ProductsServiceImpl implements ProductsService {
                     productsDetailRes.setProSkuTitle(recordMap.containsKey("proSkuTitle") ? recordMap.get("proSkuTitle").toString() : "");
                     productsDetailRes.setProSkuSubTitle(recordMap.containsKey("proSkuSubTitle") ? recordMap.get("proSkuSubTitle").toString() : "");
                     productsDetailRes.setProSkuSkuPicJson(recordMap.containsKey("proSkuSkuPic") ? recordMap.get("proSkuSkuPic").toString() : "");
-                    productsDetailRes.setSkuSellPriceJson(recordMap.containsKey("skuSellPriceJson") ? recordMap.get("skuSellPriceJson").toString() : "");
-                    productsDetailRes.setSkuSellPriceType(recordMap.containsKey("skuSellPriceType") ? Integer.parseInt(recordMap.get("skuSellPriceType").toString()) : 0);
+                    if(recordMap.containsKey("skuSellPriceJson")){
+                        recordMap.get("skuSellPriceJson");
+                        JSONArray array = JSONObject.parseArray(recordMap.get("skuSellPriceJson").toString());
+                        //productsDetailRes.setSkuSellPriceJson(JSONObject.toJSONString(array));
+                        productsDetailRes.setSkuSellPriceJson(recordMap.get("skuSellPriceJson").toString());
+                    }
+                    //productsDetailRes.setSkuSellPriceType(recordMap.containsKey("skuSellPriceType") ?
+                    //                                       Integer.parseInt(recordMap.get("skuSellPriceType").toString()) : 0);
                     if (recordMap.containsKey("skuGmtCreateTime")) {
-                        productsDetailRes.setSkuGmtCreateTime(LocalDateTime.parse(recordMap.get("skuGmtCreateTime").toString()));
+                        LocalDateTime t = LocalDateTime.parse(recordMap.get("skuGmtCreateTime").toString(),DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+                        productsDetailRes.setSkuGmtCreateTime(t);
                     }
                     productsDetailRes.setShopId(recordMap.containsKey("storeId") ? recordMap.get("storeId").toString() : "");
                     productsDetailRes.setStoreInfoName(recordMap.containsKey("storeName") ? recordMap.get("storeName").toString() : "");
@@ -134,7 +143,8 @@ public class ProductsServiceImpl implements ProductsService {
                     productsDetailRes.setStoreInfoStoreQrCode(recordMap.containsKey("storeInfoStoreQrCode") ? recordMap.get("storeInfoStoreQrCode").toString() : "");
 
                     if (recordMap.containsKey("gmtCreateTime")) {
-                        productsDetailRes.setGmtCreateTime(LocalDateTime.parse(recordMap.get("gmtCreateTime").toString()));
+                        LocalDateTime t = LocalDateTime.parse(recordMap.get("gmtCreateTime").toString(),DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+                        productsDetailRes.setGmtCreateTime(t);
                     }
                     productDetailResList.add(productsDetailRes);
                     categorys.put(recordMap.containsKey("fThreeCategoryCode") ? recordMap.get("fThreeCategoryCode").toString() : "", recordMap.containsKey("fThreeCategoryName") ? recordMap.get("fThreeCategoryName").toString() : "");
@@ -187,10 +197,16 @@ public class ProductsServiceImpl implements ProductsService {
                     productsDetailRes.setProSkuSubTitle(recordMap.containsKey("proSkuSubTitle") ? recordMap.get("proSkuSubTitle").toString() : "");
                     productsDetailRes.setProSkuSkuPicJson(recordMap.containsKey("proSkuSkuPic") ? recordMap.get("proSkuSkuPic").toString() : "");
 //                    productsDetailRes.setAttributeMap(recordMap.containsKey("attributeMap") ? recordMap.get("attributeMap").toString() : "");
-                    productsDetailRes.setSkuSellPriceJson(recordMap.containsKey("skuSellPriceJson") ? recordMap.get("skuSellPriceJson").toString() : "");
+                    //productsDetailRes.setSkuSellPriceJson(recordMap.containsKey("skuSellPriceJson") ? recordMap.get(
+                    //        "skuSellPriceJson").toString() : "");
+                    if(recordMap.containsKey("skuSellPriceJson")){
+                        JSONArray array = JSONObject.parseArray(recordMap.get("skuSellPriceJson").toString());
+                        productsDetailRes.setSkuSellPriceJson(JSONObject.toJSONString(array));
+                    }
                     productsDetailRes.setSkuSellPriceType(recordMap.containsKey("skuSellPriceType") ? Integer.parseInt(recordMap.get("skuSellPriceType").toString()) : 0);
                     if (recordMap.containsKey("skuGmtCreateTime")) {
-                        productsDetailRes.setSkuGmtCreateTime(LocalDateTime.parse(recordMap.get("skuGmtCreateTime").toString()));
+                        LocalDateTime t = LocalDateTime.parse(recordMap.get("skuGmtCreateTime").toString(),DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+                        productsDetailRes.setSkuGmtCreateTime(t);
                     }
 //                productsDetailRes.setSkuGmtCreateTime(DateUtil.getDateTime(recordMap.containsKey("skuGmtCreateTime")?recordMap.get("skuGmtCreateTime").toString():""));
                     productsDetailRes.setShopId(recordMap.containsKey("storeId") ? recordMap.get("storeId").toString() : "");
@@ -205,7 +221,8 @@ public class ProductsServiceImpl implements ProductsService {
                     productsDetailRes.setStoreInfoStoreQrCode(recordMap.containsKey("storeInfoStoreQrCode") ? recordMap.get("storeInfoStoreQrCode").toString() : "");
 
                     if (recordMap.containsKey("gmtCreateTime")) {
-                        productsDetailRes.setGmtCreateTime(LocalDateTime.parse(recordMap.get("gmtCreateTime").toString()));
+                        LocalDateTime t = LocalDateTime.parse(recordMap.get("gmtCreateTime").toString(),DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+                        productsDetailRes.setGmtCreateTime(t);
                     }
 //                productsDetailRes.setGmtCreateTime(DateUtil.getDateTime(recordMap.containsKey("gmtCreateTime")?recordMap.get("gmtCreateTime").toString():""));
                     productDetailResList.add(productsDetailRes);
@@ -276,7 +293,11 @@ public class ProductsServiceImpl implements ProductsService {
                 String temp = JSONObject.toJSONString(maps.get("attributeMap"));
                 productDetailsRes.setAttributeMap(JSON.parseObject(temp,Map.class));
             }
-            if(maps.containsKey("skuSellPriceJson"))productDetailsRes.setPriceJson(maps.get("skuSellPriceJson").toString());
+            //if(maps.containsKey("skuSellPriceJson"))productDetailsRes.setPriceJson(maps.get("skuSellPriceJson").toString());
+            if(maps.containsKey("skuSellPriceJson")){
+                JSONArray array = JSONObject.parseArray(maps.get("skuSellPriceJson").toString());
+                productDetailsRes.setPriceJson(JSONObject.toJSONString(array));
+            }
             if(maps.containsKey("skuIntroduce"))productDetailsRes.setSkuIntroduce(maps.get("skuIntroduce").toString());
             if(maps.containsKey("proSkuSkuPicJson"))productDetailsRes.setProSkuSkuPicJson(maps.get("proSkuSkuPicJson").toString());
             if(maps.containsKey("regionalCode"))productDetailsRes.setRegionalId(maps.get("regionalCode").toString());

@@ -19,6 +19,8 @@ import com.vd.canary.data.common.es.model.ProductsTO;
 import com.vd.canary.data.common.es.service.ProductESService;
 import com.vd.canary.data.constants.Constant;
 import com.vd.canary.data.util.DateUtil;
+import com.vd.canary.data.util.JSONUtils;
+import com.vd.canary.utils.JSONUtil;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
@@ -528,9 +530,11 @@ public class ProductESServiceImpl implements ProductESService {
     }
     public String updateOne(String c) throws IOException {
         Map<String, Object> content = new HashMap();
-        content.put("skuSellPriceJson", "0");
-        JSONArray array = JSONArray.parseArray("[{\"price\": \"100\", \"referencePrice\": \"200\"}]");
-        content.put("skuSellPriceType", array);
+        content.put("skuSellPriceType", null);
+        JSONArray array = JSONArray.parseArray("[{\"num\": \"12\", \"price\": \"12\", \"numDesc\": \"起订量\", \"referencePrice\": "
+                                               + "\"12\"}, {\"num\": \"13\", \"price\": \"12\", \"numDesc\": \"阶梯量\", "
+                                               + "\"referencePrice\": \"1\"}]");
+        content.put("skuSellPriceJson", JSONUtil.toJSONString(array));
         String id = ElasticsearchUtil.updateData(content, indexName, "123");
         if (StringUtils.isNotBlank(id)) {
             return "SaveProduct success.";
@@ -547,7 +551,7 @@ public class ProductESServiceImpl implements ProductESService {
             content.put("skuSellPriceJson", "0");
             JSONArray array = JSONArray.parseArray("[{\"price\": \"100\", \"referencePrice\": \"200\"}]");
             content.put("skuSellPriceType", array);
-            String id = ElasticsearchUtil.updateData(content, indexName, "123");
+            String id = ElasticsearchUtil.updateData(content, indexName, "1251097439278555137");
         }
         return "SaveProduct success.";
     }
