@@ -377,14 +377,14 @@ public class ElasticsearchUtil<T> {
             searchSourceBuilder.fetchSource(fields, null);
         }
         //排序字段
-        if (StringUtils.isNotBlank(sortField)) {
-            if(StringUtils.isNotBlank(sortTpye) && sortTpye.equalsIgnoreCase("desc")){
-                searchSourceBuilder.sort(new FieldSortBuilder(sortField).order(SortOrder.DESC));
-            }
-            if(StringUtils.isNotBlank(sortTpye) && sortTpye.equalsIgnoreCase("asc")){
-                searchSourceBuilder.sort(new FieldSortBuilder(sortField).order(SortOrder.ASC));
-            }
-        }
+        //if (StringUtils.isNotBlank(sortField) && StringUtils.isNotBlank(sortTpye)) {
+        //    if(sortTpye.equalsIgnoreCase("desc")){
+        //        searchSourceBuilder.sort(new FieldSortBuilder(sortField).order(SortOrder.DESC));
+        //    }
+        //    if(sortTpye.equalsIgnoreCase("asc")){
+        //        searchSourceBuilder.sort(new FieldSortBuilder(sortField).order(SortOrder.ASC));
+        //    }
+        //}
         // 高亮（xxx=111,aaa=222）
         if (StringUtils.isNotBlank(highlightField)) {
             HighlightBuilder highlightBuilder = new HighlightBuilder();
