@@ -17,6 +17,7 @@ import com.vd.canary.obmp.product.api.feign.WarehouseManagementFeign;
 import com.vd.canary.obmp.product.api.response.region.RegionalManagementResp;
 import com.vd.canary.obmp.product.api.response.warehouse.WarehouseManagementDetailResp;
 import com.vd.canary.obmp.product.api.response.warehouse.vo.SkuWarehouseRelationsVO;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +38,32 @@ public class SkuWarehouseRelations implements Function {
     @Override
     public void performES(String msg) {
         logger.info("SkuWarehouseRelations.msg" + msg);
+        //if(StringUtils.isNotBlank(msg)){
+        //    return;
+        //}
+        //HashMap hashMap = JSON.parseObject(msg, HashMap.class);
+        //String type = (String) hashMap.get("type");
+        //String skuid = null;
+        //HashMap<String,Object> binlogMap = null;
+        //if(hashMap.containsKey("info")){
+        //    binlogMap = JSON.parseObject(hashMap.get("info").toString(), HashMap.class);
+        //}
+        //ProductsTO productsTO = null;
+        //if (type.equals("insert") || type.equals("update")) {
+        //    if(binlogMap != null && binlogMap.size() > 0){
+        //        skuid = binlogMap.get("sku_id").toString();
+        //        try {
+        //            Map<String, Object> esMap = productESServiceImplTemp.findById(skuid);
+        //            if(esMap != null){
+        //                Map<String, Object> resjson = reSetValue(esMap, binlogMap);
+        //                productESServiceImplTemp.updateProduct(resjson);
+        //            }
+        //        }catch (IOException e) {
+        //            e.printStackTrace();
+        //        }
+        //    }
+        //}
+
 //        String skuId = "";
 //        String warehouseID = "";
 //        String regionalId = "";
@@ -102,5 +129,15 @@ public class SkuWarehouseRelations implements Function {
 //        }
 
     }
+
+    public Map<String, Object> reSetValue(Map<String, Object> esMap,Map<String,Object> binlogMap){
+        if(binlogMap.containsKey("price_type")) esMap.put("skuSellPriceType",binlogMap.get("price_type"));
+        if(binlogMap.containsKey("price_json")) esMap.put("skuSellPriceJson",binlogMap.get("price_json"));
+        System.out.println("------------reSetValue.json:"+esMap);
+        return esMap;
+    }
+
+
+
 }
 

@@ -329,6 +329,30 @@ public class ElasticsearchUtil<T> {
         return null;
     }
 
+    public static List<Map<String, Object>> searchAll(String indexName) {
+        List<Map<String, Object>> res = new ArrayList<>();
+
+        SearchRequest searchRequest = new SearchRequest(indexName);
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+        QueryBuilder query = QueryBuilders.matchAllQuery();
+        searchSourceBuilder.query(query);
+        searchRequest.source(searchSourceBuilder);
+        try {
+            SearchResponse response = client.search(searchRequest, RequestOptions.DEFAULT);
+            for (SearchHit hit : response.getHits().getHits()) {
+                Map<String, Object> map = hit.getSourceAsMap();
+                map.put("id", hit.getId());
+                res.add(map);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return res;
+
+    }
+
+
+
     /**
      * 使用分词查询  高亮 排序 ,并分页
      *
@@ -354,9 +378,10 @@ public class ElasticsearchUtil<T> {
         }
         //排序字段
         if (StringUtils.isNotBlank(sortField)) {
-            if(StringUtils.isNotBlank(sortTpye) && sortTpye.equals("desc")){
+            if(StringUtils.isNotBlank(sortTpye) && sortTpye.equalsIgnoreCase("desc")){
                 searchSourceBuilder.sort(new FieldSortBuilder(sortField).order(SortOrder.DESC));
-            }else{
+            }
+            if(StringUtils.isNotBlank(sortTpye) && sortTpye.equalsIgnoreCase("asc")){
                 searchSourceBuilder.sort(new FieldSortBuilder(sortField).order(SortOrder.ASC));
             }
         }

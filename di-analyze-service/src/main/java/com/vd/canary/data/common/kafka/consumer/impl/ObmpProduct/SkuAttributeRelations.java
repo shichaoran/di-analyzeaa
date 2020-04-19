@@ -40,18 +40,6 @@ public class SkuAttributeRelations implements Function {
     @Autowired
     private ProductESServiceImpl productESServiceImplTemp;
 
-    @Autowired
-    private BigDataApiFeign bigDataApiFeign;
-
-    //@Autowired
-    //private AttributeValueFeign attributeValueFeign;
-    //@Autowired
-    //private SkuAttributeRelationsFeign skuAttributeRelationsFeign;
-    //@Autowired
-    //private AttributeManagementFeign attributeManagementFeign;
-    //@Autowired
-    //ProductESServiceImpl productESService;
-
     @Override
     public void performES(String msg) {
         logger.info("SkuAttributeRelations.msg" + msg);
@@ -83,29 +71,12 @@ public class SkuAttributeRelations implements Function {
     }
 
     public Map<String, Object> reSetValue(Map<String, Object> esMap,Map<String,Object> binlogMap){
-        Set<Map.Entry<String, Object>> entries = binlogMap.entrySet();
-        //for (Map.Entry<String, Object> entry : entries) {
-        //    if (entry.getKey().equals("attribute_id")) {
-        //        ResponseBO<AttributeManagementDetailResp> res = attributeManagementFeign.get(entry.getValue().toString());
-        //        if(res != null){
-        //            AttributeManagementDetailResp pro1 = (AttributeManagementDetailResp) res.getData();
-        //            binlogMap.put("attributeName",pro1.getAttributeName());
-        //            binlogMap.put("attributeType",pro1.getAttributeType());
-        //
-        //            Map<String, List<AttributeValueResp>> attributeMap = new HashMap<>();
-        //            attributeMap.put(pro1.getAttributeName() + pro1.getAttributeType(), pro1.getAttributeValueList());
-        //            binlogMap.put("attributeMap",attributeMap.toString());
-        //        }
-        //    }
-        //    if (entry.getKey().equals("attribute_value_id")) {
-        //        ResponseBO<?> res2 = attributeValueFeign.get(entry.getValue().toString());
-        //        String pro2 = (String) res2.getData();
-        //        binlogMap.put("value_Name",pro2);
-        //    }
-        //}
-        //System.out.println("------------reSetValue.json:"+esMap);
+        if(binlogMap.containsKey("attribute_id")) esMap.put("attributeId",binlogMap.get("attribute_id"));
+        if(binlogMap.containsKey("attribute_value_id")) esMap.put("attributeValueId",binlogMap.get("attribute_value_id"));
+        System.out.println("------------reSetValue.json:"+esMap);
         return esMap;
     }
+
 
 
 

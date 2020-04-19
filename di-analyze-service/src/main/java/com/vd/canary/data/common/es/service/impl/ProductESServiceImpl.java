@@ -7,6 +7,7 @@ import java.util.*;
 import javax.validation.Valid;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Lists;
 import com.vd.canary.data.api.request.es.CategoryReq;
@@ -526,18 +527,29 @@ public class ProductESServiceImpl implements ProductESService {
         return null;
     }
     public String updateOne(String c) throws IOException {
-        if (!ElasticsearchUtil.isIndexExist(indexName)) {
-            ElasticsearchUtil.createIndex(indexName, createIndexMapping( indexName));
-        }
         Map<String, Object> content = new HashMap();
-        content.put("user_real_name", "张三1");
-        content.put("create_time", DateUtil.getCurrentTimeStr());// 创建时间
-        String id = ElasticsearchUtil.updateData(content, indexName, "00b6d5612f734414d68088e359e4b008");
+        content.put("skuSellPriceJson", "0");
+        JSONArray array = JSONArray.parseArray("[{\"price\": \"100\", \"referencePrice\": \"200\"}]");
+        content.put("skuSellPriceType", array);
+        String id = ElasticsearchUtil.updateData(content, indexName, "123");
         if (StringUtils.isNotBlank(id)) {
             return "SaveProduct success.";
         } else {
             return "SaveProduct failure!";
         }
+    }
+    public String updateAll(String c) throws IOException {
+        if (!ElasticsearchUtil.isIndexExist(indexName)) {
+            ElasticsearchUtil.createIndex(indexName, createIndexMapping( indexName));
+        }
+        List<Map<String, Object>> objs = ElasticsearchUtil.searchAll(indexName);
+        for(Map<String, Object> content : objs){
+            content.put("skuSellPriceJson", "0");
+            JSONArray array = JSONArray.parseArray("[{\"price\": \"100\", \"referencePrice\": \"200\"}]");
+            content.put("skuSellPriceType", array);
+            String id = ElasticsearchUtil.updateData(content, indexName, "123");
+        }
+        return "SaveProduct success.";
     }
     public String deleteOne(String c) throws IOException {
         if (!ElasticsearchUtil.isIndexExist(indexName)) {

@@ -94,29 +94,37 @@ public class ProductSku implements Function {
             if (entry.getKey().equals("id")) esMap.put("skuId", entry.getValue());
             if (entry.getKey().equals("brand_id")) {
                 esMap.put("proSkuBrandId", entry.getValue());
-                ResponseBO<BrandManagementResp> res = bigDataApiFeign.brandDetail(entry.getValue().toString());
-                if(res != null){
-                    BrandManagementResp pro = (BrandManagementResp) res.getData();
-                    if(pro != null){
-                        esMap.put("brandCode",pro.getBrandCode());
-                        esMap.put("bBrandName",pro.getBrandName());
-                        esMap.put("brandLoge",pro.getBrandLogo());
-                        esMap.put("brandShorthand",pro.getBrandShorthand());
-                        esMap.put("brandIntroduction",pro.getBrandIntroduction());
+                try {
+                    ResponseBO<BrandManagementResp> res = bigDataApiFeign.brandDetail(entry.getValue().toString());
+                    if(res != null){
+                        BrandManagementResp pro = (BrandManagementResp) res.getData();
+                        if(pro != null){
+                            esMap.put("brandCode",pro.getBrandCode());
+                            esMap.put("bBrandName",pro.getBrandName());
+                            esMap.put("brandLoge",pro.getBrandLogo());
+                            esMap.put("brandShorthand",pro.getBrandShorthand());
+                            esMap.put("brandIntroduction",pro.getBrandIntroduction());
+                        }
                     }
+                }catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
             if (entry.getKey().equals("spu_id")) {
                 esMap.put("proSkuSpuId", entry.getValue() );
                 String value = entry.getValue().toString();
-                ResponseBO<ProductSpuDetailResp> res = bigDataApiFeign.spuDetail(entry.getValue().toString());
-                if(res != null){
-                    ProductSpuDetailResp pro = (ProductSpuDetailResp) res.getData();
-                    if(pro != null){
-                        esMap.put("spuState",pro.getSpuState());
-                        esMap.put("proSpuSpuPic",JSONUtils.fromListByFastJson(pro.getSpuPic()));
-                        esMap.put("spuTitle",pro.getSpuTitle());
+                try {
+                    ResponseBO<ProductSpuDetailResp> res = bigDataApiFeign.spuDetail(entry.getValue().toString());
+                    if(res != null){
+                        ProductSpuDetailResp pro = (ProductSpuDetailResp) res.getData();
+                        if(pro != null){
+                            esMap.put("spuState",pro.getSpuState());
+                            esMap.put("proSpuSpuPic",JSONUtils.fromListByFastJson(pro.getSpuPic()));
+                            esMap.put("spuTitle",pro.getSpuTitle());
+                        }
                     }
+                }catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
             if (entry.getKey().equals("spu_code")) esMap.put("proSkuSpuCode", entry.getValue() );
@@ -129,27 +137,31 @@ public class ProductSku implements Function {
                 esMap.put("threeCategoryId",entry.getValue());
                 CategoryRelationsReq categoryRelationsReq = new CategoryRelationsReq();
                 categoryRelationsReq.setBackgroundCategoryId(entry.getValue().toString());
-                ResponseBO<List<CategoryRelationsResp>> res = bigDataApiFeign.listByCondition(categoryRelationsReq);
-                if(res != null){
-                    List<CategoryRelationsResp> pro = (List<CategoryRelationsResp>)res.getData();
-                    if(pro != null && pro.size() > 0){
-                        for(CategoryRelationsResp categoryRelationsResp :pro){
-                            String[] foreCategoryFullCode = categoryRelationsResp.getForeCategoryFullCode().split("-");
-                            esMap.put("fOneCategoryCode",foreCategoryFullCode[0]);
-                            esMap.put("fTwoCategoryCode",foreCategoryFullCode[1]);
-                            esMap.put("fThreeCategoryCode",foreCategoryFullCode[2]);
+                try {
+                    ResponseBO<List<CategoryRelationsResp>> res = bigDataApiFeign.listByCondition(categoryRelationsReq);
+                    if(res != null){
+                        List<CategoryRelationsResp> pro = (List<CategoryRelationsResp>)res.getData();
+                        if(pro != null && pro.size() > 0){
+                            for(CategoryRelationsResp categoryRelationsResp :pro){
+                                String[] foreCategoryFullCode = categoryRelationsResp.getForeCategoryFullCode().split("-");
+                                esMap.put("fOneCategoryCode",foreCategoryFullCode[0]);
+                                esMap.put("fTwoCategoryCode",foreCategoryFullCode[1]);
+                                esMap.put("fThreeCategoryCode",foreCategoryFullCode[2]);
 
-                            String[] foreCategoryFullName = categoryRelationsResp.getForeCategoryFullName().split("-");
-                            esMap.put("fOneCategoryName",foreCategoryFullName[0]);
-                            esMap.put("fTwoCategoryName",foreCategoryFullName[1]);
-                            esMap.put("fThreeCategoryName",foreCategoryFullName[2]);
+                                String[] foreCategoryFullName = categoryRelationsResp.getForeCategoryFullName().split("-");
+                                esMap.put("fOneCategoryName",foreCategoryFullName[0]);
+                                esMap.put("fTwoCategoryName",foreCategoryFullName[1]);
+                                esMap.put("fThreeCategoryName",foreCategoryFullName[2]);
 
-                            String[] foreCategoryFullId = categoryRelationsResp.getForegroundCategoryId().split("-");
-                            esMap.put("fOneCategoryId",foreCategoryFullId[0]);
-                            esMap.put("fTwoCategoryId",foreCategoryFullId[1]);
-                            esMap.put("fThreeCategoryId",foreCategoryFullId[2]);
+                                String[] foreCategoryFullId = categoryRelationsResp.getForegroundCategoryId().split("-");
+                                esMap.put("fOneCategoryId",foreCategoryFullId[0]);
+                                esMap.put("fTwoCategoryId",foreCategoryFullId[1]);
+                                esMap.put("fThreeCategoryId",foreCategoryFullId[2]);
+                            }
                         }
                     }
+                }catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
             if (entry.getKey().equals("three_category_code")) esMap.put("threeCategoryCode", entry.getValue() );
@@ -159,16 +171,20 @@ public class ProductSku implements Function {
             if (entry.getKey().equals("sku_state")) esMap.put("skuState", entry.getValue() );
             if (entry.getKey().equals("sku_pic")) {
                 List<String> idList = JSONArray.parseArray(entry.getValue().toString(),String.class);
-                ResponseBO<List<FileManagementVO>> res = bigDataApiFeign.listByIds(idList);
-                if(res != null){
-                    List<FileManagementVO> pros = (List<FileManagementVO>) res.getData();
-                    if(pros != null && pros.size() > 0){
-                        JSONArray jsonArray = new JSONArray();
-                        for(FileManagementVO file :pros){
-                            jsonArray.add(file);
+                try {
+                    ResponseBO<List<FileManagementVO>> res = bigDataApiFeign.listByIds(idList);
+                    if(res != null){
+                        List<FileManagementVO> pros = (List<FileManagementVO>) res.getData();
+                        if(pros != null && pros.size() > 0){
+                            JSONArray jsonArray = new JSONArray();
+                            for(FileManagementVO file :pros){
+                                jsonArray.add(file);
+                            }
+                            esMap.put("proSkuSkuPicJson", jsonArray);
                         }
-                        esMap.put("proSkuSkuPicJson", jsonArray);
                     }
+                }catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
             if (entry.getKey().equals("sku_valuation_unit")) esMap.put("skuValuationUnit", entry.getValue() );

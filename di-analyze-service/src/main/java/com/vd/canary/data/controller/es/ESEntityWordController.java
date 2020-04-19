@@ -81,6 +81,11 @@ public class ESEntityWordController extends BaseController {
         String res1 = productESServiceImpl.updateOne(data);
         return res1;
     }
+    @PostMapping("/updateAll")
+    public String updateAll(@NotNull String data) throws Exception {
+        String res1 = productESServiceImpl.updateAll(data);
+        return res1;
+    }
     @PostMapping("/deleteOne")
     public String deleteOne(@NotNull String data) throws Exception {
         String res1 = productESServiceImpl.deleteOne(data);
