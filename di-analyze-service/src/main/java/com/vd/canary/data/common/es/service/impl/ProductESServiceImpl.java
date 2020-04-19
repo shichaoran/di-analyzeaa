@@ -530,10 +530,8 @@ public class ProductESServiceImpl implements ProductESService {
     }
     public String updateOne(String c) throws IOException {
         Map<String, Object> content = new HashMap();
-        content.put("skuSellPriceType", null);
-        JSONArray array = JSONArray.parseArray("[{\"num\": \"12\", \"price\": \"12\", \"numDesc\": \"起订量\", \"referencePrice\": "
-                                               + "\"12\"}, {\"num\": \"13\", \"price\": \"12\", \"numDesc\": \"阶梯量\", "
-                                               + "\"referencePrice\": \"1\"}]");
+        //content.put("skuSellPriceType", JSONUtil.toJSONString("0"));
+        JSONArray array = JSONArray.parseArray("[{\"num\": \"12\", \"price\": \"12\", \"referencePrice\": \"12\",\"vipPrice\": \"12\" }]");
         content.put("skuSellPriceJson", JSONUtil.toJSONString(array));
         String id = ElasticsearchUtil.updateData(content, indexName, "123");
         if (StringUtils.isNotBlank(id)) {
@@ -548,10 +546,10 @@ public class ProductESServiceImpl implements ProductESService {
         }
         List<Map<String, Object>> objs = ElasticsearchUtil.searchAll(indexName);
         for(Map<String, Object> content : objs){
-            content.put("skuSellPriceJson", "0");
-            JSONArray array = JSONArray.parseArray("[{\"price\": \"100\", \"referencePrice\": \"200\"}]");
-            content.put("skuSellPriceType", array);
-            String id = ElasticsearchUtil.updateData(content, indexName, "1251097439278555137");
+            //content.put("skuSellPriceType", "0");
+            JSONArray array = JSONArray.parseArray("[{\"num\": \"12\", \"price\": \"12\", \"referencePrice\": \"12\",\"vipPrice\": \"12\" }]");
+            content.put("skuSellPriceJson", JSONUtil.toJSONString(array));
+            String id = ElasticsearchUtil.updateData(content, indexName, content.get("id").toString());
         }
         return "SaveProduct success.";
     }
