@@ -42,6 +42,7 @@ public class SteelReq extends RequestPageBO {
      */
     private String isDiscussPrice;
 
+
     /**
      * 配送区域
      */
