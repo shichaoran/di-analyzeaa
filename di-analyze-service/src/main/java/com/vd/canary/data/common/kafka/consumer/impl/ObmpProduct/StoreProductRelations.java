@@ -10,6 +10,9 @@ import com.vd.canary.data.common.kafka.consumer.impl.Function;
 import com.vd.canary.obmp.product.api.feign.StoreProductRelationsFeign;
 import com.vd.canary.obmp.product.api.response.store.vo.StoreProductRelationsVO;
 import com.vd.canary.utils.DateUtil;
+import com.vd.canary.utils.JSONUtil;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,67 +23,52 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-
+@Slf4j
 @Component
 public class StoreProductRelations implements Function {
 
-    private static final Logger logger = LoggerFactory.getLogger(StoreProductRelations.class);
     @Autowired
-    private StoreProductRelationsFeign storeProductRelationsFeign;
-    @Autowired
-    ProductESServiceImpl productESService;
+    private ProductESServiceImpl productESServiceImplTemp;
 
     @Override
     public void performES(String msg) {
 
-        logger.info("StoreProductRelations.msg" + msg);
+        log.info("StoreProductRelations.msg" + msg);
+        if(StringUtils.isEmpty(msg)){
+            return;
+        }
+        HashMap hashMap = JSON.parseObject(msg, HashMap.class);
+        String type = (String) hashMap.get("type");
+        String skuid = null;
+        HashMap<String,Object> binlogMap = null;
+        if(hashMap.containsKey("info")){
+            binlogMap = JSON.parseObject(hashMap.get("info").toString(), HashMap.class);
+        }
+        ProductsTO productsTO = null;
+        if (type.equals("insert") || type.equals("update")) {
+            if(binlogMap != null && binlogMap.size() > 0){
+                skuid = binlogMap.get("sku_id").toString();
+                try {
+                    Map<String, Object> esMap = productESServiceImplTemp.findById(skuid);
+                    log.info("StoreProductRelations.performES,brand_id.esMap={}.", JSONUtil.toJSON(esMap).toJSONString());
+                    if(esMap != null){
+                        Map<String, Object> resjson = reSetValue(esMap, binlogMap);
+                        productESServiceImplTemp.updateProduct(resjson);
+                    }
+                }catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
 
-//        String skuId = "";
-//        HashMap hashMap = JSON.parseObject(msg, HashMap.class);
-//        Set<Map.Entry<String, String>> entries = hashMap.entrySet();
-//        for (Map.Entry<String, String> entry : entries) {
-//            if (entry.getKey().equals("sku_id")) {
-//                skuId = entry.getValue();
-//
-//                ResponseBO<StoreProductRelationsVO> res = storeProductRelationsFeign.get(skuId);
-//                StoreProductRelationsVO pro = (StoreProductRelationsVO) res.getData();
-//                try {
-////                    ProductsTO productsTO = productESService.findById(skuId);
-////                    productsTO.setStoreId(pro.getStoreId());
-////                    productsTO.setCategoryId(pro.getCategoryId());
-//
-//
-////                    ShopTO shopTO = new ShopTO();
-////
-////                    productsTO.setStoreName(shopTO.getName());
-////                    productsTO.setBoothBusinessBoothCode(shopTO.getBoothCode());
-////                    productsTO.setBusinessCategory(shopTO.getBusinessCategory());
-////                    productsTO.setBusinessArea(shopTO.getBusinessArea());
-////                    productsTO.setMainProducts(shopTO.getMainProducts());
-////                    try {
-////                        productsTO.setBoothScheduledTime(DateUtil.getDateTime(shopTO.getBoothScheduledTime().toString()));
-////                    } catch (Exception e) {
-////                        e.printStackTrace();
-////                    }
-//
-//
-//                    ProductESServiceImpl productESService = new ProductESServiceImpl();
-//                    Gson gson = new Gson();
-//                    Map<String, Object> map = new HashMap<String, Object>();
-//                    map = gson.fromJson(msg, map.getClass());
-//                    String type = (String) map.get("type");
-//                    if (type.equals("update")) {
-//                        try {
-//                            productESService.saveOrUpdateProduct(productsTO);
-//                        } catch (IOException e) {
-//                            e.printStackTrace();
-//                        }
-//
-//                    }
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }
     }
+
+    public Map<String, Object> reSetValue(Map<String, Object> esMap,Map<String,Object> binlogMap){
+        if(binlogMap.containsKey("store_id")) esMap.put("storeId",binlogMap.get("store_id"));
+        if(binlogMap.containsKey("category_id")) esMap.put("categoryId",binlogMap.get("category_id"));
+        System.out.println("------------StoreProductRelations.reSetValue.json:"+esMap);
+        return esMap;
+    }
+
+
 }

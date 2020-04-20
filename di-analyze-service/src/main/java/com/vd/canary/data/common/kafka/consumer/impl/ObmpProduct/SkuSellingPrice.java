@@ -4,6 +4,8 @@ import com.alibaba.fastjson.JSON;
 import com.vd.canary.data.common.es.model.ProductsTO;
 import com.vd.canary.data.common.es.service.impl.ProductESServiceImpl;
 import com.vd.canary.data.common.kafka.consumer.impl.Function;
+import com.vd.canary.utils.JSONUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,10 +16,9 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 @Component
 public class SkuSellingPrice implements Function {
-
-    private static final Logger logger = LoggerFactory.getLogger(SkuSellingPrice.class);
 
     @Autowired
     private ProductESServiceImpl productESServiceImplTemp;
@@ -25,9 +26,9 @@ public class SkuSellingPrice implements Function {
 
     @Override
     public void performES(String msg) {
-        logger.info("SkuSellingPrice.msg" + msg);
+        log.info("SkuSellingPrice.msg" + msg);
 
-        if(StringUtils.isNotBlank(msg)){
+        if(StringUtils.isEmpty(msg)){
             return;
         }
         HashMap hashMap = JSON.parseObject(msg, HashMap.class);
@@ -43,6 +44,7 @@ public class SkuSellingPrice implements Function {
                 skuid = binlogMap.get("sku_id").toString();
                 try {
                     Map<String, Object> esMap = productESServiceImplTemp.findById(skuid);
+                    log.info("SkuSellingPrice.performES,brand_id.esMap={}.", JSONUtil.toJSON(esMap).toJSONString());
                     if(esMap != null){
                         Map<String, Object> resjson = reSetValue(esMap, binlogMap);
                         productESServiceImplTemp.updateProduct(resjson);
@@ -58,7 +60,7 @@ public class SkuSellingPrice implements Function {
     public Map<String, Object> reSetValue(Map<String, Object> esMap,Map<String,Object> binlogMap){
         if(binlogMap.containsKey("price_type")) esMap.put("skuSellPriceType",binlogMap.get("price_type"));
         if(binlogMap.containsKey("price_json")) esMap.put("skuSellPriceJson",binlogMap.get("price_json"));
-        System.out.println("------------reSetValue.json:"+esMap);
+        System.out.println("------------SkuSellingPrice.reSetValue.json:"+esMap);
         return esMap;
     }
 

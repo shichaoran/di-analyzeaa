@@ -79,7 +79,7 @@ public class KafkaConsumerForES {
     }*/
     @KafkaListener(topics = "binglog_obmp_product_2r3p", id = "product_es" )
     public void listenProduct(String msg) {
-        log.info("<------this is kafka consumer,topic = binglog_obmp_product_2r3p, msg = %s",msg);
+        log.info("<------this is kafka consumer,topic = binglog_obmp_product_2r3p, msg = {}",msg);
         JSONObject jsonMap = JSONObject.parseObject(msg);
         String database = jsonMap.getString("database");
         String table = jsonMap.getString("table");
@@ -137,7 +137,7 @@ public class KafkaConsumerForES {
     }*/
     @KafkaListener(topics = "binglog_obmp_customer_2r3p", id = "customer_es" )
     public void listenCustomer(String msg) {
-        log.info("<------this is kafka consumer,topic = binglog_obmp_customer_2r3p, msg = %s",msg);
+        log.info("<------this is kafka consumer,topic = binglog_obmp_customer_2r3p, msg = {}",msg);
         JSONObject jsonMap = JSONObject.parseObject(msg);
         String database = jsonMap.getString("database");
         String table = jsonMap.getString("table");

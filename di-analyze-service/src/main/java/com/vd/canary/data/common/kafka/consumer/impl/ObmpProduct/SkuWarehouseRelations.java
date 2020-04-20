@@ -17,123 +17,59 @@ import com.vd.canary.obmp.product.api.feign.WarehouseManagementFeign;
 import com.vd.canary.obmp.product.api.response.region.RegionalManagementResp;
 import com.vd.canary.obmp.product.api.response.warehouse.WarehouseManagementDetailResp;
 import com.vd.canary.obmp.product.api.response.warehouse.vo.SkuWarehouseRelationsVO;
+import com.vd.canary.utils.JSONUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
+@Slf4j
 @Component
 public class SkuWarehouseRelations implements Function {
-    private static final Logger logger = LoggerFactory.getLogger(SkuWarehouseRelations.class);
+
     @Autowired
-    private SkuWarehouseRelationsFeign skuWarehouseRelationsFeign;
-    @Autowired
-    ProductESServiceImpl productESService;
-    @Autowired
-    private RegionalManagementFeign regionalManagementFeign;
-    @Autowired
-    private WarehouseManagementFeign warehouseManagementFeign;
+    private ProductESServiceImpl productESServiceImplTemp;
 
     @Override
     public void performES(String msg) {
-        logger.info("SkuWarehouseRelations.msg" + msg);
-        //if(StringUtils.isNotBlank(msg)){
-        //    return;
-        //}
-        //HashMap hashMap = JSON.parseObject(msg, HashMap.class);
-        //String type = (String) hashMap.get("type");
-        //String skuid = null;
-        //HashMap<String,Object> binlogMap = null;
-        //if(hashMap.containsKey("info")){
-        //    binlogMap = JSON.parseObject(hashMap.get("info").toString(), HashMap.class);
-        //}
-        //ProductsTO productsTO = null;
-        //if (type.equals("insert") || type.equals("update")) {
-        //    if(binlogMap != null && binlogMap.size() > 0){
-        //        skuid = binlogMap.get("sku_id").toString();
-        //        try {
-        //            Map<String, Object> esMap = productESServiceImplTemp.findById(skuid);
-        //            if(esMap != null){
-        //                Map<String, Object> resjson = reSetValue(esMap, binlogMap);
-        //                productESServiceImplTemp.updateProduct(resjson);
-        //            }
-        //        }catch (IOException e) {
-        //            e.printStackTrace();
-        //        }
-        //    }
-        //}
-
-//        String skuId = "";
-//        String warehouseID = "";
-//        String regionalId = "";
-//        HashMap hashMap = JSON.parseObject(msg, HashMap.class);
-//        Set<Map.Entry<String, String>> entries = hashMap.entrySet();
-//        for (Map.Entry<String, String> entry : entries) {
-//            if (entry.getKey().equals("sku_id")) {
-//                skuId = entry.getValue();
-//
-//                ResponseBO<SkuWarehouseRelationsVO> res = skuWarehouseRelationsFeign.get(skuId);
-//                SkuWarehouseRelationsVO pro = (SkuWarehouseRelationsVO) res.getData();
-//                try {
-//                    ProductsTO productsTO = productESService.findById(skuId);
-//
-//                    productsTO.setWarehouseId(pro.WAREHOUSE_ID);
-//                    productsTO.setWarehouseName(pro.WAREHOUSE_NAME);
-//                    productsTO.setInventory(pro.INVENTORY);
-//                    productsTO.setRegionalName(pro.REGIONAL_NAME);
-//                    productsTO.setRegionalId(pro.REGIONAL_ID);
-//
-//                    ProductESServiceImpl productESService = new ProductESServiceImpl();
-//                    Gson gson = new Gson();
-//                    Map<String, Object> map = new HashMap<String, Object>();
-//                    map = gson.fromJson(msg, map.getClass());
-//                    String type = (String) map.get("type");
-//                    if (type.equals("update")) {
-//                        try {
-//                            productESService.saveOrUpdateProduct(productsTO);
-//                        } catch (IOException e) {
-//                            e.printStackTrace();
-//                        }
-//
-//                    }
-//
-//                    if (entry.getKey().equals("warehouse_id")) {
-//                        warehouseID = entry.getValue();
-//                        ResponseBO<WarehouseManagementDetailResp> res1 = warehouseManagementFeign.get(warehouseID);
-//
-//                        WarehouseManagementDetailResp pro1 = (WarehouseManagementDetailResp) res1.getData();
-//                        productsTO.setWarehouseCode(pro1.getWarehouseCode());
-//                        productsTO.setWarehouseRegional(pro1.getWarehouseRegional());
-//
-//
-//                    }
-//
-//                    if (entry.getKey().equals("regional_id")) {
-//                        regionalId = entry.getValue();
-//                        ResponseBO<RegionalManagementResp> res2 = regionalManagementFeign.getRegionalManagement(regionalId);
-//                        RegionalManagementResp pro2 = (RegionalManagementResp) res2.getData();
-//                        productsTO.setWarehouseId(pro2.getRegionalCode());
-//                        productsTO.setWarehouseName(pro2.getRegionalName());
-//                        productsTO.setInventory(pro2.getRegionalScope());
-//
-//                    }
-//
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//
-//            }
-//
-//
-//        }
+        log.info("SkuWarehouseRelations.msg" + msg);
+        if(StringUtils.isEmpty(msg)){
+            return;
+        }
+        HashMap hashMap = JSON.parseObject(msg, HashMap.class);
+        String type = (String) hashMap.get("type");
+        String skuid = null;
+        HashMap<String,Object> binlogMap = null;
+        if(hashMap.containsKey("info")){
+            binlogMap = JSON.parseObject(hashMap.get("info").toString(), HashMap.class);
+        }
+        ProductsTO productsTO = null;
+        if (type.equals("insert") || type.equals("update")) {
+            if(binlogMap != null && binlogMap.size() > 0){
+                skuid = binlogMap.get("sku_id").toString();
+                try {
+                    Map<String, Object> esMap = productESServiceImplTemp.findById(skuid);
+                    log.info("SkuWarehouseRelations.performES,brand_id.esMap={}.", JSONUtil.toJSON(esMap).toJSONString());
+                    if(esMap != null){
+                        Map<String, Object> resjson = reSetValue(esMap, binlogMap);
+                        productESServiceImplTemp.updateProduct(resjson);
+                    }
+                }catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
 
     }
 
     public Map<String, Object> reSetValue(Map<String, Object> esMap,Map<String,Object> binlogMap){
-        if(binlogMap.containsKey("price_type")) esMap.put("skuSellPriceType",binlogMap.get("price_type"));
-        if(binlogMap.containsKey("price_json")) esMap.put("skuSellPriceJson",binlogMap.get("price_json"));
-        System.out.println("------------reSetValue.json:"+esMap);
+        if(binlogMap.containsKey("warehouse_id")) esMap.put("warehouseId",binlogMap.get("warehouse_id"));
+        if(binlogMap.containsKey("warehouse_name")) esMap.put("warehouseName",binlogMap.get("warehouse_name"));
+        if(binlogMap.containsKey("inventory")) esMap.put("inventory",binlogMap.get("inventory"));
+        if(binlogMap.containsKey("regional_id")) esMap.put("regionalId",binlogMap.get("regional_id"));
+        if(binlogMap.containsKey("regional_name")) esMap.put("skuRegionalName",binlogMap.get("regional_name"));
+        System.out.println("------------SkuWarehouseRelations.reSetValue.json:"+esMap);
         return esMap;
     }
 
