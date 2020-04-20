@@ -10,6 +10,7 @@ import com.vd.canary.data.api.response.es.SteelRes;
 import com.vd.canary.data.api.response.es.vo.ProductsDetailRes;
 import com.vd.canary.data.api.response.es.vo.SteelVO;
 import com.vd.canary.data.common.es.helper.ESPageRes;
+import com.vd.canary.data.common.es.model.FinalSteel;
 import com.vd.canary.data.common.es.service.impl.ProductESServiceImpl;
 import com.vd.canary.data.service.es.SteelService;
 import com.vd.canary.utils.DateUtil;
@@ -73,7 +74,7 @@ public class SteelServiceImpl implements SteelService {
         steelVO.setSkuAuxiliaryUnit("顿");
         steelVO.setFThreeCategoryName("建筑钢");
         steelVO.setFTwoCategoryName("钢");
-
+        steelVO.setFThreeCategoryCode("H101010");
         steelVO.setSkuGmtCreateTime(LocalDateTime.ofInstant(DateUtil.currentDate().toInstant(), ZoneId.systemDefault()));
         list.add(steelVO);
         steelRes.setSteelVORes(list);
@@ -120,6 +121,15 @@ public class SteelServiceImpl implements SteelService {
                         steelVO.setSkuGmtCreateTime(t);
                     }
                     steelVO.setSkuAuxiliaryUnit(recordMap.containsKey("skuAuxiliaryUnit") ? recordMap.get("skuAuxiliaryUnit").toString() : "");
+
+                    FinalSteel finalSteel = new FinalSteel();
+                    for (Integer i=0;i<finalSteel.getList().size();i++) {
+                        if (finalSteel.getList().contains(recordMap.get("fThreeCategoryCode"))) {
+                            steelVO.setFTwoCategoryName(recordMap.containsKey("fTwoCategoryName") ? recordMap.get("fTwoCategoryName").toString() : "");
+                            steelVO.setFThreeCategoryName(recordMap.containsKey("fThreeCategoryName") ? recordMap.get("fThreeCategoryName").toString() : "");
+                            steelVO.setFThreeCategoryCode(recordMap.containsKey("fThreeCategoryCode") ? recordMap.get("fThreeCategoryCode").toString() : "");
+                        }
+                    }
 
                     steelVOS.add(steelVO);
                     categorys.put(recordMap.containsKey("fThreeCategoryCode") ? recordMap.get("fThreeCategoryCode").toString() : "", recordMap.containsKey("fThreeCategoryName") ? recordMap.get("fThreeCategoryName").toString() : "");
