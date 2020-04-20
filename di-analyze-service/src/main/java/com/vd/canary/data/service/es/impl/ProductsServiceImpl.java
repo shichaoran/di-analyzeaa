@@ -157,10 +157,15 @@ public class ProductsServiceImpl implements ProductsService {
                     if(recordMap.containsKey("storeInfoStoreQrCode") && recordMap.get("storeInfoStoreQrCode") != null){
                         productsDetailRes.setStoreInfoStoreQrCode(recordMap.get("storeInfoStoreQrCode").toString());
                     }
-
                     if (recordMap.containsKey("gmtCreateTime") && recordMap.get("gmtCreateTime") !=null) {
                         LocalDateTime t = LocalDateTime.parse(recordMap.get("gmtCreateTime").toString(),DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
                         productsDetailRes.setGmtCreateTime(t);
+                    }
+                    if (recordMap.containsKey("regionalId") && recordMap.get("regionalId") !=null) {
+                        productsDetailRes.setRegionalIdJson(recordMap.get("regionalId").toString());
+                    }
+                    if (recordMap.containsKey("skuRegionalName") && recordMap.get("skuRegionalName") !=null) {
+                        productsDetailRes.setSkuRegionalNameJson(recordMap.get("skuRegionalName").toString());
                     }
                     productDetailResList.add(productsDetailRes);
                     categorys.put(recordMap.containsKey("fThreeCategoryCode") ? recordMap.get("fThreeCategoryCode").toString() : "", recordMap.containsKey("fThreeCategoryName") ? recordMap.get("fThreeCategoryName").toString() : "");
@@ -258,6 +263,12 @@ public class ProductsServiceImpl implements ProductsService {
                     if (recordMap.containsKey("gmtCreateTime") && recordMap.get("gmtCreateTime") !=null ) {
                         LocalDateTime t = LocalDateTime.parse(recordMap.get("gmtCreateTime").toString(),DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
                         productsDetailRes.setGmtCreateTime(t);
+                    }
+                    if (recordMap.containsKey("regionalId") && recordMap.get("regionalId") !=null) {
+                        productsDetailRes.setRegionalIdJson(recordMap.get("regionalId").toString());
+                    }
+                    if (recordMap.containsKey("skuRegionalName") && recordMap.get("skuRegionalName") !=null) {
+                        productsDetailRes.setSkuRegionalNameJson(recordMap.get("skuRegionalName").toString());
                     }
                     productDetailResList.add(productsDetailRes);
                     categorys.put(recordMap.containsKey("fThreeCategoryCode") ? recordMap.get("fThreeCategoryCode").toString() : "", recordMap.containsKey("fThreeCategoryName") ? recordMap.get("fThreeCategoryName").toString() : "");
