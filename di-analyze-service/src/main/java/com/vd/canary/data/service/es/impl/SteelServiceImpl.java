@@ -96,7 +96,8 @@ public class SteelServiceImpl implements SteelService {
         ResponseBO<SteelRes> res = new ResponseBO<SteelRes>();
         SteelRes steelRes = new SteelRes();
         log.info("getProductByCategory,threeCategoryReq:"+ JSONObject.toJSON(steelReq).toString());
-        ESPageRes esPageRes = productESServiceImpl.boolQueryByDiffCategorys(steelReq.getPageNum(), steelReq.getPageSize(), new SteelReq());
+        ESPageRes esPageRes = null ;// productESServiceImpl.boolQueryByDiffCategorys(steelReq.getPageNum(), steelReq.getPageSize(),
+                                      //                                       new SteelReq());
         if (esPageRes!=null) {
             List<Map<String, Object>> recordList = esPageRes.getRecordList();
             if (recordList != null && recordList.size() > 0) {
