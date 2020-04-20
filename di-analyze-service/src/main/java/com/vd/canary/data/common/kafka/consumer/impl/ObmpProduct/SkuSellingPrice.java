@@ -28,7 +28,7 @@ public class SkuSellingPrice implements Function {
     public void performES(String msg) {
         log.info("SkuSellingPrice.msg" + msg);
 
-        if(StringUtils.isNotBlank(msg)){
+        if(StringUtils.isEmpty(msg)){
             return;
         }
         HashMap hashMap = JSON.parseObject(msg, HashMap.class);

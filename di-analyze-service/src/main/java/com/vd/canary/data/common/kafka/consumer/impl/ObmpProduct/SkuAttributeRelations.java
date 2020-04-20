@@ -45,7 +45,7 @@ public class SkuAttributeRelations implements Function {
     @Override
     public void performES(String msg) {
         log.info("SkuAttributeRelations.msg" + msg);
-        if(StringUtils.isNotBlank(msg)){
+        if(StringUtils.isEmpty(msg)){
             return;
         }
         HashMap hashMap = JSON.parseObject(msg, HashMap.class);

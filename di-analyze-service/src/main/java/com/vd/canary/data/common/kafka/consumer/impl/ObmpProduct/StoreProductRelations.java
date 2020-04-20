@@ -34,7 +34,7 @@ public class StoreProductRelations implements Function {
     public void performES(String msg) {
 
         log.info("StoreProductRelations.msg" + msg);
-        if(StringUtils.isNotBlank(msg)){
+        if(StringUtils.isEmpty(msg)){
             return;
         }
         HashMap hashMap = JSON.parseObject(msg, HashMap.class);
