@@ -20,6 +20,7 @@ import com.vd.canary.obmp.product.api.response.brand.BrandManagementResp;
 import com.vd.canary.obmp.product.api.response.category.CategoryRelationsResp;
 import com.vd.canary.obmp.product.api.response.file.vo.FileManagementVO;
 import com.vd.canary.obmp.product.api.response.spu.ProductSpuDetailResp;
+import com.vd.canary.utils.JSONUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.ListUtils;
 import org.apache.commons.collections.map.HashedMap;
@@ -74,6 +75,10 @@ public class ProductSku implements Function {
                 if(esMap != null){
                     Map<String, Object> resjson = reSetValue(esMap, bnglogMap);
                     productESServiceImplTemp.updateProduct(resjson);
+                }else{
+                    Map<String, Object> esMapT = new HashMap();
+                    Map<String, Object> resjson = reSetValue(esMapT, bnglogMap);
+                    productESServiceImplTemp.saveProduct(JSONObject.toJSONString(resjson),bnglogMap.get("id").toString());
                 }
             }catch (IOException e) {
                 e.printStackTrace();
@@ -95,9 +100,12 @@ public class ProductSku implements Function {
             if (entry.getKey().equals("brand_id")) {
                 esMap.put("proSkuBrandId", entry.getValue());
                 try {
-                    ResponseBO<BrandManagementResp> res = bigDataApiFeign.brandDetail(entry.getValue().toString());
+                    String id = entry.getValue().toString();
+                    ResponseBO<BrandManagementResp> res = bigDataApiFeign.brandDetail(id);
+                    log.info("ProductSku.reSetValue,brand_id.res={}.",JSONUtil.toJSON(res).toJSONString());
                     if(res != null){
                         BrandManagementResp pro = (BrandManagementResp) res.getData();
+                        log.info("ProductSku.reSetValue,brand_id.pro={}.",JSONUtil.toJSON(pro).toJSONString());
                         if(pro != null){
                             esMap.put("brandCode",pro.getBrandCode());
                             esMap.put("bBrandName",pro.getBrandName());
@@ -107,6 +115,7 @@ public class ProductSku implements Function {
                         }
                     }
                 }catch (Exception e) {
+                    log.info("ProductSku.reSetValue,Exception:bigDataApiFeign.brandDetail(id)");
                     e.printStackTrace();
                 }
             }
@@ -114,9 +123,12 @@ public class ProductSku implements Function {
                 esMap.put("proSkuSpuId", entry.getValue() );
                 String value = entry.getValue().toString();
                 try {
-                    ResponseBO<ProductSpuDetailResp> res = bigDataApiFeign.spuDetail(entry.getValue().toString());
+                    String id = entry.getValue().toString();
+                    ResponseBO<ProductSpuDetailResp> res = bigDataApiFeign.spuDetail(id);
+                    log.info("ProductSku.reSetValue,spu_id.res={}.",JSONUtil.toJSON(res).toJSONString());
                     if(res != null){
                         ProductSpuDetailResp pro = (ProductSpuDetailResp) res.getData();
+                        log.info("ProductSku.reSetValue,spu_id.pro={}.",JSONUtil.toJSON(pro).toJSONString());
                         if(pro != null){
                             esMap.put("spuState",pro.getSpuState());
                             esMap.put("proSpuSpuPic",JSONUtils.fromListByFastJson(pro.getSpuPic()));
@@ -124,6 +136,7 @@ public class ProductSku implements Function {
                         }
                     }
                 }catch (Exception e) {
+                    log.info("ProductSku.reSetValue,Exception:bigDataApiFeign.spuDetail(id).");
                     e.printStackTrace();
                 }
             }
@@ -140,7 +153,9 @@ public class ProductSku implements Function {
                 try {
                     ResponseBO<List<CategoryRelationsResp>> res = bigDataApiFeign.listByCondition(categoryRelationsReq);
                     if(res != null){
+                        log.info("ProductSku.reSetValue,three_category_id.res={}.",JSONUtil.toJSON(res).toJSONString());
                         List<CategoryRelationsResp> pro = (List<CategoryRelationsResp>)res.getData();
+                        log.info("ProductSku.reSetValue,three_category_id.pro={}.",JSONUtil.toJSON(pro).toJSONString());
                         if(pro != null && pro.size() > 0){
                             for(CategoryRelationsResp categoryRelationsResp :pro){
                                 String[] foreCategoryFullCode = categoryRelationsResp.getForeCategoryFullCode().split("-");
@@ -161,6 +176,7 @@ public class ProductSku implements Function {
                         }
                     }
                 }catch (Exception e) {
+                    log.info("ProductSku.reSetValue,Exception:bigDataApiFeign.listByCondition .");
                     e.printStackTrace();
                 }
             }
@@ -172,18 +188,25 @@ public class ProductSku implements Function {
             if (entry.getKey().equals("sku_pic")) {
                 List<String> idList = JSONArray.parseArray(entry.getValue().toString(),String.class);
                 try {
-                    ResponseBO<List<FileManagementVO>> res = bigDataApiFeign.listByIds(idList);
-                    if(res != null){
-                        List<FileManagementVO> pros = (List<FileManagementVO>) res.getData();
-                        if(pros != null && pros.size() > 0){
-                            JSONArray jsonArray = new JSONArray();
-                            for(FileManagementVO file :pros){
-                                jsonArray.add(file);
+                    if(idList != null && idList.size() > 0 ){
+                        log.info("ProductSku.reSetValue,sku_pic.idList={}.",idList);
+                        ResponseBO<List<FileManagementVO>> res = bigDataApiFeign.listByIds(idList);//idList=["1","2"]
+                        log.info("ProductSku.reSetValue,sku_pic.res={}.",JSONUtil.toJSON(res).toJSONString());
+                        if(res != null){
+                            List<FileManagementVO> pros = (List<FileManagementVO>) res.getData();
+                            log.info("ProductSku.reSetValue,sku_pic.pros={}.",JSONUtil.toJSON(pros).toJSONString());
+                            if(pros != null && pros.size() > 0){
+                                JSONArray jsonArray = new JSONArray();
+                                for(FileManagementVO file :pros){
+                                    jsonArray.add(JSONUtil.toJSON(file));
+                                }
+                                log.info("ProductSku.reSetValue,sku_pic.jsonArray={}.",JSONUtil.toJSONString(jsonArray));
+                                esMap.put("proSkuSkuPicJson", JSONUtil.toJSONString(jsonArray));
                             }
-                            esMap.put("proSkuSkuPicJson", jsonArray);
                         }
                     }
                 }catch (Exception e) {
+                    log.info("ProductSku.reSetValue,Exception:bigDataApiFeign.listByIds(idList) .");
                     e.printStackTrace();
                 }
             }
@@ -193,7 +216,7 @@ public class ProductSku implements Function {
             if (entry.getKey().equals("gmt_modify_time")) esMap.put("skuGmtModifyTime",entry.getValue());
             if (entry.getKey().equals("sku_auxiliary_unit")) esMap.put("skuAuxiliaryUnit", entry.getValue() );
         }
-        System.out.println("------------reSetValue.json:"+esMap);
+        System.out.println("------------ProductSku.reSetValue.json:"+esMap);
         return esMap;
     }
 

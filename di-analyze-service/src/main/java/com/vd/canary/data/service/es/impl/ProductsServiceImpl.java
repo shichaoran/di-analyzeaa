@@ -118,15 +118,13 @@ public class ProductsServiceImpl implements ProductsService {
                     productsDetailRes.setSkuId(recordMap.get("skuId").toString());
                     productsDetailRes.setProSkuTitle(recordMap.containsKey("proSkuTitle") ? recordMap.get("proSkuTitle").toString() : "");
                     productsDetailRes.setProSkuSubTitle(recordMap.containsKey("proSkuSubTitle") ? recordMap.get("proSkuSubTitle").toString() : "");
-                    productsDetailRes.setProSkuSkuPicJson(recordMap.containsKey("proSkuSkuPic") ? recordMap.get("proSkuSkuPic").toString() : "");
+                    if(recordMap.containsKey("proSkuSkuPicJson")){
+                        productsDetailRes.setProSkuSkuPicJson(recordMap.get("proSkuSkuPicJson").toString());
+                    }
                     if(recordMap.containsKey("skuSellPriceJson")){
-                        recordMap.get("skuSellPriceJson");
                         JSONArray array = JSONObject.parseArray(recordMap.get("skuSellPriceJson").toString());
-                        //productsDetailRes.setSkuSellPriceJson(JSONObject.toJSONString(array));
                         productsDetailRes.setSkuSellPriceJson(recordMap.get("skuSellPriceJson").toString());
                     }
-                    //productsDetailRes.setSkuSellPriceType(recordMap.containsKey("skuSellPriceType") ?
-                    //                                       Integer.parseInt(recordMap.get("skuSellPriceType").toString()) : 0);
                     if (recordMap.containsKey("skuGmtCreateTime")) {
                         LocalDateTime t = LocalDateTime.parse(recordMap.get("skuGmtCreateTime").toString(),DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
                         productsDetailRes.setSkuGmtCreateTime(t);
@@ -141,7 +139,6 @@ public class ProductsServiceImpl implements ProductsService {
                     productsDetailRes.setApproveState(recordMap.containsKey("approveState") ? recordMap.get("approveState").toString() : "");
                     productsDetailRes.setEnterpriseType(recordMap.containsKey("enterpriseType") ? recordMap.get("enterpriseType").toString() : "");
                     productsDetailRes.setStoreInfoStoreQrCode(recordMap.containsKey("storeInfoStoreQrCode") ? recordMap.get("storeInfoStoreQrCode").toString() : "");
-
                     if (recordMap.containsKey("gmtCreateTime")) {
                         LocalDateTime t = LocalDateTime.parse(recordMap.get("gmtCreateTime").toString(),DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
                         productsDetailRes.setGmtCreateTime(t);
@@ -157,6 +154,8 @@ public class ProductsServiceImpl implements ProductsService {
                         mapt.put(recordMap.containsKey("attributeValueId") ? recordMap.get("attributeValueId").toString() : "", recordMap.containsKey("value_Name") ? recordMap.get("value_Name").toString() : "");
                         attributes.put(recordMap.containsKey("attributeName") ? recordMap.get("attributeName").toString() : "", mapt);
                     }
+                    productsDetailRes.setSkuAuxiliaryUnit(recordMap.containsKey("skuAuxiliaryUnit") ? recordMap.get("skuAuxiliaryUnit").toString() : "");
+                    productsDetailRes.setSkuName(recordMap.containsKey("proSkuSkuName")?recordMap.get("proSkuSkuName").toString() : "");
                 }
                 productsRes.setCategorys(categorys);
                 productsRes.setBrands(brands);
@@ -195,10 +194,9 @@ public class ProductsServiceImpl implements ProductsService {
                     productsDetailRes.setSkuId(recordMap.containsKey("skuId") ? recordMap.get("skuId").toString() : "");
                     productsDetailRes.setProSkuTitle(recordMap.containsKey("proSkuTitle") ? recordMap.get("proSkuTitle").toString() : "");
                     productsDetailRes.setProSkuSubTitle(recordMap.containsKey("proSkuSubTitle") ? recordMap.get("proSkuSubTitle").toString() : "");
-                    productsDetailRes.setProSkuSkuPicJson(recordMap.containsKey("proSkuSkuPic") ? recordMap.get("proSkuSkuPic").toString() : "");
-//                    productsDetailRes.setAttributeMap(recordMap.containsKey("attributeMap") ? recordMap.get("attributeMap").toString() : "");
-                    //productsDetailRes.setSkuSellPriceJson(recordMap.containsKey("skuSellPriceJson") ? recordMap.get(
-                    //        "skuSellPriceJson").toString() : "");
+                    if(recordMap.containsKey("proSkuSkuPicJson")){
+                        productsDetailRes.setProSkuSkuPicJson(recordMap.get("proSkuSkuPicJson").toString());
+                    }
                     if(recordMap.containsKey("skuSellPriceJson")){
                         JSONArray array = JSONObject.parseArray(recordMap.get("skuSellPriceJson").toString());
                         productsDetailRes.setSkuSellPriceJson(JSONObject.toJSONString(array));
@@ -208,7 +206,6 @@ public class ProductsServiceImpl implements ProductsService {
                         LocalDateTime t = LocalDateTime.parse(recordMap.get("skuGmtCreateTime").toString(),DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
                         productsDetailRes.setSkuGmtCreateTime(t);
                     }
-//                productsDetailRes.setSkuGmtCreateTime(DateUtil.getDateTime(recordMap.containsKey("skuGmtCreateTime")?recordMap.get("skuGmtCreateTime").toString():""));
                     productsDetailRes.setShopId(recordMap.containsKey("storeId") ? recordMap.get("storeId").toString() : "");
                     productsDetailRes.setStoreInfoName(recordMap.containsKey("storeName") ? recordMap.get("storeName").toString() : "");
                     productsDetailRes.setBusinessCategory(recordMap.containsKey("businessCategory") ? recordMap.get("businessCategory").toString() : "");
@@ -224,7 +221,6 @@ public class ProductsServiceImpl implements ProductsService {
                         LocalDateTime t = LocalDateTime.parse(recordMap.get("gmtCreateTime").toString(),DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
                         productsDetailRes.setGmtCreateTime(t);
                     }
-//                productsDetailRes.setGmtCreateTime(DateUtil.getDateTime(recordMap.containsKey("gmtCreateTime")?recordMap.get("gmtCreateTime").toString():""));
                     productDetailResList.add(productsDetailRes);
                     categorys.put(recordMap.containsKey("fThreeCategoryCode") ? recordMap.get("fThreeCategoryCode").toString() : "", recordMap.containsKey("fThreeCategoryName") ? recordMap.get("fThreeCategoryName").toString() : "");
                     brands.put(recordMap.containsKey("proSkuBrandId") ? recordMap.get("proSkuBrandId").toString() : "", recordMap.containsKey("bBrandName") ? recordMap.get("bBrandName").toString() : "");
@@ -236,7 +232,8 @@ public class ProductsServiceImpl implements ProductsService {
                         mapt.put(recordMap.containsKey("attributeValueId") ? recordMap.get("attributeValueId").toString() : "", recordMap.containsKey("value_Name") ? recordMap.get("value_Name").toString() : "");
                         attributes.put(recordMap.containsKey("attributeName") ? recordMap.get("attributeName").toString() : "", mapt);
                     }
-
+                    productsDetailRes.setSkuAuxiliaryUnit(recordMap.containsKey("skuAuxiliaryUnit") ? recordMap.get("skuAuxiliaryUnit").toString() : "");
+                    productsDetailRes.setSkuName(recordMap.containsKey("proSkuSkuName")?recordMap.get("proSkuSkuName").toString() : "");
                 }
                 productsRes.setCategorys(categorys);
                 productsRes.setBrands(brands);

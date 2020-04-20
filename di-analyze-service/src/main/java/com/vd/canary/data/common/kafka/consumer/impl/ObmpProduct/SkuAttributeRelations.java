@@ -21,6 +21,8 @@ import com.vd.canary.obmp.product.api.response.brand.BrandManagementResp;
 import com.vd.canary.obmp.product.api.response.category.CategoryRelationsResp;
 import com.vd.canary.obmp.product.api.response.file.vo.FileManagementVO;
 import com.vd.canary.obmp.product.api.response.spu.ProductSpuDetailResp;
+import com.vd.canary.utils.JSONUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,16 +35,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+@Slf4j
 @Component
 public class SkuAttributeRelations implements Function {
 
-    private static final Logger logger = LoggerFactory.getLogger(SkuAttributeRelations.class);
     @Autowired
     private ProductESServiceImpl productESServiceImplTemp;
 
     @Override
     public void performES(String msg) {
-        logger.info("SkuAttributeRelations.msg" + msg);
+        log.info("SkuAttributeRelations.msg" + msg);
         if(StringUtils.isNotBlank(msg)){
             return;
         }
@@ -59,6 +61,7 @@ public class SkuAttributeRelations implements Function {
                 skuid = binlogMap.get("sku_id").toString();
                 try {
                     Map<String, Object> esMap = productESServiceImplTemp.findById(skuid);
+                    log.info("SkuAttributeRelations.performES,brand_id.esMap={}.", JSONUtil.toJSON(esMap).toJSONString());
                     if(esMap != null){
                         Map<String, Object> resjson = reSetValue(esMap, binlogMap);
                         productESServiceImplTemp.updateProduct(resjson);
@@ -73,7 +76,7 @@ public class SkuAttributeRelations implements Function {
     public Map<String, Object> reSetValue(Map<String, Object> esMap,Map<String,Object> binlogMap){
         if(binlogMap.containsKey("attribute_id")) esMap.put("attributeId",binlogMap.get("attribute_id"));
         if(binlogMap.containsKey("attribute_value_id")) esMap.put("attributeValueId",binlogMap.get("attribute_value_id"));
-        System.out.println("------------reSetValue.json:"+esMap);
+        System.out.println("------------SkuAttributeRelations.reSetValue.json:"+esMap);
         return esMap;
     }
 
