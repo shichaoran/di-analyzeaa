@@ -48,4 +48,8 @@ public class SteelReq extends RequestPageBO {
      */
     private String skuRegionalName;
 
+    /**
+     * 属性id列表
+     */
+    private List<String> attributeIdList;
 }
