@@ -12,6 +12,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Lists;
 import com.vd.canary.data.api.request.es.CategoryReq;
 import com.vd.canary.data.api.request.es.ProductsReq;
+import com.vd.canary.data.api.request.es.SteelReq;
 import com.vd.canary.data.api.request.es.ThreeCategoryReq;
 import com.vd.canary.data.common.es.helper.ESPageRes;
 import com.vd.canary.data.common.es.helper.ElasticsearchUtil;
@@ -199,6 +200,40 @@ public class ProductESServiceImpl implements ProductESService {
 
     //通过一级类目 二级类目 三级类目 分页搜索数据 分页
     public ESPageRes boolQueryByDiffCategorys(Integer pageNumber, Integer pageSize, @Valid ThreeCategoryReq req) {
+        if (req == null || ( req.getFOneCategoryId()==null && req.getFTwoCategoryId()==null && req.getFThreeCategoryId()== null ) ) {
+            List<Map<String, Object>> recordList = new ArrayList<>();
+            return new ESPageRes(pageNumber, pageSize, 0, recordList);
+        }
+        if (pageNumber == null || pageNumber < Constant.ES_DEFAULT_PAGE_NUMBER) {
+            pageNumber = Constant.ES_DEFAULT_PAGE_NUMBER;
+        }
+        if (pageSize == null || pageSize <= 0) {
+            pageSize = Constant.ES_PAGE_SIZE;
+        }
+        String fields = null;
+        String sortField = null;
+        String sortTpye = null;
+        String highlightField = null;
+        BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
+        if( req.getFOneCategoryId() != null){
+            boolQuery.must(QueryBuilders.termQuery("fOneCategoryId", req.getFOneCategoryId() ));
+        }
+        if( req.getFTwoCategoryId() != null){
+            boolQuery.must(QueryBuilders.termQuery("fTwoCategoryId", req.getFTwoCategoryId() ));
+        }
+        if( req.getFThreeCategoryId() != null){
+            boolQuery.must(QueryBuilders.termQuery("fThreeCategoryId", req.getFThreeCategoryId() ));
+        }
+        ESPageRes esPageRes = ElasticsearchUtil.searchDataPage(indexName, pageNumber, pageSize, boolQuery, fields, sortField, sortTpye, highlightField);
+        return esPageRes;
+    }
+
+
+
+
+
+    // 钢筑采   通过一级类目 二级类目 三级类目 分页搜索数据 分页
+    public ESPageRes boolQueryByDiffCategorys(Integer pageNumber, Integer pageSize, @Valid SteelReq req) {
         if (req == null || ( req.getFOneCategoryId()==null && req.getFTwoCategoryId()==null && req.getFThreeCategoryId()== null ) ) {
             List<Map<String, Object>> recordList = new ArrayList<>();
             return new ESPageRes(pageNumber, pageSize, 0, recordList);

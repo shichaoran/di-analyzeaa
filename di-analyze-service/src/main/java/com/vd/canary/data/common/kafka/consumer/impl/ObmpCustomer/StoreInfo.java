@@ -22,11 +22,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-/**
- * @Author shichaoran
- * @Date 2020/4/9 13:57
- * @Version
- */
+
+
 @Component
 public class StoreInfo implements Function {
     private static final Logger logger = LoggerFactory.getLogger(StoreInfo.class);

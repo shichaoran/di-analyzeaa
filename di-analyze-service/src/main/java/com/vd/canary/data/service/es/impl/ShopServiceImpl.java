@@ -34,8 +34,8 @@ public class ShopServiceImpl implements ShopService {
     public ShopESServiceImpl shopESService;
 
 
-    @Override
-    public ResponseBO<ShopRes> search(@Valid SearchShopReq shopSearchBO) {
+//    @Override
+    public ResponseBO<ShopRes> search1(@Valid SearchShopReq shopSearchBO) {
         ResponseBO<ShopRes> res = new ResponseBO<ShopRes>();
         ShopRes shopRes = new ShopRes();
 
@@ -99,8 +99,8 @@ public class ShopServiceImpl implements ShopService {
     }
 
 
-    //    @Override
-    public ResponseBO<ShopRes> search1(@Valid SearchShopReq shopSearchBO) {
+    @Override
+    public ResponseBO<ShopRes> search(@Valid SearchShopReq shopSearchBO) {
         ResponseBO<ShopRes> res = new ResponseBO<ShopRes>();
         ShopRes shopRes = new ShopRes();
         ESPageRes esPageRes = shopESService.boolQueryByKeyword(shopSearchBO.getPageNum(), shopSearchBO.getPageSize(), shopSearchBO);
