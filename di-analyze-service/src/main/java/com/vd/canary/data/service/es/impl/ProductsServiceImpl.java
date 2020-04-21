@@ -194,6 +194,8 @@ public class ProductsServiceImpl implements ProductsService {
 
                     if(recordMap.containsKey("skuRegionalName") && recordMap.get("skuRegionalName") !=null) productsDetailRes.setSkuRegionalNameJson(recordMap.get("skuRegionalName").toString());
 
+                    if(recordMap.containsKey("attributeMap") && recordMap.get("attributeMap") !=null) productsDetailRes.setAttributeMapJson(recordMap.get("attributeMap").toString());
+
                     productDetailResList.add(productsDetailRes);
 
                     categorys.put(recordMap.containsKey("fThreeCategoryCode") ? recordMap.get("fThreeCategoryCode").toString() : "", recordMap.containsKey("fThreeCategoryName") ? recordMap.get("fThreeCategoryName").toString() : "");
