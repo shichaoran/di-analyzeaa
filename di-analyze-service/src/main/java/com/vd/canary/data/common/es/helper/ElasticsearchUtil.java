@@ -3,13 +3,10 @@ package com.vd.canary.data.common.es.helper;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.collect.Lists;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpHost;
-import org.apache.http.client.config.RequestConfig;
-import org.elasticsearch.action.admin.indices.alias.Alias;
 import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.delete.DeleteRequest;
 import org.elasticsearch.action.delete.DeleteResponse;
@@ -31,9 +28,7 @@ import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.text.Text;
 import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.common.xcontent.XContentBuilder;
-import org.elasticsearch.common.xcontent.XContentFactory;
 import org.elasticsearch.common.xcontent.XContentType;
-import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.index.reindex.DeleteByQueryRequest;
@@ -44,19 +39,16 @@ import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightField;
 import org.elasticsearch.search.sort.FieldSortBuilder;
 import org.elasticsearch.search.sort.SortOrder;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
-
-import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
+
 @Configuration
 @Slf4j
 @Data
@@ -254,7 +246,6 @@ public class ElasticsearchUtil<T> {
         log.info("delete:{}" , JSON.toJSONString(response));
     }
 
-
     /**
      * 根据条件删除
      *
@@ -273,22 +264,6 @@ public class ElasticsearchUtil<T> {
             throw new RuntimeException(e);
         }
     }
-
-    /**
-     * 清空记录
-     *
-     * @param indexName
-     */
-    /*public static void deleteAll(String indexName) {
-        DeleteRequest deleteRequest = new DeleteRequest(indexName);
-        DeleteResponse response = null;
-        try {
-            response = client.delete(deleteRequest, RequestOptions.DEFAULT);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        log.info("delete: {}" ,JSON.toJSONString(response));
-    }*/
 
     // 通过查询条件搜索结果，不分页
     public static List<Map<String, Object>> searchByQuery(String indexName,QueryBuilder query) {
@@ -329,28 +304,25 @@ public class ElasticsearchUtil<T> {
         return null;
     }
 
-    public static List<Map<String, Object>> searchAll(String indexName) {
+    public static List<Map<String, Object>> selectAll(String indexName) {
         List<Map<String, Object>> res = new ArrayList<>();
-
-        SearchRequest searchRequest = new SearchRequest(indexName);
-        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
-        QueryBuilder query = QueryBuilders.matchAllQuery();
-        searchSourceBuilder.query(query);
-        searchRequest.source(searchSourceBuilder);
         try {
-            SearchResponse response = client.search(searchRequest, RequestOptions.DEFAULT);
-            for (SearchHit hit : response.getHits().getHits()) {
+            SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+            QueryBuilder queryBuilder = QueryBuilders.matchAllQuery();
+            searchSourceBuilder.query(queryBuilder);
+            SearchRequest searchRequest = new SearchRequest(indexName).source(searchSourceBuilder);
+            SearchResponse response = client.search(searchRequest,RequestOptions.DEFAULT);
+            SearchHit[] hits = response.getHits().getHits();
+            for (SearchHit hit : hits) {
                 Map<String, Object> map = hit.getSourceAsMap();
-                map.put("id", hit.getId());
                 res.add(map);
             }
+
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
         return res;
-
     }
-
 
 
     /**
@@ -367,7 +339,7 @@ public class ElasticsearchUtil<T> {
      * @return 结果
      */
     public static ESPageRes searchDataPage(String index, Integer startPage, Integer pageSize,
-                                           QueryBuilder query, String fields, String sortField, String sortTpye, String highlightField) {
+            QueryBuilder query, String fields, String sortField, String sortTpye, String highlightField) {
         SearchRequest searchRequest = new SearchRequest(index);
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
         //设置一个可选的超时，控制允许搜索的时间

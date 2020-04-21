@@ -80,36 +80,38 @@ public class ProductsTO implements Serializable {
      * attribute_management表   属性管理
      */
     //属性编码
-    private String attributeCode;  // 写搜索缺失
+    private String attributeCode;  // 该字段目前没实际作用  因为商品和属性是一对多的关系
     //属性名称
-    private String attributeName;  // 写搜索缺失
+    private String attributeName;  // 该字段目前没实际作用  因为商品和属性是一对多的关系
 
 
     /**
      * attribute_value表   属性值
      */
     //属性值名称
-    private String value_Name;  // 写搜索缺失
+    private String value_Name;  // 该字段目前没实际作用  因为商品和属性是一对多的关系
 
-
-    /**
-     * attribute_value_relations表   属性值关系表
-     */
-    //属性id
-    private String attributeId;
-    //属性值id
-    private String attributeValueId;
-    /**
-     * 商品属性 key为属性id+属性类型，value为属性值
-     */
-    //private Map<String, HashMap<String,String>> attributeMap;
-    private String attributeMap;   // 写搜索缺失
 
     /**
      * sku_attribute_relations表   sku属性映射关系
      */
+    //属性id -> attribute_management.id
+    private String attributeId;  // 该字段目前没实际作用  因为商品和属性是一对多的关系
+    //属性值id -> attribute_value.id
+    private String attributeValueId;  // 该字段目前没实际作用  因为商品和属性是一对多的关系
+    // 商品 所有属性和属性值 合集 格式如下：
+    /**
+     * [{
+     *    "attributeType": "1",
+     *    "attributeId": "1252129898609266689",
+     *    "attributeName": "颜色",
+     *    "attributeValue": [{"attributeValueId":"1252129898630238210","attributeValueName":"红"},{"attributeValueId":"1252129898651209730","attributeValueName":"蓝"}]
+     * }]
+     *
+     */
+    private String attributeMap;
     //属性类型：0定价属性   1一般属性
-    private Integer attributeType;  // 写搜索缺失
+    private Integer attributeType;  //  该字段目前没实际作用  因为商品和属性是一对多的关系
 
 
     /**

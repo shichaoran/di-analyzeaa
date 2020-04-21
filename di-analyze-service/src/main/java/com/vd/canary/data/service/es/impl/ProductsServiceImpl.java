@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.vd.canary.core.bo.ResponseBO;
-import com.vd.canary.core.util.ResponseUtil;
 import com.vd.canary.data.api.request.es.CategoryReq;
 import com.vd.canary.data.api.request.es.ProductDetailsReq;
 import com.vd.canary.data.api.request.es.ProductsReq;
@@ -15,7 +14,6 @@ import com.vd.canary.data.api.response.es.vo.CategoryVO;
 import com.vd.canary.data.common.es.helper.ESPageRes;
 import com.vd.canary.data.api.response.es.ProductsRes;
 import com.vd.canary.data.api.response.es.vo.ProductsDetailRes;
-import com.vd.canary.data.common.es.model.ProductsTO;
 import com.vd.canary.data.common.es.service.impl.ProductESServiceImpl;
 import com.vd.canary.data.service.es.ProductsService;
 import com.vd.canary.utils.CollectionUtil;
@@ -116,58 +114,53 @@ public class ProductsServiceImpl implements ProductsService {
                 for (Map<String, Object> recordMap : recordList) {
                     ProductsDetailRes productsDetailRes = new ProductsDetailRes();
                     productsDetailRes.setSkuId(recordMap.get("skuId").toString());
-                    productsDetailRes.setProSkuTitle(recordMap.containsKey("proSkuTitle") ? recordMap.get("proSkuTitle").toString() : "");
-                    productsDetailRes.setProSkuSubTitle(recordMap.containsKey("proSkuSubTitle") ? recordMap.get("proSkuSubTitle").toString() : "");
-                    if(recordMap.containsKey("proSkuSkuPicJson")){
-                        productsDetailRes.setProSkuSkuPicJson(recordMap.get("proSkuSkuPicJson").toString());
-                    }
-                    if(recordMap.containsKey("skuSellPriceJson")){
+                    if(recordMap.containsKey("proSkuTitle") && recordMap.get("proSkuTitle") != null) productsDetailRes.setProSkuTitle(recordMap.get("proSkuTitle").toString() );
+
+                    if(recordMap.containsKey("proSkuSubTitle") && recordMap.get("proSkuSubTitle") != null ) productsDetailRes.setProSkuSubTitle(recordMap.get("proSkuSubTitle").toString() );
+
+                    if(recordMap.containsKey("proSkuSkuPicJson") && recordMap.get("proSkuSkuPicJson") != null) productsDetailRes.setProSkuSkuPicJson(recordMap.get("proSkuSkuPicJson").toString());
+
+                    if(recordMap.containsKey("skuSellPriceJson") && recordMap.get("skuSellPriceJson") != null ){
                         JSONArray array = JSONObject.parseArray(recordMap.get("skuSellPriceJson").toString());
                         productsDetailRes.setSkuSellPriceJson(recordMap.get("skuSellPriceJson").toString());
                     }
-                    if (recordMap.containsKey("skuGmtCreateTime")) {
+
+                    if (recordMap.containsKey("skuGmtCreateTime") && recordMap.get("skuGmtCreateTime") != null) {
                         LocalDateTime t = LocalDateTime.parse(recordMap.get("skuGmtCreateTime").toString(),DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
                         productsDetailRes.setSkuGmtCreateTime(t);
                     }
-                    productsDetailRes.setShopId(recordMap.containsKey("storeId") ? recordMap.get("storeId").toString() : "");
-                    productsDetailRes.setStoreInfoName(recordMap.containsKey("storeName") ? recordMap.get("storeName").toString() : "");
-                    if(recordMap.containsKey("businessCategory") ){
-                        if(recordMap.get("businessCategory") != null){
-                            productsDetailRes.setBusinessCategory(recordMap.get("businessCategory").toString() );
-                        }
-                    }
-                    if(recordMap.containsKey("mainProducts") && recordMap.get("mainProducts") != null){
-                        productsDetailRes.setMainProducts(recordMap.get("mainProducts").toString());
-                    }
-                    if(recordMap.containsKey("businessArea") && recordMap.get("businessArea") != null){
-                        productsDetailRes.setBusinessArea(recordMap.get("businessArea").toString());
-                    }
-                    if(recordMap.containsKey("boothBusinessBoothCode") && recordMap.get("boothBusinessBoothCode") != null){
-                        productsDetailRes.setBoothBusinessBoothCode( recordMap.get("boothBusinessBoothCode").toString() );
-                    }
-                    if(recordMap.containsKey("customerProfilesLevel") && recordMap.get("customerProfilesLevel") != null){
-                        productsDetailRes.setCustomerProfilesLevel(recordMap.get("customerProfilesLevel").toString());
-                    }
-                    if(recordMap.containsKey("approveState") && recordMap.get("approveState") != null){
-                        productsDetailRes.setApproveState(recordMap.get("approveState").toString());
-                    }
-                    if( recordMap.containsKey("enterpriseType") && recordMap.get("enterpriseType") != null ){
-                        productsDetailRes.setEnterpriseType(recordMap.get("enterpriseType").toString());
-                    }
-                    if(recordMap.containsKey("storeInfoStoreQrCode") && recordMap.get("storeInfoStoreQrCode") != null){
-                        productsDetailRes.setStoreInfoStoreQrCode(recordMap.get("storeInfoStoreQrCode").toString());
-                    }
-                    if (recordMap.containsKey("gmtCreateTime") && recordMap.get("gmtCreateTime") !=null) {
+
+                    if(recordMap.containsKey("storeId") && recordMap.get("storeId") != null) productsDetailRes.setShopId(recordMap.get("storeId").toString());
+
+                    if(recordMap.containsKey("storeName") && recordMap.get("storeName") != null) productsDetailRes.setStoreInfoName(recordMap.get("storeName").toString() );
+
+                    if(recordMap.containsKey("businessCategory") && recordMap.get("businessCategory") != null ) productsDetailRes.setBusinessCategory(recordMap.get("businessCategory").toString() );
+
+                    if(recordMap.containsKey("mainProducts") && recordMap.get("mainProducts") != null) productsDetailRes.setMainProducts(recordMap.get("mainProducts").toString());
+
+                    if(recordMap.containsKey("businessArea") && recordMap.get("businessArea") != null) productsDetailRes.setBusinessArea(recordMap.get("businessArea").toString());
+
+                    if(recordMap.containsKey("boothBusinessBoothCode") && recordMap.get("boothBusinessBoothCode") != null)productsDetailRes.setBoothBusinessBoothCode(recordMap.get("boothBusinessBoothCode").toString());
+
+                    if(recordMap.containsKey("customerProfilesLevel") && recordMap.get("customerProfilesLevel") != null) productsDetailRes.setCustomerProfilesLevel(recordMap.get("customerProfilesLevel").toString());
+
+                    if(recordMap.containsKey("approveState") && recordMap.get("approveState") != null) productsDetailRes.setApproveState(recordMap.get("approveState").toString());
+
+                    if(recordMap.containsKey("enterpriseType") && recordMap.get("enterpriseType") != null ) productsDetailRes.setEnterpriseType(recordMap.get("enterpriseType").toString());
+
+                    if(recordMap.containsKey("storeInfoStoreQrCode") && recordMap.get("storeInfoStoreQrCode") != null) productsDetailRes.setStoreInfoStoreQrCode(recordMap.get("storeInfoStoreQrCode").toString());
+
+                    if(recordMap.containsKey("gmtCreateTime") && recordMap.get("gmtCreateTime") !=null) {
                         LocalDateTime t = LocalDateTime.parse(recordMap.get("gmtCreateTime").toString(),DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
                         productsDetailRes.setGmtCreateTime(t);
                     }
-                    if (recordMap.containsKey("regionalId") && recordMap.get("regionalId") !=null) {
-                        productsDetailRes.setRegionalIdJson(recordMap.get("regionalId").toString());
-                    }
-                    if (recordMap.containsKey("skuRegionalName") && recordMap.get("skuRegionalName") !=null) {
-                        productsDetailRes.setSkuRegionalNameJson(recordMap.get("skuRegionalName").toString());
-                    }
+
+                    if(recordMap.containsKey("regionalId") && recordMap.get("regionalId") !=null) productsDetailRes.setRegionalIdJson(recordMap.get("regionalId").toString());
+
+                    if(recordMap.containsKey("skuRegionalName") && recordMap.get("skuRegionalName") !=null) productsDetailRes.setSkuRegionalNameJson(recordMap.get("skuRegionalName").toString());
+
                     productDetailResList.add(productsDetailRes);
+
                     categorys.put(recordMap.containsKey("fThreeCategoryCode") ? recordMap.get("fThreeCategoryCode").toString() : "", recordMap.containsKey("fThreeCategoryName") ? recordMap.get("fThreeCategoryName").toString() : "");
                     brands.put(recordMap.containsKey("proSkuBrandId") ? recordMap.get("proSkuBrandId").toString() : "", recordMap.containsKey("bBrandName") ? recordMap.get("bBrandName").toString() : "");
                     if (attributes.containsKey(recordMap.containsKey("attributeName") ? recordMap.get("attributeName").toString() : "")) {
@@ -215,62 +208,55 @@ public class ProductsServiceImpl implements ProductsService {
                 List<ProductsDetailRes> productDetailResList = new ArrayList<>(); //商品详细列表
                 for (Map<String, Object> recordMap : recordList) {
                     ProductsDetailRes productsDetailRes = new ProductsDetailRes();
-                    productsDetailRes.setSkuId(recordMap.containsKey("skuId") ? recordMap.get("skuId").toString() : "");
-                    productsDetailRes.setProSkuTitle(recordMap.containsKey("proSkuTitle") ? recordMap.get("proSkuTitle").toString() : "");
-                    productsDetailRes.setProSkuSubTitle(recordMap.containsKey("proSkuSubTitle") ? recordMap.get("proSkuSubTitle").toString() : "");
-                    if(recordMap.containsKey("proSkuSkuPicJson")){
-                        productsDetailRes.setProSkuSkuPicJson(recordMap.get("proSkuSkuPicJson").toString());
-                    }
-                    if(recordMap.containsKey("skuSellPriceJson")){
+
+                    productsDetailRes.setSkuId(recordMap.get("skuId").toString());
+                    if(recordMap.containsKey("proSkuTitle") && recordMap.get("proSkuTitle") != null) productsDetailRes.setProSkuTitle(recordMap.get("proSkuTitle").toString() );
+
+                    if(recordMap.containsKey("proSkuSubTitle") && recordMap.get("proSkuSubTitle") != null ) productsDetailRes.setProSkuSubTitle(recordMap.get("proSkuSubTitle").toString() );
+
+                    if(recordMap.containsKey("proSkuSkuPicJson") && recordMap.get("proSkuSkuPicJson") != null) productsDetailRes.setProSkuSkuPicJson(recordMap.get("proSkuSkuPicJson").toString());
+
+                    if(recordMap.containsKey("skuSellPriceJson") && recordMap.get("skuSellPriceJson") != null ){
                         JSONArray array = JSONObject.parseArray(recordMap.get("skuSellPriceJson").toString());
-                        productsDetailRes.setSkuSellPriceJson(JSONObject.toJSONString(array));
+                        productsDetailRes.setSkuSellPriceJson(recordMap.get("skuSellPriceJson").toString());
                     }
-                    productsDetailRes.setSkuSellPriceType(recordMap.containsKey("skuSellPriceType") ? Integer.parseInt(recordMap.get("skuSellPriceType").toString()) : 0);
-                    if (recordMap.containsKey("skuGmtCreateTime")) {
+
+                    if (recordMap.containsKey("skuGmtCreateTime") && recordMap.get("skuGmtCreateTime") != null) {
                         LocalDateTime t = LocalDateTime.parse(recordMap.get("skuGmtCreateTime").toString(),DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
                         productsDetailRes.setSkuGmtCreateTime(t);
                     }
-                    productsDetailRes.setShopId(recordMap.containsKey("storeId") ? recordMap.get("storeId").toString() : "");
-                    productsDetailRes.setStoreInfoName(recordMap.containsKey("storeName") ? recordMap.get("storeName").toString() : "");
-                    //productsDetailRes.setBusinessCategory(recordMap.containsKey("businessCategory") ? recordMap.get(
-                    //        "businessCategory").toString() : "");
-                    if(recordMap.containsKey("businessCategory") ){
-                        if(recordMap.get("businessCategory") != null){
-                            productsDetailRes.setBusinessCategory(recordMap.get("businessCategory").toString() );
-                        }
-                    }
-                    if(recordMap.containsKey("mainProducts") && recordMap.get("mainProducts") != null){
-                        productsDetailRes.setMainProducts(recordMap.get("mainProducts").toString());
-                    }
-                    if(recordMap.containsKey("businessArea") && recordMap.get("businessArea") != null){
-                        productsDetailRes.setBusinessArea(recordMap.get("businessArea").toString());
-                    }
-                    if(recordMap.containsKey("boothBusinessBoothCode") && recordMap.get("boothBusinessBoothCode") != null){
-                        productsDetailRes.setBoothBusinessBoothCode( recordMap.get("boothBusinessBoothCode").toString() );
-                    }
-                    if(recordMap.containsKey("customerProfilesLevel") && recordMap.get("customerProfilesLevel") != null){
-                        productsDetailRes.setCustomerProfilesLevel(recordMap.get("customerProfilesLevel").toString());
-                    }
-                    if(recordMap.containsKey("approveState") && recordMap.get("approveState") != null){
-                        productsDetailRes.setApproveState(recordMap.get("approveState").toString());
-                    }
-                    if( recordMap.containsKey("enterpriseType") && recordMap.get("enterpriseType") != null ){
-                        productsDetailRes.setEnterpriseType(recordMap.get("enterpriseType").toString());
-                    }
-                    if(recordMap.containsKey("storeInfoStoreQrCode") && recordMap.get("storeInfoStoreQrCode") != null){
-                        productsDetailRes.setStoreInfoStoreQrCode(recordMap.get("storeInfoStoreQrCode").toString());
-                    }
-                    if (recordMap.containsKey("gmtCreateTime") && recordMap.get("gmtCreateTime") !=null ) {
+
+                    if(recordMap.containsKey("storeId") && recordMap.get("storeId") != null) productsDetailRes.setShopId(recordMap.get("storeId").toString());
+
+                    if(recordMap.containsKey("storeName") && recordMap.get("storeName") != null) productsDetailRes.setStoreInfoName(recordMap.get("storeName").toString() );
+
+                    if(recordMap.containsKey("businessCategory") && recordMap.get("businessCategory") != null ) productsDetailRes.setBusinessCategory(recordMap.get("businessCategory").toString() );
+
+                    if(recordMap.containsKey("mainProducts") && recordMap.get("mainProducts") != null) productsDetailRes.setMainProducts(recordMap.get("mainProducts").toString());
+
+                    if(recordMap.containsKey("businessArea") && recordMap.get("businessArea") != null) productsDetailRes.setBusinessArea(recordMap.get("businessArea").toString());
+
+                    if(recordMap.containsKey("boothBusinessBoothCode") && recordMap.get("boothBusinessBoothCode") != null)productsDetailRes.setBoothBusinessBoothCode(recordMap.get("boothBusinessBoothCode").toString());
+
+                    if(recordMap.containsKey("customerProfilesLevel") && recordMap.get("customerProfilesLevel") != null) productsDetailRes.setCustomerProfilesLevel(recordMap.get("customerProfilesLevel").toString());
+
+                    if(recordMap.containsKey("approveState") && recordMap.get("approveState") != null) productsDetailRes.setApproveState(recordMap.get("approveState").toString());
+
+                    if(recordMap.containsKey("enterpriseType") && recordMap.get("enterpriseType") != null ) productsDetailRes.setEnterpriseType(recordMap.get("enterpriseType").toString());
+
+                    if(recordMap.containsKey("storeInfoStoreQrCode") && recordMap.get("storeInfoStoreQrCode") != null) productsDetailRes.setStoreInfoStoreQrCode(recordMap.get("storeInfoStoreQrCode").toString());
+
+                    if(recordMap.containsKey("gmtCreateTime") && recordMap.get("gmtCreateTime") !=null) {
                         LocalDateTime t = LocalDateTime.parse(recordMap.get("gmtCreateTime").toString(),DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
                         productsDetailRes.setGmtCreateTime(t);
                     }
-                    if (recordMap.containsKey("regionalId") && recordMap.get("regionalId") !=null) {
-                        productsDetailRes.setRegionalIdJson(recordMap.get("regionalId").toString());
-                    }
-                    if (recordMap.containsKey("skuRegionalName") && recordMap.get("skuRegionalName") !=null) {
-                        productsDetailRes.setSkuRegionalNameJson(recordMap.get("skuRegionalName").toString());
-                    }
+
+                    if(recordMap.containsKey("regionalId") && recordMap.get("regionalId") !=null) productsDetailRes.setRegionalIdJson(recordMap.get("regionalId").toString());
+
+                    if(recordMap.containsKey("skuRegionalName") && recordMap.get("skuRegionalName") !=null) productsDetailRes.setSkuRegionalNameJson(recordMap.get("skuRegionalName").toString());
+
                     productDetailResList.add(productsDetailRes);
+
                     categorys.put(recordMap.containsKey("fThreeCategoryCode") ? recordMap.get("fThreeCategoryCode").toString() : "", recordMap.containsKey("fThreeCategoryName") ? recordMap.get("fThreeCategoryName").toString() : "");
                     brands.put(recordMap.containsKey("proSkuBrandId") ? recordMap.get("proSkuBrandId").toString() : "", recordMap.containsKey("bBrandName") ? recordMap.get("bBrandName").toString() : "");
                     if (attributes.containsKey(recordMap.containsKey("attributeName") ? recordMap.get("attributeName").toString() : "")) {
