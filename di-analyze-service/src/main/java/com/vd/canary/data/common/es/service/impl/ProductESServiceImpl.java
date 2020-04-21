@@ -27,6 +27,7 @@ import org.elasticsearch.common.unit.Fuzziness;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.XContentFactory;
 import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 
 import org.springframework.stereotype.Service;
@@ -275,8 +276,15 @@ public class ProductESServiceImpl implements ProductESService {
         if (StringUtils.isNotBlank(req.getIsHaveHouse())) {//是否入驻展厅
             //boolQuery.must();
         }
-        ESPageRes esPageRes = ElasticsearchUtil.searchDataPage(indexName, pageNumber, pageSize, boolQuery, fields, sortField, sortTpye, highlightField);
-        return esPageRes;
+        if(StringUtils.isEmpty(req.getKey())){
+            QueryBuilder queryBuilder = QueryBuilders.matchAllQuery();
+            ESPageRes esPageRes = ElasticsearchUtil.searchDataPage(indexName, pageNumber, pageSize, queryBuilder, fields, sortField, sortTpye, highlightField);
+            return esPageRes;
+        }else{
+            ESPageRes esPageRes = ElasticsearchUtil.searchDataPage(indexName, pageNumber, pageSize, boolQuery, fields, sortField, sortTpye, highlightField);
+            return esPageRes;
+        }
+
     }
 
     /**
