@@ -521,9 +521,10 @@ public class ProductESServiceImpl implements ProductESService {
     public String updateOne(String c) throws IOException {
         Map<String, Object> content = new HashMap();
         //content.put("skuSellPriceType", JSONUtil.toJSONString("0"));
-        JSONArray array = JSONArray.parseArray("[{\"num\": \"12\", \"price\": \"12\", \"referencePrice\": \"12\",\"vipPrice\": \"12\" }]");
-        content.put("skuSellPriceJson", JSONUtil.toJSONString(array));
-        String id = ElasticsearchUtil.updateData(content, indexName, "123");
+        //JSONArray array = JSONArray.parseArray("[{\"num\": \"12\", \"price\": \"12\", \"referencePrice\": \"12\",\"vipPrice\": "
+        //                                        + "\"12\" }]");
+        content.put("attributeMap", JSONUtil.toJSONString(""));
+        String id = ElasticsearchUtil.updateData(content, indexName, "1251816454693605377");
         if (StringUtils.isNotBlank(id)) {
             return "SaveProduct success.";
         } else {
