@@ -103,6 +103,36 @@ public class SkuAttributeRelations implements Function {
                 JSONArray jsonArray = JSONArray.parseArray(esAttributeMap.toString());
                 for(int i=0;i<jsonArray.size();i++){
                     Map map = (Map)jsonArray.get(i);
+                    if(map.get("attributeName") == null){
+                        try {
+                            ResponseBO<AttributeManagementDetailResp> attributeManagementDetailResp =  bigDataApiFeign.getAttribute(binlogMap.get("attribute_id").toString());
+                            if(attributeManagementDetailResp != null && attributeManagementDetailResp.getData() != null){
+                                String name = attributeManagementDetailResp.getData().getAttributeName();
+                                map.put("attributeName", name);
+                            }
+                        }catch (Exception e) {
+                            log.info("SkuAttributeRelations.reSetValue,Exception,bigDataApiFeign.getAttribute.");
+                            e.printStackTrace();
+                            //map.put("attributeName", "规格");
+                        }
+                    }
+                    if(map.get("attributeValue") == null){
+                        try {
+                            ResponseBO<AttributeValueResp> attributeValueResp = bigDataApiFeign.getAttributeValue(binlogMap.get("attribute_value_id").toString());
+                            if(attributeValueResp != null && attributeValueResp.getData() != null){
+                                AttributeValueResp resp = attributeValueResp.getData();
+                                List<Map<String,Object>> list = new ArrayList();
+                                Map<String,Object> valueMap = new HashMap<>();
+                                valueMap.put("attributeValueId",resp.getId());
+                                valueMap.put("attributeValueName",resp.getValueName());
+                                list.add(valueMap);
+                                map.put("attributeValue", JSONUtil.toJSONString(list));
+                            }
+                        }catch (Exception e) {
+                            log.info("SkuAttributeRelations.reSetValue,Exception:bigDataApiFeign.getAttributeValue1.");
+                            e.printStackTrace();
+                        }
+                    }
                     if(map != null && map.get("attributeId").equals(binlogMap.get("attribute_id"))){
                         flag = 1;
                         JSONArray array = JSONArray.parseArray(JSONUtil.toJSONString(map.get("attributeValue")));
