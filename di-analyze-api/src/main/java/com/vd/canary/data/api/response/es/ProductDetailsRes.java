@@ -30,7 +30,7 @@ public class ProductDetailsRes implements Serializable {
     //sku副标题
     private String skuSubTitle;
     //商品属性
-    private String attributeMapJSON ;
+    private String attributeMapJson ;
     //商品价格
     private String priceJson;
     //价格类型

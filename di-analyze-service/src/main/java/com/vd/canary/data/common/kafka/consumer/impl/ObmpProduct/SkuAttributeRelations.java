@@ -96,6 +96,7 @@ public class SkuAttributeRelations implements Function {
             binlogMap.containsKey("type") && binlogMap.get("type") != null ) {
             Object attributeMapObject = esMap.get("attributeMap");
             if(attributeMapObject == null){
+                List<Map<String,Object>> listMap = new ArrayList();
                 Map<String,Object> map = new HashMap<String, Object>();
                 map.put("attributeType", binlogMap.get("type"));
                 map.put("attributeId", binlogMap.get("attribute_id"));
@@ -108,11 +109,13 @@ public class SkuAttributeRelations implements Function {
                     AttributeValueResp resp = attributeValueResp.getData();
                     List<Map<String,Object>> list = new ArrayList();
                     Map<String,Object> valueMap = new HashMap<>();
-
+                    valueMap.put("attributeValueId",resp.getId());
+                    valueMap.put("attributeValueName",resp.getValueName());
                     list.add(valueMap);
                     map.put("attributeValue", JSONUtil.toJSONString(list));
                 }
-                //esMap.put("attributeMap",);
+                listMap.add(map);
+                esMap.put("attributeMap",JSONUtil.toJSONString(listMap));
             }else{
                 JSONArray jsonArray = JSONArray.parseArray(attributeMapObject.toString());
                 for(int i=0;i<jsonArray.size();i++){

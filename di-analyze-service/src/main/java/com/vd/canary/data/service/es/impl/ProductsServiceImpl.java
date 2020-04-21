@@ -37,67 +37,6 @@ public class ProductsServiceImpl implements ProductsService {
     @Autowired
     private ProductESServiceImpl productESServiceImpl;
 
-    //@Override
-    public ResponseBO<ProductsRes> getProductsByKey1(@Valid ProductsReq productsReq) throws Exception {
-        ResponseBO<ProductsRes> res = new ResponseBO<ProductsRes>();
-        ProductsRes productsRes = new ProductsRes();
-        Map<String,String> categorys = new HashMap<String,String>();
-        categorys.put("0","装配式建筑");
-        categorys.put("1","金属矿");
-        categorys.put("2","铜矿");
-        productsRes.setCategorys(categorys);
-        Map<String,String> brands = new HashMap<String,String>();
-        brands.put("0","抚顺特钢");
-        brands.put("1","不锈钢");
-        brands.put("2","不锈钢铁");
-        productsRes.setBrands(brands);
-        Map<String,Map<String,String>> s= new HashMap<String,Map<String,String>>();
-        Map<String,String> map = new HashMap<String,String>();
-        map.put("1","红色");
-        map.put("2","黄色");
-        s.put("颜色",map);
-        productsRes.setAttributes(s);
-        List<ProductsDetailRes> list = new ArrayList<ProductsDetailRes>();
-        ProductsDetailRes productsDetailRes = new ProductsDetailRes();
-        productsDetailRes.setSkuId("1");
-        Map<String, Map<String, String>> s1 = new HashMap<>();
-        Map<String,String> mapsub = new HashMap<String,String>();
-        mapsub.put("1","黑色");
-        mapsub.put("2","白色");
-        s1.put("颜色",mapsub);
-        productsDetailRes.setAttributeMap(s1);
-        productsDetailRes.setSkuName("建筑钢材");
-        productsDetailRes.setProSkuTitle("建筑钢");
-        productsDetailRes.setProSkuSubTitle("建筑钢特殊钢");
-        productsDetailRes.setProSkuSkuPicJson("[{\"fileSortNumber\":\"1\",\"fileUrl\":\"www.baidu.com\"}]");
-        productsDetailRes.setSkuSellPriceJson("[\"100\"]");
-        productsDetailRes.setSkuSellPriceType(0);
-        productsDetailRes.setSkuGmtCreateTime(null);
-        productsDetailRes.setSkuAuxiliaryUnit("顿");
-        productsDetailRes.setFThreeCategoryName("建筑钢");
-        productsDetailRes.setShopId("1250735825574989826");
-        productsDetailRes.setStoreInfoName("安徽商和融资担保有限公司");
-        productsDetailRes.setBusinessCategory("100");
-        productsDetailRes.setMainProducts("建筑钢 钢材");
-        productsDetailRes.setBusinessArea("安徽");
-        productsDetailRes.setBoothBusinessBoothCode("[\"100#\"]");
-        productsDetailRes.setCustomerProfilesLevel("1");
-        productsDetailRes.setApproveState("1");
-        productsDetailRes.setEnterpriseType("2");
-        productsDetailRes.setStoreInfoStoreQrCode("=97dhkrnjdkwndk83dd9da72lj3 ");
-        productsDetailRes.setGmtCreateTime(LocalDateTime.ofInstant(DateUtil.currentDate().toInstant(), ZoneId.systemDefault()));
-        productsDetailRes.setBoothScheduledTime(LocalDateTime.ofInstant(DateUtil.currentDate().toInstant(), ZoneId.systemDefault()));
-        list.add(productsDetailRes);
-        productsRes.setProductDetailRes(list);
-
-        productsRes.setTotal(100);
-        res.setData(productsRes);
-        res.setCode(200);
-        res.setSuccess(true);
-        res.setMessage("success");
-        return res;
-    }
-
     @Override
     public ResponseBO<ProductsRes> getProductsByKey(@Valid ProductsReq productsReq) throws Exception {
         ResponseBO<ProductsRes> res = new ResponseBO<ProductsRes>();
@@ -284,33 +223,6 @@ public class ProductsServiceImpl implements ProductsService {
         return res;
     }
 
-    //@Override
-    public ResponseBO<ProductDetailsRes> getProductsDetail1(@Valid ProductDetailsReq productDetailsReq) throws IOException {
-        ResponseBO<ProductDetailsRes> res = new ResponseBO();
-        ProductDetailsRes detail = new ProductDetailsRes();
-        Map<String, Map<String, String>> s = new HashMap<>();
-        Map<String,String> map = new HashMap<String,String>();
-        map.put("1","红色");
-        map.put("2","黄色");
-        s.put("颜色",map);
-        detail.setAttributeMap(s);
-        detail.setPriceJson("[\"100\"]");
-        detail.setPriceType(1);
-        detail.setProSkuSkuPicJson("[{\"fileSortNumber\":\"1\",\"fileUrl\":\"www.baidu.com\"}]");
-        detail.setRegionalId("100");
-        detail.setRegionalName("浙江");
-        detail.setSkuId("1");
-        detail.setSkuIntroduce("建筑钢 特殊钢 高韧性复合钢");
-        detail.setSkuName("建筑钢");
-        detail.setSkuSubTitle("建筑钢 特殊钢");
-        detail.setSkuTitle("建筑钢材");
-        res.setData(detail);
-        res.setCode(200);
-        res.setMessage("success");
-        res.setSuccess(true);
-        return res;
-    }
-
     @Override
     public ResponseBO<ProductDetailsRes> getProductsDetail(@Valid ProductDetailsReq productDetailsReq) throws IOException {
         ResponseBO<ProductDetailsRes> res = new ResponseBO<ProductDetailsRes>();
@@ -323,7 +235,8 @@ public class ProductsServiceImpl implements ProductsService {
             if(maps.containsKey("proSkuSubTitle"))productDetailsRes.setSkuSubTitle(maps.get("proSkuSubTitle").toString());
             if(maps.containsKey("attributeMap")){
                 String temp = JSONObject.toJSONString(maps.get("attributeMap"));
-                productDetailsRes.setAttributeMap(JSON.parseObject(temp,Map.class));
+
+                ////////////////productDetailsRes.setAttributeMap(JSON.parseObject(temp,Map.class));
             }
             //if(maps.containsKey("skuSellPriceJson"))productDetailsRes.setPriceJson(maps.get("skuSellPriceJson").toString());
             if(maps.containsKey("skuSellPriceJson")){
