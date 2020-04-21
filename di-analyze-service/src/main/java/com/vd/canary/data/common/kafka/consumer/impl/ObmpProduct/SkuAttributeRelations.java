@@ -157,7 +157,7 @@ public class SkuAttributeRelations implements Function {
                 }catch (Exception e) {
                     log.info("SkuAttributeRelations.reSetValue,Exception,bigDataApiFeign.getAttribute.");
                     e.printStackTrace();
-                    map.put("attributeName", "规格");
+                    //map.put("attributeName", "规格");
                 }
 
                 try {
