@@ -1,3 +1,4 @@
+
 package com.vd.canary.data.common.es.service.impl;
 
 import java.io.IOException;
@@ -12,7 +13,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Lists;
 import com.vd.canary.data.api.request.es.CategoryReq;
 import com.vd.canary.data.api.request.es.ProductsReq;
-import com.vd.canary.data.api.request.es.SteelReq;
 import com.vd.canary.data.api.request.es.ThreeCategoryReq;
 import com.vd.canary.data.common.es.helper.ESPageRes;
 import com.vd.canary.data.common.es.helper.ElasticsearchUtil;
@@ -36,6 +36,7 @@ import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.XContentFactory;
 import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
@@ -229,40 +230,6 @@ public class ProductESServiceImpl implements ProductESService {
     }
 
 
-
-
-
-    // 钢筑采   通过一级类目 二级类目 三级类目 分页搜索数据 分页
-    public ESPageRes boolQueryByDiffCategorys(Integer pageNumber, Integer pageSize, @Valid SteelReq req) {
-        if (req == null || ( req.getFOneCategoryId()==null && req.getFTwoCategoryId()==null && req.getFThreeCategoryId()== null ) ) {
-            List<Map<String, Object>> recordList = new ArrayList<>();
-            return new ESPageRes(pageNumber, pageSize, 0, recordList);
-        }
-        if (pageNumber == null || pageNumber < Constant.ES_DEFAULT_PAGE_NUMBER) {
-            pageNumber = Constant.ES_DEFAULT_PAGE_NUMBER;
-        }
-        if (pageSize == null || pageSize <= 0) {
-            pageSize = Constant.ES_PAGE_SIZE;
-        }
-        String fields = null;
-        String sortField = null;
-        String sortTpye = null;
-        String highlightField = null;
-        BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
-        if( req.getFOneCategoryId() != null){
-            boolQuery.must(QueryBuilders.termQuery("fOneCategoryId", req.getFOneCategoryId() ));
-        }
-        if( req.getFTwoCategoryId() != null){
-            boolQuery.must(QueryBuilders.termQuery("fTwoCategoryId", req.getFTwoCategoryId() ));
-        }
-        if( req.getFThreeCategoryId() != null){
-            boolQuery.must(QueryBuilders.termQuery("fThreeCategoryId", req.getFThreeCategoryId() ));
-        }
-        ESPageRes esPageRes = ElasticsearchUtil.searchDataPage(indexName, pageNumber, pageSize, boolQuery, fields, sortField, sortTpye, highlightField);
-        return esPageRes;
-    }
-
-
     /**
      * 功能：首页顶部商品搜索框通过 关键字分词查询  支持 高亮 排序 并分页
      * 使用QueryBuilders
@@ -296,8 +263,8 @@ public class ProductESServiceImpl implements ProductESService {
         if (StringUtils.isNotBlank(req.getKey())) {// keyword 关键字搜索
             String escapeKey = QueryParser.escape(req.getKey());
             boolQuery.must(QueryBuilders.multiMatchQuery(escapeKey,
-                    "proSkuSpuName", "proSkuSkuName", "proSkuTitle", "proSkuSubTitle",
-                    "threeCategoryName", "bBrandName", "brandShorthand").fuzziness(Fuzziness.AUTO));
+                                                         "proSkuSpuName", "proSkuSkuName", "proSkuTitle", "proSkuSubTitle",
+                                                         "threeCategoryName", "bBrandName", "brandShorthand").fuzziness(Fuzziness.AUTO));
         }
         if (req.getBBrandId() != null && req.getBBrandId().size() > 0) {//品牌id
             boolQuery.must(QueryBuilders.termsQuery("proSkuBrandId", req.getBBrandId()));
@@ -456,7 +423,7 @@ public class ProductESServiceImpl implements ProductESService {
                         builder.endObject();
                         builder.startObject("regionalScope"); { builder.field("type", "keyword"); }
                         builder.endObject();
-                        builder.startObject("skuSellPriceJson"); { builder.field("type", "nested"); }
+                        builder.startObject("skuSellPriceJson"); { builder.field("type", "keyword"); }
                         builder.endObject();
                         builder.startObject("skuSellPriceType"); { builder.field("type", "keyword"); }
                         builder.endObject();
@@ -579,7 +546,12 @@ public class ProductESServiceImpl implements ProductESService {
         if (!ElasticsearchUtil.isIndexExist(indexName)) {
             ElasticsearchUtil.createIndex(indexName, createIndexMapping( indexName));
         }
-        List<Map<String, Object>> objs = ElasticsearchUtil.searchAll(indexName);
+
+        //List<Map<String, Object>> objs = ElasticsearchUtil.searchAll(indexName);
+
+        QueryBuilder query = QueryBuilders.matchAllQuery();
+
+        List<Map<String, Object>> objs = ElasticsearchUtil.searchByQuery(indexName,query);
         for(Map<String, Object> content : objs){
             //content.put("skuSellPriceType", "0");
             JSONArray array = JSONArray.parseArray("[{\"num\": \"12\", \"price\": \"12\", \"referencePrice\": \"12\",\"vipPrice\": \"12\" }]");

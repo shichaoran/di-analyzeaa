@@ -80,16 +80,16 @@ public class ProductsTO implements Serializable {
      * attribute_management表   属性管理
      */
     //属性编码
-    private String attributeCode;
+    private String attributeCode;  // 写搜索缺失
     //属性名称
-    private String attributeName;
+    private String attributeName;  // 写搜索缺失
 
 
     /**
      * attribute_value表   属性值
      */
     //属性值名称
-    private String value_Name;
+    private String value_Name;  // 写搜索缺失
 
 
     /**
@@ -103,30 +103,30 @@ public class ProductsTO implements Serializable {
      * 商品属性 key为属性id+属性类型，value为属性值
      */
     //private Map<String, HashMap<String,String>> attributeMap;
-    private String attributeMap;
+    private String attributeMap;   // 写搜索缺失
 
     /**
      * sku_attribute_relations表   sku属性映射关系
      */
     //属性类型：0定价属性   1一般属性
-    private Integer attributeType;
+    private Integer attributeType;  // 写搜索缺失
 
 
     /**
      * background_category表  后台类目
      */
     //后台一级分类id
-    private String oneCategoryId;
+    private String oneCategoryId; // 写搜索缺失
     //后台一级分类code
-    private String oneCategoryCode;
+    private String oneCategoryCode; // 写搜索缺失
     //后台一级分类
-    private String oneCategoryName;
+    private String oneCategoryName; // 写搜索缺失
     //后台二级分类id
-    private String twoCategoryId;
+    private String twoCategoryId; // 写搜索缺失
     //后台二级分类code
-    private String twoCategoryCode;
+    private String twoCategoryCode; // 写搜索缺失
     //后台二级分类
-    private String twoCategoryName;
+    private String twoCategoryName; // 写搜索缺失
 
     /**
      * brand_management表   品牌管理
@@ -152,45 +152,45 @@ public class ProductsTO implements Serializable {
      * category_relations前后台类目映射关系
      */
     //前台一级分类id
-    private String fOneCategoryId;
+    private String fOneCategoryId; // 需要测试
     //前台一级分类code
-    private String fOneCategoryCode;
+    private String fOneCategoryCode;// 需要测试
     //前台一级分类
-    private String fOneCategoryName;
+    private String fOneCategoryName;// 需要测试
     //前台二级分类id
-    private String fTwoCategoryId;
+    private String fTwoCategoryId;// 需要测试
     //前台二级分类code
-    private String fTwoCategoryCode;
+    private String fTwoCategoryCode;// 需要测试
     //前台二级分类
-    private String fTwoCategoryName;
+    private String fTwoCategoryName;// 需要测试
     //前台三级分类id
-    private String fThreeCategoryId;
+    private String fThreeCategoryId;// 需要测试
     //前台三级分类code
-    private String fThreeCategoryCode;
+    private String fThreeCategoryCode;// 需要测试
     //前台三级分类
-    private String fThreeCategoryName;
+    private String fThreeCategoryName;// 需要测试
 
     /**
      * file_management表   文件管理
      */
     //文件类型  0图片 1视频
-    private String type;
+    private String type; // 写搜索缺失
     //文件存储地址
-    private String fileUrl;
+    private String fileUrl;// 写搜索缺失
     //排序号
-    private Integer fileSortNumber;
+    private Integer fileSortNumber;// 写搜索缺失
 
 
     /**
      * regional_management表   区域管理
      */
     //区域编码
-    private String regionalCode;
+    private String regionalCode;  // 写搜索缺失
     //区域名称
-    private String regionalName;
+    private String regionalName;// 写搜索缺失
     //区域范围json
     //private Text regionalScope;
-    private String regionalScope;
+    private String regionalScope;// 写搜索缺失
 
     /**
      * sku_selling_price表   sku定价管理
@@ -247,16 +247,16 @@ public class ProductsTO implements Serializable {
     private Date gmtCreateTime;
     private Date boothScheduledTime; //入驻时间
     /**
-    * warehouse_management表    仓库管理
-    */
+     * warehouse_management表    仓库管理
+     */
     //仓库编码
-    private String warehouseCode;
+    private String warehouseCode; // 写搜索缺失
     //仓库类型
-    private String warehouseType;
+    private String warehouseType;// 写搜索缺失
     //省市区json
-    private String warehouseRegional;
+    private String warehouseRegional;// 写搜索缺失
     //详细地址
-    private String detailedAddress;
+    private String detailedAddress;// 写搜索缺失
 
 
 }

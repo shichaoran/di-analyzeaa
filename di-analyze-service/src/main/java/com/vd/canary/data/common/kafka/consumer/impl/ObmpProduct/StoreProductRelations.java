@@ -1,34 +1,29 @@
 package com.vd.canary.data.common.kafka.consumer.impl.ObmpProduct;
 
 import com.alibaba.fastjson.JSON;
-import com.google.gson.Gson;
-import com.vd.canary.core.bo.ResponseBO;
-import com.vd.canary.data.common.es.index.ShopTO;
 import com.vd.canary.data.common.es.model.ProductsTO;
 import com.vd.canary.data.common.es.service.impl.ProductESServiceImpl;
+import com.vd.canary.data.common.es.service.impl.ShopESServiceImpl;
 import com.vd.canary.data.common.kafka.consumer.impl.Function;
-import com.vd.canary.obmp.product.api.feign.StoreProductRelationsFeign;
-import com.vd.canary.obmp.product.api.response.store.vo.StoreProductRelationsVO;
-import com.vd.canary.utils.DateUtil;
 import com.vd.canary.utils.JSONUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
+
 @Slf4j
 @Component
 public class StoreProductRelations implements Function {
 
     @Autowired
     private ProductESServiceImpl productESServiceImplTemp;
+
+    @Autowired
+    private ShopESServiceImpl shopESServiceImpl;
 
     @Override
     public void performES(String msg) {
@@ -64,7 +59,31 @@ public class StoreProductRelations implements Function {
     }
 
     public Map<String, Object> reSetValue(Map<String, Object> esMap,Map<String,Object> binlogMap){
-        if(binlogMap.containsKey("store_id")) esMap.put("storeId",binlogMap.get("store_id"));
+        if(binlogMap.containsKey("store_id")){
+            esMap.put("storeId",binlogMap.get("store_id"));
+            try {
+                Map<String, Object> shopEsRes = shopESServiceImpl.findById(binlogMap.get("store_id").toString());
+                log.info("StoreProductRelations.performES,reSetValue.shopEsRes={}.", JSONUtil.toJSON(shopEsRes).toJSONString());
+                if(shopEsRes != null){
+                    esMap.put("storeId",shopEsRes.get("id"));
+                    esMap.put("categoryId",""); // 暂时不好处理
+                    esMap.put("storeName",shopEsRes.get("name"));
+                    esMap.put("businessCategory",shopEsRes.get("businessCategory"));
+                    esMap.put("mainProducts",shopEsRes.get("mainProducts"));
+                    esMap.put("businessArea",shopEsRes.get("businessArea"));
+                    esMap.put("boothBusinessBoothCode",shopEsRes.get("boothCode"));
+                    esMap.put("customerProfilesLevel",shopEsRes.get("level"));
+                    esMap.put("approveState","");
+                    esMap.put("enterpriseType","");
+                    esMap.put("storeInfoStoreQrCode","");
+                    esMap.put("gmtCreateTime",shopEsRes.get("boothScheduledTime")); // 暂时用入驻时间
+                    esMap.put("boothScheduledTime",shopEsRes.get("boothScheduledTime"));
+                }
+            }catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
         if(binlogMap.containsKey("category_id")) esMap.put("categoryId",binlogMap.get("category_id"));
         System.out.println("------------StoreProductRelations.reSetValue.json:"+esMap);
         return esMap;

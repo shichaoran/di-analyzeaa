@@ -131,15 +131,34 @@ public class ProductsServiceImpl implements ProductsService {
                     }
                     productsDetailRes.setShopId(recordMap.containsKey("storeId") ? recordMap.get("storeId").toString() : "");
                     productsDetailRes.setStoreInfoName(recordMap.containsKey("storeName") ? recordMap.get("storeName").toString() : "");
-                    productsDetailRes.setBusinessCategory(recordMap.containsKey("businessCategory") ? recordMap.get("businessCategory").toString() : "");
-                    productsDetailRes.setMainProducts(recordMap.containsKey("mainProducts") ? recordMap.get("mainProducts").toString() : "");
-                    productsDetailRes.setBusinessArea(recordMap.containsKey("businessArea") ? recordMap.get("businessArea").toString() : "");
-                    productsDetailRes.setBoothBusinessBoothCode(recordMap.containsKey("boothBusinessBoothCode") ? recordMap.get("boothBusinessBoothCode").toString() : "");
-                    productsDetailRes.setCustomerProfilesLevel(recordMap.containsKey("customerProfilesLevel") ? recordMap.get("customerProfilesLevel").toString() : "");
-                    productsDetailRes.setApproveState(recordMap.containsKey("approveState") ? recordMap.get("approveState").toString() : "");
-                    productsDetailRes.setEnterpriseType(recordMap.containsKey("enterpriseType") ? recordMap.get("enterpriseType").toString() : "");
-                    productsDetailRes.setStoreInfoStoreQrCode(recordMap.containsKey("storeInfoStoreQrCode") ? recordMap.get("storeInfoStoreQrCode").toString() : "");
-                    if (recordMap.containsKey("gmtCreateTime")) {
+                    if(recordMap.containsKey("businessCategory") ){
+                        if(recordMap.get("businessCategory") != null){
+                            productsDetailRes.setBusinessCategory(recordMap.get("businessCategory").toString() );
+                        }
+                    }
+                    if(recordMap.containsKey("mainProducts") && recordMap.get("mainProducts") != null){
+                        productsDetailRes.setMainProducts(recordMap.get("mainProducts").toString());
+                    }
+                    if(recordMap.containsKey("businessArea") && recordMap.get("businessArea") != null){
+                        productsDetailRes.setBusinessArea(recordMap.get("businessArea").toString());
+                    }
+                    if(recordMap.containsKey("boothBusinessBoothCode") && recordMap.get("boothBusinessBoothCode") != null){
+                        productsDetailRes.setBoothBusinessBoothCode( recordMap.get("boothBusinessBoothCode").toString() );
+                    }
+                    if(recordMap.containsKey("customerProfilesLevel") && recordMap.get("customerProfilesLevel") != null){
+                        productsDetailRes.setCustomerProfilesLevel(recordMap.get("customerProfilesLevel").toString());
+                    }
+                    if(recordMap.containsKey("approveState") && recordMap.get("approveState") != null){
+                        productsDetailRes.setApproveState(recordMap.get("approveState").toString());
+                    }
+                    if( recordMap.containsKey("enterpriseType") && recordMap.get("enterpriseType") != null ){
+                        productsDetailRes.setEnterpriseType(recordMap.get("enterpriseType").toString());
+                    }
+                    if(recordMap.containsKey("storeInfoStoreQrCode") && recordMap.get("storeInfoStoreQrCode") != null){
+                        productsDetailRes.setStoreInfoStoreQrCode(recordMap.get("storeInfoStoreQrCode").toString());
+                    }
+
+                    if (recordMap.containsKey("gmtCreateTime") && recordMap.get("gmtCreateTime") !=null) {
                         LocalDateTime t = LocalDateTime.parse(recordMap.get("gmtCreateTime").toString(),DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
                         productsDetailRes.setGmtCreateTime(t);
                     }
@@ -208,16 +227,35 @@ public class ProductsServiceImpl implements ProductsService {
                     }
                     productsDetailRes.setShopId(recordMap.containsKey("storeId") ? recordMap.get("storeId").toString() : "");
                     productsDetailRes.setStoreInfoName(recordMap.containsKey("storeName") ? recordMap.get("storeName").toString() : "");
-                    productsDetailRes.setBusinessCategory(recordMap.containsKey("businessCategory") ? recordMap.get("businessCategory").toString() : "");
-                    productsDetailRes.setMainProducts(recordMap.containsKey("mainProducts") ? recordMap.get("mainProducts").toString() : "");
-                    productsDetailRes.setBusinessArea(recordMap.containsKey("businessArea") ? recordMap.get("businessArea").toString() : "");
-                    productsDetailRes.setBoothBusinessBoothCode(recordMap.containsKey("boothBusinessBoothCode") ? recordMap.get("boothBusinessBoothCode").toString() : "");
-                    productsDetailRes.setCustomerProfilesLevel(recordMap.containsKey("customerProfilesLevel") ? recordMap.get("customerProfilesLevel").toString() : "");
-                    productsDetailRes.setApproveState(recordMap.containsKey("approveState") ? recordMap.get("approveState").toString() : "");
-                    productsDetailRes.setEnterpriseType(recordMap.containsKey("enterpriseType") ? recordMap.get("enterpriseType").toString() : "");
-                    productsDetailRes.setStoreInfoStoreQrCode(recordMap.containsKey("storeInfoStoreQrCode") ? recordMap.get("storeInfoStoreQrCode").toString() : "");
-
-                    if (recordMap.containsKey("gmtCreateTime")) {
+                    //productsDetailRes.setBusinessCategory(recordMap.containsKey("businessCategory") ? recordMap.get(
+                    //        "businessCategory").toString() : "");
+                    if(recordMap.containsKey("businessCategory") ){
+                        if(recordMap.get("businessCategory") != null){
+                            productsDetailRes.setBusinessCategory(recordMap.get("businessCategory").toString() );
+                        }
+                    }
+                    if(recordMap.containsKey("mainProducts") && recordMap.get("mainProducts") != null){
+                        productsDetailRes.setMainProducts(recordMap.get("mainProducts").toString());
+                    }
+                    if(recordMap.containsKey("businessArea") && recordMap.get("businessArea") != null){
+                        productsDetailRes.setBusinessArea(recordMap.get("businessArea").toString());
+                    }
+                    if(recordMap.containsKey("boothBusinessBoothCode") && recordMap.get("boothBusinessBoothCode") != null){
+                        productsDetailRes.setBoothBusinessBoothCode( recordMap.get("boothBusinessBoothCode").toString() );
+                    }
+                    if(recordMap.containsKey("customerProfilesLevel") && recordMap.get("customerProfilesLevel") != null){
+                        productsDetailRes.setCustomerProfilesLevel(recordMap.get("customerProfilesLevel").toString());
+                    }
+                    if(recordMap.containsKey("approveState") && recordMap.get("approveState") != null){
+                        productsDetailRes.setApproveState(recordMap.get("approveState").toString());
+                    }
+                    if( recordMap.containsKey("enterpriseType") && recordMap.get("enterpriseType") != null ){
+                        productsDetailRes.setEnterpriseType(recordMap.get("enterpriseType").toString());
+                    }
+                    if(recordMap.containsKey("storeInfoStoreQrCode") && recordMap.get("storeInfoStoreQrCode") != null){
+                        productsDetailRes.setStoreInfoStoreQrCode(recordMap.get("storeInfoStoreQrCode").toString());
+                    }
+                    if (recordMap.containsKey("gmtCreateTime") && recordMap.get("gmtCreateTime") !=null ) {
                         LocalDateTime t = LocalDateTime.parse(recordMap.get("gmtCreateTime").toString(),DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
                         productsDetailRes.setGmtCreateTime(t);
                     }
