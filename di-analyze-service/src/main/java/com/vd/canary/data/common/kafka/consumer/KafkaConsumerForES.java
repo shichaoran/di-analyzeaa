@@ -157,7 +157,7 @@ public class KafkaConsumerForES {
             e.printStackTrace();
         }
     }*/
-    @KafkaListener(topics = "binglog_obmp_customer_2r3p", id = "customer_es1121" )
+    //@KafkaListener(topics = "binglog_obmp_customer_2r3p", id = "customer_es" )
     public void listenCustomer(String msg) throws IOException {
         log.info("<------this is kafka consumer,topic = binglog_obmp_customer_2r3p, msg = {}", msg);
         JSONObject jsonMap = JSONObject.parseObject(msg);

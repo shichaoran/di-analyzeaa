@@ -626,7 +626,8 @@ public class ProductESServiceImpl implements ProductESService {
         if (!ElasticsearchUtil.isIndexExist(indexName)) {
             ElasticsearchUtil.createIndex(indexName, createIndexMapping( indexName));
         }
-        ElasticsearchUtil.deleteById( indexName, "00b6d5612f734414d68088e359e4b008");
+        ElasticsearchUtil.deleteById( indexName, "1252565703047811073");
+        ElasticsearchUtil.deleteById( indexName, "1252780591888269313");
         return  "Succ";
     }
 
