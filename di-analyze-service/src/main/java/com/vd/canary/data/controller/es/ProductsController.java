@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
@@ -33,19 +34,19 @@ public class ProductsController extends BaseController {
     }
 
     @PostMapping("/data/products/getProductByCategory")
-    ResponseBO<ProductsRes> getProductByCategory(@RequestBody @Valid ThreeCategoryReq threeCategoryReq) throws Exception {
+    public ResponseBO<ProductsRes> getProductByCategory(@RequestBody @Valid ThreeCategoryReq threeCategoryReq) throws Exception {
         ResponseBO<ProductsRes> res = productsService.getProductByCategory(threeCategoryReq);
         return res;
     }
 
     @PostMapping("/data/products/getProductDetail")
-    ResponseBO<ProductDetailsRes> getProductsDetail(@RequestBody @Valid ProductDetailsReq productDetailsReq) throws IOException {
-        ResponseBO<ProductDetailsRes> res = productsService.getProductsDetail(productDetailsReq);
+    public ResponseBO<List<ProductDetailsRes>> getProductsDetail(@RequestBody @Valid ProductDetailsReq productDetailsReq) throws IOException {
+        ResponseBO<List<ProductDetailsRes>> res = productsService.getProductsDetail(productDetailsReq);
         return res;
     }
 
     @PostMapping("/data/products/category")
-    ResponseBO<CategoryRes> categoryRes(@RequestBody @Valid CategoryReq categoryReq) {
+    public ResponseBO<CategoryRes> categoryRes(@RequestBody @Valid CategoryReq categoryReq) {
         ResponseBO<CategoryRes> res = productsService.categoryRes(categoryReq);
         return res;
     }

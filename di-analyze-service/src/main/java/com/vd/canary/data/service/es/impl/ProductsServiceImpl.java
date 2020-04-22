@@ -228,61 +228,46 @@ public class ProductsServiceImpl implements ProductsService {
     }
 
     @Override
-    public ResponseBO<ProductDetailsRes> getProductsDetail(@Valid ProductDetailsReq productDetailsReq) throws IOException {
-        ResponseBO<ProductDetailsRes> res = new ResponseBO<ProductDetailsRes>();
-        ProductDetailsRes productDetailsRes = new ProductDetailsRes();
-        Map<String, Object> maps = productESServiceImpl.findById(productDetailsReq.getProductId());
-        if (maps != null && maps.size() > 0) {
-            if(maps.containsKey("skuId"))productDetailsRes.setSkuId(maps.get("skuId").toString());
-            if(maps.containsKey("proSkuSkuName"))productDetailsRes.setSkuName(maps.get("proSkuSkuName").toString());
-            if(maps.containsKey("proSkuTitle"))productDetailsRes.setSkuTitle(maps.get("proSkuTitle").toString());
-            if(maps.containsKey("proSkuSubTitle"))productDetailsRes.setSkuSubTitle(maps.get("proSkuSubTitle").toString());
-            if(maps.containsKey("attributeMap")){
-                String temp = JSONObject.toJSONString(maps.get("attributeMap"));
+    public ResponseBO<List<ProductDetailsRes>>  getProductsDetail(@Valid ProductDetailsReq productDetailsReq) throws IOException {
+        ResponseBO<List<ProductDetailsRes>> res = new ResponseBO<List<ProductDetailsRes>>();
+        List<ProductDetailsRes> reslist = new ArrayList<>();
+        List<Map<String, Object>> list = productESServiceImpl.boolQueryForProductDetail(productDetailsReq);
+        if (CollectionUtil.isNotEmpty(list)) {
+            for(Map<String, Object> map : list){
+                ProductDetailsRes productDetailsRes = new ProductDetailsRes();
+                if(map.containsKey("skuId") && map.get("skuId") != null ) productDetailsRes.setSkuId(map.get("skuId").toString());
 
-                ////////////////productDetailsRes.setAttributeMap(JSON.parseObject(temp,Map.class));
+                if(map.containsKey("proSkuSkuName") && map.get("proSkuSkuName") != null ) productDetailsRes.setSkuName(map.get("proSkuSkuName").toString());
+
+                if(map.containsKey("proSkuTitle") && map.get("proSkuTitle") != null )productDetailsRes.setSkuTitle(map.get("proSkuTitle").toString());
+
+                if(map.containsKey("proSkuSubTitle") && map.get("proSkuSubTitle") != null )productDetailsRes.setSkuSubTitle(map.get("proSkuSubTitle").toString());
+
+                if(map.containsKey("attributeMap") && map.get("attributeMap") !=null) productDetailsRes.setAttributeMapJson(map.get("attributeMap").toString());
+
+                if(map.containsKey("skuSellPriceJson") && map.get("skuSellPriceJson") != null){
+                    JSONArray array = JSONObject.parseArray(map.get("skuSellPriceJson").toString());
+                    productDetailsRes.setPriceJson(JSONObject.toJSONString(array));
+                }
+
+                if(map.containsKey("skuIntroduce") && map.get("skuIntroduce") != null) productDetailsRes.setSkuIntroduce(map.get("skuIntroduce").toString());
+
+                if(map.containsKey("proSkuSkuPicJson") && map.get("proSkuSkuPicJson") != null ) productDetailsRes.setProSkuSkuPicJson(map.get("proSkuSkuPicJson").toString());
+
+                if(map.containsKey("regionalCode") && map.get("regionalCode") != null ) productDetailsRes.setRegionalId(map.get("regionalCode").toString());
+
+                if(map.containsKey("regionalName") && map.get("regionalName") != null ) productDetailsRes.setRegionalName(map.get("regionalName").toString());
+                reslist.add(productDetailsRes);
             }
-            //if(maps.containsKey("skuSellPriceJson"))productDetailsRes.setPriceJson(maps.get("skuSellPriceJson").toString());
-            if(maps.containsKey("skuSellPriceJson")){
-                JSONArray array = JSONObject.parseArray(maps.get("skuSellPriceJson").toString());
-                productDetailsRes.setPriceJson(JSONObject.toJSONString(array));
-            }
-            if(maps.containsKey("skuIntroduce"))productDetailsRes.setSkuIntroduce(maps.get("skuIntroduce").toString());
-            if(maps.containsKey("proSkuSkuPicJson"))productDetailsRes.setProSkuSkuPicJson(maps.get("proSkuSkuPicJson").toString());
-            if(maps.containsKey("regionalCode"))productDetailsRes.setRegionalId(maps.get("regionalCode").toString());
-            if(maps.containsKey("regionalName"))productDetailsRes.setRegionalName(maps.get("regionalName").toString());
         }
-        res.setData(productDetailsRes);
+        res.setData(reslist);
         res.setSuccess(true);
         res.setCode(200);
         res.setMessage("success.");
         return res;
     }
 
-    public ResponseBO<CategoryRes> categoryRes1(@Valid CategoryReq categoryReq) {
-        ResponseBO<CategoryRes> res = new ResponseBO<CategoryRes>();
-        CategoryRes data = new CategoryRes();
-        CategoryVO categoryVO = new CategoryVO();
-        categoryVO.setFOneCategoryId("120");
-        categoryVO.setFOneCategoryCode("120478");
-        categoryVO.setFOneCategoryName("建筑钢");
-        categoryVO.setFTwoCategoryId("248");
-        categoryVO.setFTwoCategoryCode("248468");
-        categoryVO.setFTwoCategoryName("钢管");
-        categoryVO.setFThreeCategoryId("579");
-        categoryVO.setFThreeCategoryCode("579303");
-        categoryVO.setFThreeCategoryName("薄钢片");
-        //data.setCategoryVO(categoryVO);
-        Map<String, CategoryVO> map = new HashMap<>();
-        map.put("1000",categoryVO);
-        data.setMaplist(map);
-        //data.setSkuId("1");
-        res.setData(data);
-        res.setMessage("success");
-        res.setCode(200);
-        res.setSuccess(true);
-        return res;
-    }
+
     @Override
     public ResponseBO<CategoryRes> categoryRes(@Valid CategoryReq categoryReq) {
         ResponseBO<CategoryRes> res = new ResponseBO<CategoryRes>();

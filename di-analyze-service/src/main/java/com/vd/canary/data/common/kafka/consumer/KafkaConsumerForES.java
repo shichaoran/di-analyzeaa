@@ -77,7 +77,7 @@ public class KafkaConsumerForES {
             e.printStackTrace();
         }
     }*/
-    @KafkaListener(topics = "binglog_obmp_product_2r3p", id = "product_es1" )
+    @KafkaListener(topics = "binglog_obmp_product_2r3p", id = "product_es" )
     public void listenProduct(String msg) {
         log.info("<------this is kafka consumer,topic = binglog_obmp_product_2r3p, msg = {}",msg);
         JSONObject jsonMap = JSONObject.parseObject(msg);

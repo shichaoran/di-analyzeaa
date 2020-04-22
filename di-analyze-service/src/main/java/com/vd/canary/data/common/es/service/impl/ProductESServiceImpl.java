@@ -9,6 +9,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Lists;
 import com.vd.canary.data.api.request.es.CategoryReq;
+import com.vd.canary.data.api.request.es.ProductDetailsReq;
 import com.vd.canary.data.api.request.es.ProductsReq;
 import com.vd.canary.data.api.request.es.ThreeCategoryReq;
 import com.vd.canary.data.common.es.helper.ESPageRes;
@@ -285,6 +286,19 @@ public class ProductESServiceImpl implements ProductESService {
             return esPageRes;
         }
 
+    }
+
+    // 商详页数据展示
+    public List<Map<String, Object>> boolQueryForProductDetail(ProductDetailsReq req) {
+        List<Map<String, Object>> result = Lists.newArrayList();
+        if(req == null && req.getStoreId() == null && req.getSpuId() == null ){
+            return result;
+        }
+        BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
+        boolQuery.must(QueryBuilders.termsQuery("storeId", req.getStoreId()));
+        boolQuery.must(QueryBuilders.termsQuery("proSkuSpuId", req.getSpuId()));
+        List<Map<String, Object>> list = ElasticsearchUtil.searchByQuery(indexName,boolQuery);
+        return list;
     }
 
     /**
