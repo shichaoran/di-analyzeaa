@@ -8,10 +8,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Lists;
-import com.vd.canary.data.api.request.es.CategoryReq;
-import com.vd.canary.data.api.request.es.ProductDetailsReq;
-import com.vd.canary.data.api.request.es.ProductsReq;
-import com.vd.canary.data.api.request.es.ThreeCategoryReq;
+import com.vd.canary.data.api.request.es.*;
 import com.vd.canary.data.common.es.helper.ESPageRes;
 import com.vd.canary.data.common.es.helper.ElasticsearchUtil;
 import com.vd.canary.data.common.es.model.ProductsTO;
@@ -218,6 +215,73 @@ public class ProductESServiceImpl implements ProductESService {
         ESPageRes esPageRes = ElasticsearchUtil.searchDataPage(indexName, pageNumber, pageSize, boolQuery, fields, sortField, sortTpye, highlightField);
         return esPageRes;
     }
+
+
+
+
+    public ESPageRes boolQueryByKeyword(Integer pageNumber, Integer pageSize, SteelReq req) {
+        if (req == null) {
+            List<Map<String, Object>> recordList = new ArrayList<>();
+            return new ESPageRes(0, 0, 0, recordList);
+        }
+        if (pageNumber == null || pageNumber < Constant.ES_DEFAULT_PAGE_NUMBER) {
+            pageNumber = Constant.ES_DEFAULT_PAGE_NUMBER;
+        }
+        if (pageSize == null || pageSize <= 0) {
+            pageSize = Constant.ES_PAGE_SIZE;
+        }
+        String fields = null;
+        String sortField = null;
+        String sortTpye = null;
+        String highlightField = null;
+        BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
+
+        if (req.getBBrandId() != null && req.getBBrandId().size() > 0) {//品牌id
+            boolQuery.must(QueryBuilders.termsQuery("proSkuBrandId", req.getBBrandId()));
+        }
+        if (req.getFThreeCategoryId() != null) {//后台三级分类id
+            boolQuery.must(QueryBuilders.termsQuery("fThreeCategoryId", req.getFThreeCategoryId()));
+        }
+        if (req.getFTwoCategoryId() != null) {//后台三级分类id
+            boolQuery.must(QueryBuilders.termsQuery("fTwoCategoryId", req.getFTwoCategoryId()));
+        }
+        if (req.getFOneCategoryId() != null) {//后台三级分类id
+            boolQuery.must(QueryBuilders.termsQuery("fOneCategoryId", req.getFOneCategoryId()));
+        }
+        if (req.getSkuRegionalName() != null) { //供货区域id
+            boolQuery.must(QueryBuilders.termsQuery("regionalId", req.getSkuRegionalName()));
+        }
+        if (StringUtils.isNotBlank(req.getPriceSort())) {
+            sortField = "skuSellPriceJson"; // 商品定价信息，需要嵌套查询xxx.xxx
+            sortTpye = req.getPriceSort(); // 商品价格排序
+        }
+        if (StringUtils.isNotBlank(req.getIsDiscussPrice())) {//是否议价，需要嵌套查询xxx.xxx
+            //boolQuery.must(QueryBuilders.rangeQuery("skuSellPriceJson").from(30).to(60).includeLower(true).includeUpper(true)); //适用价格区间查找
+            boolQuery.must(QueryBuilders.rangeQuery("skuSellPriceJson").gt(0));
+            //boolQuery.mustNot();
+        }
+
+        ESPageRes esPageRes = ElasticsearchUtil.searchDataPage(indexName, pageNumber, pageSize, boolQuery, fields, sortField, sortTpye, highlightField);
+        return esPageRes;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     /**
