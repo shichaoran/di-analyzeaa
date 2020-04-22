@@ -61,7 +61,7 @@ public class ShopDataHandler {
                 shopTO.setImageBanerJson(imageBanerDTOS);
             }
             if(ObjectUtil.isNotEmpty(storeTemplateVO)){
-                shopTO.setMediaUrl(storeTemplateVO.getId());
+                shopTO.setStoreTemplateId(storeTemplateVO.getId());
             }
             if(ObjectUtil.isNotEmpty(storeMediaVO)){
                 shopTO.setMediaUrl(storeMediaVO.getMediaUrl());
