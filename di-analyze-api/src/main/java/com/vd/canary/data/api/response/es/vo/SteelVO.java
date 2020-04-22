@@ -25,7 +25,13 @@ public class SteelVO implements Serializable {
     //spuname
     private String spuName;
     //商品属性 key为属性id+属性类型，value为属性值
-    private Map<String, Map<String,String>> attributeMap ;//Map<String, HashSet<String>> attributeMap;
+//    private Map<String, Map<String,String>> attributeMap ;//Map<String, HashSet<String>> attributeMap;
+
+    //spuid
+    private String skuID;
+    //spuname
+    private String skuName;
+
     //商品定价
     private String skuSellPriceJson;
     //定价类型
@@ -34,10 +40,10 @@ public class SteelVO implements Serializable {
     private LocalDateTime skuGmtCreateTime;
     //辅助单位
     private String skuAuxiliaryUnit;
-    //三级类目名称
-    private String fThreeCategoryName;
-    //三级类目编码
+//    //三级类目名称
+//    private String fThreeCategoryName;
+//    //三级类目编码
     private String fThreeCategoryCode;
     //二级类目名称
-    private String fTwoCategoryName;
+//    private String fTwoCategoryName;
 }

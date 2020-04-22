@@ -37,4 +37,5 @@ public class ShopSearchVO implements Serializable {
     private String storeTemplateId; //模板id
     private String mainProducts;  //主营产品
     private LocalDateTime boothScheduledTime; //入驻时间
+    private String memberOrder;
 }
