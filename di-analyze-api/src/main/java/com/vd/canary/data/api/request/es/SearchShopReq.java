@@ -21,8 +21,8 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 public class SearchShopReq extends RequestPageBO {
-    private List<String> categoryNames;
-    private List<String> brandIdNames;
+    private List<String> categoryIds;
+    private List<String> brandIds;
     private String exhibitionJoined;
     private String key;
 }

@@ -1,29 +1,24 @@
 package com.vd.canary.data.common.es.service.impl;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.google.common.collect.Lists;
-import com.google.gson.JsonObject;
-import com.vd.canary.data.api.request.es.ProductDetailsReq;
-import com.vd.canary.data.api.request.es.ShopPageReq;
 import com.vd.canary.data.api.request.es.SearchShopReq;
-import com.vd.canary.data.api.response.es.ShopProductRes;
+import com.vd.canary.data.api.request.es.ShopPageReq;
 import com.vd.canary.data.common.es.helper.ESPageRes;
 import com.vd.canary.data.common.es.helper.ElasticsearchUtil;
-import com.vd.canary.data.common.es.model.ProductsTO;
 import com.vd.canary.data.common.es.model.ShopTO;
 import com.vd.canary.data.common.es.service.ShopESService;
 import com.vd.canary.data.constants.Constant;
-import com.vd.canary.data.service.es.ShopService;
 import com.vd.canary.data.util.DateUtil;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.lucene.queryparser.classic.QueryParser;
 import org.elasticsearch.common.unit.Fuzziness;
@@ -31,6 +26,7 @@ import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.XContentFactory;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
+
 import org.springframework.stereotype.Service;
 
 /**
@@ -248,12 +244,12 @@ public class ShopESServiceImpl implements ShopESService {
                     "name","customerId","mediaUrl","imageOrder",
                     "imageName","imageUrl","boothCode","storeTemplateId").fuzziness(Fuzziness.AUTO));
         }
-        if(req.getBrandIds() != null && req.getBrandIds().size() > 0 ){//品牌id
+        /*if(req.getBrandIds() != null && req.getBrandIds().size() > 0 ){//品牌id
             boolQuery.must(QueryBuilders.termsQuery("proSkuBrandId",req.getBrandIds()));
         }
         if(req.getCategoryIds() != null && req.getCategoryIds().size() > 0 ){//后台三级分类id
             boolQuery.must(QueryBuilders.termsQuery("businessCategory",req.getCategoryIds()));
-        }
+        }*/
         if (req.getExhibitionJoined() != null){
             if( req.getExhibitionJoined().equals("1") || req.getExhibitionJoined().equals("0") ) {//是否入驻展厅
             //boolQuery.must();
