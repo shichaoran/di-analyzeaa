@@ -40,8 +40,8 @@ public class SteelVO implements Serializable {
     private LocalDateTime skuGmtCreateTime;
     //辅助单位
     private String skuAuxiliaryUnit;
-//    //三级类目名称
-//    private String fThreeCategoryName;
+//    //三级类目id
+    private String fThreeCategoryId;
 //    //三级类目编码
     private String fThreeCategoryCode;
     //二级类目名称
