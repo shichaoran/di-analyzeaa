@@ -76,7 +76,7 @@ public class ShopServiceImpl implements ShopService {
         shopVO.setStoreTemplateId("1");
         shopVO.setMainProducts("钢铁");
         shopVO.setBoothScheduledTime(LocalDateTime.ofInstant(DateUtil.currentDate().toInstant(), ZoneId.systemDefault()));
-        shopVO.setLevel("1");
+        shopVO.setMemberOrder("1");
         list.add(shopVO);
         shopRes.setShopVos(list);
 
@@ -129,7 +129,7 @@ public class ShopServiceImpl implements ShopService {
                     shopVo.setBoothScheduledTime(LocalDateTime.parse(recordMap.get("boothScheduledTime").toString()));
                 }
                 shopVo.setBusinessBrand(Collections.singletonList(recordMap.containsKey("businessBrand") ? recordMap.get("businessBrand").toString() : ""));
-                shopVo.setLevel(recordMap.containsKey("level") ? recordMap.get("level").toString() : "");
+                shopVo.setMemberOrder(recordMap.containsKey("memberOrder") ? recordMap.get("memberOrder").toString() : "");
                 shopVo.setImageOrder(recordMap.containsKey("imageOrder") ? recordMap.get("imageOrder").toString() : "");
                 shopVo.setImageName(recordMap.containsKey("imageName") ? recordMap.get("imageName").toString() : "");
                 shopProductRes.setPriceType(recordMap.containsKey("priceType") ? recordMap.get("priceType").toString() : "");

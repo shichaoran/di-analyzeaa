@@ -5,6 +5,7 @@ import lombok.*;
 import lombok.experimental.Accessors;
 
 import java.util.List;
+import java.util.Map;
 
 @Data
 @NoArgsConstructor
@@ -32,6 +33,7 @@ public class SteelReq extends RequestPageBO {
      * 品牌id
      */
     private List<String> bBrandId;
+
     /**
      * price为desc 或者 asc
      */
@@ -42,10 +44,15 @@ public class SteelReq extends RequestPageBO {
      */
     private String isDiscussPrice;
 
-
     /**
      * 配送区域
      */
     private String skuRegionalName;
+    /**
+     * 属性id列表
+     */
+    private  Map<String,String> attributes;
+
+    private List<String> spuId;
 
 }

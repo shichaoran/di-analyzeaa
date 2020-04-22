@@ -1,7 +1,7 @@
 package com.vd.canary.data.common.kafka.consumer.impl.ObmpCustomer;
 
-
 import com.alibaba.fastjson.JSON;
+import com.vd.canary.data.common.es.model.ProductsTO;
 import com.vd.canary.data.common.es.model.ShopTO;
 import com.vd.canary.data.common.es.service.impl.ShopESServiceImpl;
 import com.vd.canary.data.common.kafka.consumer.impl.Function;
@@ -12,27 +12,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
- * @Author shichaoran
- * @Date 2020/4/9 16:49
- * @Version
+ * @Author WangRuilin
+ * @Date 2020/4/21 9:41
  */
 
 @Slf4j
 @Component
-public class CustomerBusinessInfo implements Function {
+public class StoreTemplate implements Function {
 
     @Autowired
     private ShopESServiceImpl shopESServiceImplTemp;
     @Override
     public void performES(String msg) {
 
-        log.info("CustomerBusinessInfo.msg" + msg);
+        log.info("StoreTemplate.msg" + msg);
         if(StringUtils.isEmpty(msg)){
             return;
         }
@@ -45,7 +42,7 @@ public class CustomerBusinessInfo implements Function {
         }
         if (type.equals("insert") || type.equals("update")) {
             if(binlogMap != null && binlogMap.size() > 0){
-                id = binlogMap.get("customer_id").toString();
+                id = binlogMap.get("store_info_id").toString();
                 try {
                     Map<String, Object> esMap = shopESServiceImplTemp.findById(id);
                     log.info("StoreTemplate.performES,storeTemplateId.esMap={}.", JSONUtil.toJSON(esMap).toJSONString());
@@ -61,18 +58,14 @@ public class CustomerBusinessInfo implements Function {
 
     }
 
-    public Map<String, Object> reSetValue(Map<String, Object> esMap,Map<String,Object> binlogMap){
-        if(binlogMap.containsKey("business_category")) esMap.put("businessCategory",binlogMap.get("business_category"));
-
-        if(binlogMap.containsKey("business_brand")) {
-            List<String> list = new ArrayList<>();
-            list.add(binlogMap.get("business_brand").toString());
-            esMap.put("businessBrand",list);
+        public Map<String, Object> reSetValue(Map<String, Object> esMap,Map<String,Object> binlogMap){
+            if(binlogMap.containsKey("id") && binlogMap.get("template_status").equals("enable")) {
+                esMap.put("storeTemplateId",binlogMap.get("id"));
+            }
+            System.out.println("------------SkuAttributeRelations.reSetValue.json:"+esMap);
+            return esMap;
         }
-        if(binlogMap.containsKey("business_area")) esMap.put("businessArea",binlogMap.get("business_area"));
-        if(binlogMap.containsKey("main_products")) esMap.put("mainProducts",binlogMap.get("main_products"));
 
-        System.out.println("------------SkuAttributeRelations.reSetValue.json:"+esMap);
-        return esMap;
-    }
+
+
 }

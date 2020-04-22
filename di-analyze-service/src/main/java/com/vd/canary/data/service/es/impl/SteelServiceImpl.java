@@ -38,8 +38,8 @@ public class SteelServiceImpl implements SteelService {
     @Autowired
     private ProductESServiceImpl productESServiceImpl;
 
-    @Override
-    public ResponseBO<SteelRes> getProductByCategory(@Valid SteelReq steelReq){
+//    @Override
+    public ResponseBO<SteelRes> getProductByCategory1(@Valid SteelReq steelReq){
         ResponseBO<SteelRes> res = new ResponseBO<SteelRes>();
         SteelRes steelRes = new SteelRes();
         Map<String,String> categorys = new HashMap<String,String>();
@@ -66,14 +66,14 @@ public class SteelServiceImpl implements SteelService {
         mapsub.put("1","黑色");
         mapsub.put("2","白色");
         s1.put("颜色",mapsub);
-        steelVO.setAttributeMap(s1);
+//        steelVO.setAttributeMap(s1);
         steelVO.setSpuName("建筑钢材");
         steelVO.setSkuSellPriceJson("[\"100\"]");
         steelVO.setSkuSellPriceType(0);
         steelVO.setSkuGmtCreateTime(null);
         steelVO.setSkuAuxiliaryUnit("顿");
-        steelVO.setFThreeCategoryName("建筑钢");
-        steelVO.setFTwoCategoryName("钢");
+//        steelVO.setFThreeCategoryName("建筑钢");
+//        steelVO.setFTwoCategoryName("钢");
         steelVO.setFThreeCategoryCode("H101010");
         steelVO.setSkuGmtCreateTime(LocalDateTime.ofInstant(DateUtil.currentDate().toInstant(), ZoneId.systemDefault()));
         list.add(steelVO);
@@ -91,13 +91,12 @@ public class SteelServiceImpl implements SteelService {
 
 
 
-//    @Override
-    public ResponseBO<SteelRes> getProductByCategory1(@Valid SteelReq steelReq) {
+    @Override
+    public ResponseBO<SteelRes> getProductByCategory(@Valid SteelReq steelReq) {
         ResponseBO<SteelRes> res = new ResponseBO<SteelRes>();
         SteelRes steelRes = new SteelRes();
         log.info("getProductByCategory,threeCategoryReq:"+ JSONObject.toJSON(steelReq).toString());
-        ESPageRes esPageRes = null ;// productESServiceImpl.boolQueryByDiffCategorys(steelReq.getPageNum(), steelReq.getPageSize(),
-                                      //                                       new SteelReq());
+        ESPageRes esPageRes = productESServiceImpl.boolQueryByKeyword(steelReq.getPageNum(), steelReq.getPageSize(), steelReq);                  //                                       new SteelReq());
         if (esPageRes!=null) {
             List<Map<String, Object>> recordList = esPageRes.getRecordList();
             if (recordList != null && recordList.size() > 0) {
@@ -110,6 +109,8 @@ public class SteelServiceImpl implements SteelService {
 
                     SteelVO steelVO = new SteelVO();
 
+                    steelVO.setSkuID(recordMap.containsKey("skuId") ? recordMap.get("skuId").toString() : "");
+                    steelVO.setSkuName(recordMap.containsKey("proSkuSkuName") ? recordMap.get("proSkuSkuName").toString() : "");
                     steelVO.setSpuID(recordMap.containsKey("proSkuSpuId") ? recordMap.get("proSkuSpuId").toString() : "");
                     steelVO.setSpuName(recordMap.containsKey("proSkuSpuName") ? recordMap.get("proSkuSpuName").toString() : "");
                     if(recordMap.containsKey("skuSellPriceJson")){
@@ -126,8 +127,8 @@ public class SteelServiceImpl implements SteelService {
                     FinalSteel finalSteel = new FinalSteel();
                     for (Integer i=0;i<finalSteel.getList().size();i++) {
                         if (finalSteel.getList().contains(recordMap.get("fThreeCategoryCode"))) {
-                            steelVO.setFTwoCategoryName(recordMap.containsKey("fTwoCategoryName") ? recordMap.get("fTwoCategoryName").toString() : "");
-                            steelVO.setFThreeCategoryName(recordMap.containsKey("fThreeCategoryName") ? recordMap.get("fThreeCategoryName").toString() : "");
+                            //steelVO.setFTwoCategoryName(recordMap.containsKey("fTwoCategoryName") ? recordMap.get("fTwoCategoryName").toString() : "");
+                            //steelVO.setFThreeCategoryName(recordMap.containsKey("fThreeCategoryName") ? recordMap.get("fThreeCategoryName").toString() : "");
                             steelVO.setFThreeCategoryCode(recordMap.containsKey("fThreeCategoryCode") ? recordMap.get("fThreeCategoryCode").toString() : "");
                         }
                     }
