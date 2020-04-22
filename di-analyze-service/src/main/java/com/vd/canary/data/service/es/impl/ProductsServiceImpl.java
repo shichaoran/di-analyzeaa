@@ -19,6 +19,8 @@ import com.vd.canary.data.service.es.ProductsService;
 import com.vd.canary.utils.CollectionUtil;
 import com.vd.canary.utils.DateUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.poi.ss.formula.functions.T;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -94,9 +96,15 @@ public class ProductsServiceImpl implements ProductsService {
                         productsDetailRes.setGmtCreateTime(t);
                     }
 
-                    if(recordMap.containsKey("regionalId") && recordMap.get("regionalId") !=null) productsDetailRes.setRegionalIdJson(recordMap.get("regionalId").toString());
+                    if(recordMap.containsKey("regionalId") && recordMap.get("regionalId") !=null){
+                        JSONArray array = JSONArray.parseArray(recordMap.get("regionalId").toString());
+                        productsDetailRes.setRegionalIdJson(JSONObject.parseArray(array.toJSONString(), String.class));
+                    }
 
-                    if(recordMap.containsKey("skuRegionalName") && recordMap.get("skuRegionalName") !=null) productsDetailRes.setSkuRegionalNameJson(recordMap.get("skuRegionalName").toString());
+                    if(recordMap.containsKey("skuRegionalName") && recordMap.get("skuRegionalName") !=null) {
+                        JSONArray array = JSONArray.parseArray(recordMap.get("skuRegionalName").toString());
+                        productsDetailRes.setSkuRegionalNameJson(JSONObject.parseArray(array.toJSONString(), String.class));
+                    }
 
                     if(recordMap.containsKey("attributeMap") && recordMap.get("attributeMap") !=null) productsDetailRes.setAttributeMapJson(recordMap.get("attributeMap").toString());
 
@@ -189,9 +197,15 @@ public class ProductsServiceImpl implements ProductsService {
                         productsDetailRes.setGmtCreateTime(t);
                     }
 
-                    if(recordMap.containsKey("regionalId") && recordMap.get("regionalId") !=null) productsDetailRes.setRegionalIdJson(recordMap.get("regionalId").toString());
+                    if(recordMap.containsKey("regionalId") && recordMap.get("regionalId") !=null){
+                        JSONArray array = JSONArray.parseArray(recordMap.get("regionalId").toString());
+                        productsDetailRes.setRegionalIdJson(JSONObject.parseArray(array.toJSONString(), String.class));
+                    }
 
-                    if(recordMap.containsKey("skuRegionalName") && recordMap.get("skuRegionalName") !=null) productsDetailRes.setSkuRegionalNameJson(recordMap.get("skuRegionalName").toString());
+                    if(recordMap.containsKey("skuRegionalName") && recordMap.get("skuRegionalName") !=null) {
+                        JSONArray array = JSONArray.parseArray(recordMap.get("skuRegionalName").toString());
+                        productsDetailRes.setSkuRegionalNameJson(JSONObject.parseArray(array.toJSONString(), String.class));
+                    }
 
                     if(recordMap.containsKey("attributeMap") && recordMap.get("attributeMap") !=null) productsDetailRes.setAttributeMapJson(recordMap.get("attributeMap").toString());
 
@@ -253,9 +267,22 @@ public class ProductsServiceImpl implements ProductsService {
 
                 if(map.containsKey("proSkuSkuPicJson") && map.get("proSkuSkuPicJson") != null ) productDetailsRes.setProSkuSkuPicJson(map.get("proSkuSkuPicJson").toString());
 
-                if(map.containsKey("regionalCode") && map.get("regionalCode") != null ) productDetailsRes.setRegionalId(map.get("regionalCode").toString());
+                if(map.containsKey("regionalId") && map.get("regionalId") !=null){
+                    JSONArray array = JSONArray.parseArray(map.get("regionalId").toString());
+                    productDetailsRes.setRegionalId(JSONObject.parseArray(array.toJSONString(), String.class));
+                }
 
-                if(map.containsKey("regionalName") && map.get("regionalName") != null ) productDetailsRes.setRegionalName(map.get("regionalName").toString());
+                if(map.containsKey("skuRegionalName") && map.get("skuRegionalName") !=null) {
+                    JSONArray array = JSONArray.parseArray(map.get("skuRegionalName").toString());
+                    productDetailsRes.setRegionalName(JSONObject.parseArray(array.toJSONString(), String.class));
+                }
+
+                if(map.containsKey("warehouseId") && map.get("warehouseId") != null ) productDetailsRes.setWarehouseId(map.get("warehouseId").toString());
+
+                if(map.containsKey("warehouseName") && map.get("warehouseName") != null ) productDetailsRes.setWarehouseName(map.get("warehouseName").toString());
+
+                if(map.containsKey("inventory") && map.get("inventory") != null ) productDetailsRes.setInventory(map.get("inventory").toString());
+
                 reslist.add(productDetailsRes);
             }
         }

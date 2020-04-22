@@ -40,9 +40,17 @@ public class ProductDetailsRes implements Serializable {
     //sku图片地址
     private String proSkuSkuPicJson;
     //供货区域id
-    private String regionalId;
+    private List<String> regionalId;
     //供货区域
-    private String regionalName;
+    private List<String> regionalName;
+    //仓库id
+    private String warehouseId;
+    //仓库名称
+    private String warehouseName;
+    //库存
+    private String inventory;
+
+
 
 /*    //店铺名称
     private String storeInfoName;
