@@ -21,15 +21,17 @@ public class ShopTO implements Serializable {
     private String businessCategory; //经营类目
     private List<String> businessBrand;//品牌
     private String businessArea;//区域
-    private String imageOrder;
-    private String imageName; //名
-    private String imageUrl; //地址
+    //private String imageOrder;
+    //private String imageName; //名
+    private String imageBanerJson;
     private List<ShopProductRes> shopProductRes;
     private String customerId;  // 客户·ID
     private String storeTemplateId; //模板id
     private String mainProducts;  //主营产品
     private LocalDateTime boothScheduledTime; //入驻时间
     private String level; //会员等级
+    private String remark1;
+    private String remark2;
 
     public ShopTO() {
 
