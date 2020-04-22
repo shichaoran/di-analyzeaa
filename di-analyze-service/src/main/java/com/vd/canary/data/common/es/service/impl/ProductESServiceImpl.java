@@ -600,9 +600,9 @@ public class ProductESServiceImpl implements ProductESService {
     public String updateOne(String c) throws IOException {
         Map<String, Object> content = new HashMap();
         //content.put("skuSellPriceType", JSONUtil.toJSONString("0"));
-        //JSONArray array = JSONArray.parseArray("[{\"num\": \"12\", \"price\": \"12\", \"referencePrice\": \"12\",\"vipPrice\": "
-        //                                        + "\"12\" }]");
-        content.put("attributeMap", JSONUtil.toJSONString(""));
+        JSONArray array = JSONArray.parseArray("[{\"attributeId\":\"1251815435083468801\","
+                                               + "\"attributeValue\":\"[{\\\"attributeValueId\\\":\\\"1251815331110866945\\\",\\\"attributeValueName\\\":\\\"属性1\\\"}]\",\"attributeType\":\"1\",\"attributeName\":\"属性单选框202004191810\"},{\"attributeId\":\"1251815331068923906\",\"attributeValue\":\"[{\\\"attributeValueId\\\":\\\"1251815331110866945\\\",\\\"attributeValueName\\\":\\\"属性1\\\"}]\",\"attributeType\":\"0\",\"attributeName\":\"属性单选框202004191810\"}]");
+        content.put("attributeMap", JSONUtil.toJSONString(array));
         String id = ElasticsearchUtil.updateData(content, indexName, "1251816454693605377");
         if (StringUtils.isNotBlank(id)) {
             return "SaveProduct success.";

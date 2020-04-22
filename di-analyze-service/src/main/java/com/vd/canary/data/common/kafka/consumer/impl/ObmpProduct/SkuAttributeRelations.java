@@ -3,23 +3,17 @@ package com.vd.canary.data.common.kafka.consumer.impl.ObmpProduct;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.google.gson.Gson;
 import com.vd.canary.core.bo.ResponseBO;
 import com.vd.canary.data.common.es.model.ProductsTO;
 import com.vd.canary.data.common.es.service.impl.ProductESServiceImpl;
 import com.vd.canary.data.common.kafka.consumer.impl.Function;
-import com.vd.canary.data.util.JSONUtils;
-import com.vd.canary.obmp.product.api.feign.AttributeManagementFeign;
-import com.vd.canary.obmp.product.api.feign.AttributeValueFeign;
 import com.vd.canary.obmp.product.api.feign.BigDataApiFeign;
-import com.vd.canary.obmp.product.api.feign.SkuAttributeRelationsFeign;
-import com.vd.canary.obmp.product.api.request.category.foreground.CategoryRelationsReq;
-import com.vd.canary.obmp.product.api.request.sku.SkuAttributeRelationsReq;
 import com.vd.canary.obmp.product.api.response.attribute.AttributeManagementDetailResp;
 import com.vd.canary.obmp.product.api.response.attribute.AttributeValueResp;
 import com.vd.canary.obmp.product.api.response.brand.BrandManagementResp;
 import com.vd.canary.obmp.product.api.response.category.CategoryRelationsResp;
 import com.vd.canary.obmp.product.api.response.file.vo.FileManagementVO;
+import com.vd.canary.obmp.product.api.response.sku.SkuAttributeRelationsResp;
 import com.vd.canary.obmp.product.api.response.spu.ProductSpuDetailResp;
 import com.vd.canary.utils.JSONUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +26,7 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -94,6 +89,74 @@ public class SkuAttributeRelations implements Function {
      */
     public Map<String, Object> reSetValue(Map<String, Object> esMap,Map<String,Object> binlogMap){
         if(binlogMap.containsKey("attribute_id") && binlogMap.get("attribute_id") != null &&
+           binlogMap.containsKey("attribute_value_id") && binlogMap.get("attribute_value_id") != null &&
+           binlogMap.containsKey("type") && binlogMap.get("type") != null ) {
+            List<String> list = new ArrayList();
+            list.add(binlogMap.get("sku_id").toString());
+            ResponseBO<List<SkuAttributeRelationsResp>> resp = bigDataApiFeign.listBySkuId(list);
+            Map<String, HashSet<String>> map = new HashMap();
+            Map<String,String> skuidAndAttributeidTypeMap = new HashMap<>();
+            if(resp != null){
+                List<SkuAttributeRelationsResp> skuAttributeRelationsResps = (List<SkuAttributeRelationsResp>)resp.getData();
+                if(skuAttributeRelationsResps != null && skuAttributeRelationsResps.size() > 0){
+                    HashSet hashSet = null;
+                    for(SkuAttributeRelationsResp skuAttributeRelationsResp : skuAttributeRelationsResps){
+                        if(map.containsKey(skuAttributeRelationsResp.getAttributeId())){
+                            hashSet = map.get(skuAttributeRelationsResp.getAttributeId());
+                            hashSet.add(skuAttributeRelationsResp.getAttributeValueId());
+                        }else{
+                            hashSet = new HashSet();
+                            hashSet.add(skuAttributeRelationsResp.getAttributeValueId());
+                            map.put(skuAttributeRelationsResp.getAttributeId(),hashSet);
+                        }
+                        skuidAndAttributeidTypeMap.put(binlogMap.get("sku_id").toString() + "." + skuAttributeRelationsResp.getAttributeId() ,skuAttributeRelationsResp.getType().toString() );
+                    }
+                }
+            }
+            List<Map<String,Object>> listMap = new ArrayList();
+            Set<Map.Entry<String, HashSet<String>>> entries = map.entrySet();
+            for (Map.Entry<String, HashSet<String>> entry : entries) {
+                Map<String,Object> mapTemp = new HashMap<String, Object>();
+                mapTemp.put("attributeType", skuidAndAttributeidTypeMap.get(binlogMap.get("sku_id").toString() + "." + entry.getKey()));
+                mapTemp.put("attributeId", entry.getKey());
+                try {
+                    ResponseBO<AttributeManagementDetailResp> attributeManagementDetailResp =  bigDataApiFeign.getAttribute(entry.getKey());
+                    if(attributeManagementDetailResp != null && attributeManagementDetailResp.getData() != null){
+                        String name = attributeManagementDetailResp.getData().getAttributeName();
+                        mapTemp.put("attributeName", name);
+                    }
+                }catch (Exception e) {
+                    log.info("SkuAttributeRelations.reSetValue,Exception,bigDataApiFeign.getAttribute.");
+                    e.printStackTrace();
+                }
+                HashSet<String> hashSet = entry.getValue();
+                List<Map<String,Object>> listSub = new ArrayList();
+                for(String s: hashSet){
+                    try {
+                        ResponseBO<AttributeValueResp> attributeValueResp = bigDataApiFeign.getAttributeValue(s);
+                        if(attributeValueResp != null && attributeValueResp.getData() != null){
+                            AttributeValueResp respSub = attributeValueResp.getData();
+                            Map<String,Object> valueMap = new HashMap<>();
+                            valueMap.put("attributeValueId",respSub.getId());
+                            valueMap.put("attributeValueName",respSub.getValueName());
+                            listSub.add(valueMap);
+                        }
+                    }catch (Exception e) {
+                        log.info("SkuAttributeRelations.reSetValue,Exception:bigDataApiFeign.getAttributeValue1.");
+                        e.printStackTrace();
+                    }
+                }
+                mapTemp.put("attributeValue", JSONUtil.toJSONString(listSub));
+                listMap.add(mapTemp);
+            }
+            esMap.put("attributeMap",JSONUtil.toJSONString(listMap));
+        }
+        System.out.println("------------SkuAttributeRelations.reSetValue.json:"+esMap);
+        return esMap;
+    }
+
+    public Map<String, Object> reSetValue1(Map<String, Object> esMap,Map<String,Object> binlogMap){
+        if(binlogMap.containsKey("attribute_id") && binlogMap.get("attribute_id") != null &&
             binlogMap.containsKey("attribute_value_id") && binlogMap.get("attribute_value_id") != null &&
             binlogMap.containsKey("type") && binlogMap.get("type") != null ) {
             Object esAttributeMap = esMap.get("attributeMap");
@@ -113,7 +176,6 @@ public class SkuAttributeRelations implements Function {
                         }catch (Exception e) {
                             log.info("SkuAttributeRelations.reSetValue,Exception,bigDataApiFeign.getAttribute.");
                             e.printStackTrace();
-                            //map.put("attributeName", "规格");
                         }
                     }
                     if(map.get("attributeValue") == null){
@@ -143,6 +205,7 @@ public class SkuAttributeRelations implements Function {
                                     array.remove(j);
                                 }
                             }
+                            map.put("attributeValue",array);
                         }
                     }
                 }
@@ -157,6 +220,9 @@ public class SkuAttributeRelations implements Function {
                         Map map = (Map)jsonArray.get(i);
                         if(map != null && map.get("attributeId").equals(binlogMap.get("attribute_id"))){
                             JSONArray array = JSONArray.parseArray(JSONUtil.toJSONString(map.get("attributeValue")));
+                            if(array == null){
+                                array = new JSONArray();
+                            }
                             try {
                                 ResponseBO<AttributeValueResp> attributeValueResp = bigDataApiFeign.getAttributeValue(binlogMap.get("attribute_value_id").toString());
                                 if(attributeValueResp != null && attributeValueResp.getData() != null){
@@ -170,6 +236,7 @@ public class SkuAttributeRelations implements Function {
                                 log.info("SkuAttributeRelations.reSetValue,Exception:bigDataApiFeign.getAttributeValue.");
                                 e.printStackTrace();
                             }
+                            map.put("attributeValue",array);
                         }
                         listMap.add(map);
                     }
@@ -180,16 +247,16 @@ public class SkuAttributeRelations implements Function {
                 map.put("attributeType", binlogMap.get("type"));
                 map.put("attributeId", binlogMap.get("attribute_id"));
                 try {
-                    ResponseBO<AttributeManagementDetailResp> AttributeManagementDetailResp = bigDataApiFeign.getAttribute(binlogMap.get("attribute_id").toString());
-                    if(AttributeManagementDetailResp != null && AttributeManagementDetailResp.getData() != null){
-                        map.put("attributeName", binlogMap.get(AttributeManagementDetailResp.getData().getAttributeName()));
+                    ResponseBO<AttributeManagementDetailResp> attributeManagementDetailResp =  bigDataApiFeign.getAttribute(binlogMap.get("attribute_id").toString());
+                    if(attributeManagementDetailResp != null && attributeManagementDetailResp.getData() != null){
+                        String name = attributeManagementDetailResp.getData().getAttributeName();
+                        map.put("attributeName", name);
                     }
                 }catch (Exception e) {
                     log.info("SkuAttributeRelations.reSetValue,Exception,bigDataApiFeign.getAttribute.");
                     e.printStackTrace();
                     //map.put("attributeName", "规格");
                 }
-
                 try {
                     ResponseBO<AttributeValueResp> attributeValueResp = bigDataApiFeign.getAttributeValue(binlogMap.get("attribute_value_id").toString());
                     if(attributeValueResp != null && attributeValueResp.getData() != null){
