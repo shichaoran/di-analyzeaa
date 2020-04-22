@@ -23,6 +23,7 @@ import com.vd.canary.data.api.response.es.vo.ShopVo;
 import com.vd.canary.data.common.es.helper.ESPageRes;
 import com.vd.canary.data.common.es.service.impl.ShopESServiceImpl;
 import com.vd.canary.data.service.es.ShopService;
+import com.vd.canary.data.util.StringUtil;
 import com.vd.canary.utils.DateUtil;
 import com.vd.canary.utils.ObjectUtil;
 
@@ -124,22 +125,20 @@ public class ShopServiceImpl implements ShopService {
                 }
                 Object businessBrand = stringObjectMap.get("businessBrand");
                 if(ObjectUtil.isNotEmpty(businessBrand)){
-                    String businessBrandJson= JSONArray.toJSONString(businessBrand);
-                    List<String> businessBrandList = JSON.parseArray(businessBrandJson, String.class);
+                    List<String> businessBrandList =StringUtil.splitToStringList((String) businessBrand,",");
                     brandsSet.addAll(businessBrandList);
                     shopVo.setBusinessBrand(businessBrandList);
                 }
                 Object businessCategory = stringObjectMap.get("businessCategory");
                 if(ObjectUtil.isNotEmpty(businessCategory)){
-                    String businessCategoryJson= JSONArray.toJSONString(businessCategory);
-                    List<String> businessCategoryList = JSON.parseArray(businessCategoryJson, String.class);
+                    List<String> businessCategoryList =StringUtil.splitToStringList((String) businessCategory,",");
                     categoriesSet.addAll(businessCategoryList);
                     shopVo.setBusinessBrand(  businessCategoryList);
                 }
                 Object imageBaner = stringObjectMap.get("imageBanerJson");
                 if(ObjectUtil.isNotEmpty(imageBaner)){
                     String imageBanerJson = JSONArray.toJSONString(imageBaner);
-                    List<ImageBanerVO> imageBanerVOS = JSON.parseArray(imageBanerJson, ImageBanerVO.class);
+                    List<ImageBanerVO> imageBanerVOS = JSON.parseArray(imageBanerJson,ImageBanerVO.class);
                     shopVo.setImageBanerVOS(imageBanerVOS);
                 }
                 Object shopProductRes = stringObjectMap.get("shopProductRes");
@@ -150,8 +149,7 @@ public class ShopServiceImpl implements ShopService {
                 }
                 Object mainCategory = stringObjectMap.get("mainCategory");
                 if(ObjectUtil.isNotEmpty(mainCategory)){
-                    String mainCategoryJson = JSONArray.toJSONString(mainCategory);
-                    List<String> mainCategoryList = JSON.parseArray(mainCategoryJson, String.class);
+                    List<String> mainCategoryList = StringUtil.splitToStringList((String) mainCategory,",");
                     shopVo.setMainCategory(mainCategoryList);
                 }
                 shopVos.add(shopVo);
