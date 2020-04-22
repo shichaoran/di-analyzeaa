@@ -80,25 +80,25 @@ public class ProductsTO implements Serializable {
      * attribute_management表   属性管理
      */
     //属性编码
-    private String attributeCode;  // 该字段目前没实际作用  因为商品和属性是一对多的关系
+    private String attributeCode;  // 该字段目前没实际作用  因为商品和属性是一对多的关系，都整合到 attributeMap 字段中保存
     //属性名称
-    private String attributeName;  // 该字段目前没实际作用  因为商品和属性是一对多的关系
+    private String attributeName;  // 该字段目前没实际作用  因为商品和属性是一对多的关系，都整合到 attributeMap 字段中保存
 
 
     /**
      * attribute_value表   属性值
      */
     //属性值名称
-    private String value_Name;  // 该字段目前没实际作用  因为商品和属性是一对多的关系
+    private String value_Name;  // 该字段目前没实际作用  因为商品和属性是一对多的关系，都整合到 attributeMap 字段中保存
 
 
     /**
      * sku_attribute_relations表   sku属性映射关系
      */
     //属性id -> attribute_management.id
-    private String attributeId;  // 该字段目前没实际作用  因为商品和属性是一对多的关系
+    private String attributeId;  // 该字段目前没实际作用  因为商品和属性是一对多的关系，都整合到 attributeMap 字段中保存
     //属性值id -> attribute_value.id
-    private String attributeValueId;  // 该字段目前没实际作用  因为商品和属性是一对多的关系
+    private String attributeValueId;  // 该字段目前没实际作用  因为商品和属性是一对多的关系，都整合到 attributeMap 字段中保存
     // 商品 所有属性和属性值 合集 格式如下：
     /**
      * [{
@@ -111,7 +111,7 @@ public class ProductsTO implements Serializable {
      */
     private String attributeMap;
     //属性类型：0定价属性   1一般属性
-    private Integer attributeType;  //  该字段目前没实际作用  因为商品和属性是一对多的关系
+    private Integer attributeType;  //  该字段目前没实际作用  因为商品和属性是一对多的关系，都整合到 attributeMap 字段中保存
 
 
     /**
@@ -176,11 +176,11 @@ public class ProductsTO implements Serializable {
      * file_management表   文件管理
      */
     //文件类型  0图片 1视频
-    private String type; // 写搜索缺失
+    private String type; // 该字段目前没实际作用  因为商品和图片属性是一对多的关系，都整合到 proSkuSkuPicJson 字段中保存
     //文件存储地址
-    private String fileUrl;// 写搜索缺失
+    private String fileUrl;// 该字段目前没实际作用  因为商品和图片属性是一对多的关系，都整合到 proSkuSkuPicJson 字段中保存
     //排序号
-    private Integer fileSortNumber;// 写搜索缺失
+    private Integer fileSortNumber;// 该字段目前没实际作用  因为商品和图片属性是一对多的关系，都整合到 proSkuSkuPicJson 字段中保存
 
 
     /**
