@@ -10,11 +10,16 @@ import com.vd.canary.data.api.response.es.SteelRes;
 import com.vd.canary.data.api.response.es.vo.ProductsDetailRes;
 import com.vd.canary.data.api.response.es.vo.SteelVO;
 import com.vd.canary.data.common.es.helper.ESPageRes;
+import com.vd.canary.data.common.es.helper.ElasticsearchUtil;
 import com.vd.canary.data.common.es.model.FinalSteel;
 import com.vd.canary.data.common.es.service.impl.ProductESServiceImpl;
+import com.vd.canary.data.constants.Constant;
 import com.vd.canary.data.service.es.SteelService;
 import com.vd.canary.utils.DateUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -86,6 +91,10 @@ public class SteelServiceImpl implements SteelService {
         res.setMessage("success");
         return res;
     }
+
+
+
+
 
 
 
