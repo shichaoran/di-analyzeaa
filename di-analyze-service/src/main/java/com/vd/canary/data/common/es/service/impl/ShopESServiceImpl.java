@@ -6,7 +6,9 @@ import java.util.*;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.google.common.collect.Lists;
 import com.google.gson.JsonObject;
+import com.vd.canary.data.api.request.es.ProductDetailsReq;
 import com.vd.canary.data.api.request.es.ShopPageReq;
 import com.vd.canary.data.api.request.es.SearchShopReq;
 import com.vd.canary.data.api.response.es.ShopProductRes;
@@ -167,15 +169,20 @@ public class ShopESServiceImpl implements ShopESService {
         log.info("indexName:{},id:{},update shop,map{} .", indexName, map.get("id").toString(),map);
     }
 
-    //通过id获取数据
-//    public ShopTO findById(String id) throws IOException{
-//        return (ShopTO)ElasticsearchUtil.searchDataById(indexName,id);
-//    }
-
     public Map<String, Object> findById(String id) throws IOException {
         return ElasticsearchUtil.searchDataById(indexName, id);
     }
 
+    // 通过CustomerId 获取该商铺详情信息
+    public Map<String, Object> boolQueryByCustomerId(String customerId) {
+        if(StringUtils.isEmpty(customerId) ){
+            return new HashMap<>();
+        }
+        BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
+        boolQuery.must(QueryBuilders.termsQuery("customerId", customerId));
+        List<Map<String, Object>> list = ElasticsearchUtil.searchByQuery(indexName,boolQuery);
+        return list.get(0);
+    }
 
     /**
      * 功能：首页顶部店铺搜索框通过 关键字分词查询  支持 高亮 排序 并分页
