@@ -113,6 +113,7 @@ public class SteelServiceImpl implements SteelService {
                     steelVO.setSkuName(recordMap.containsKey("proSkuSkuName") ? recordMap.get("proSkuSkuName").toString() : "");
                     steelVO.setSpuID(recordMap.containsKey("proSkuSpuId") ? recordMap.get("proSkuSpuId").toString() : "");
                     steelVO.setSpuName(recordMap.containsKey("proSkuSpuName") ? recordMap.get("proSkuSpuName").toString() : "");
+
                     if(recordMap.containsKey("skuSellPriceJson")){
                         JSONArray array = JSONObject.parseArray(recordMap.get("skuSellPriceJson").toString());
                         steelVO.setSkuSellPriceJson(JSONObject.toJSONString(array));
@@ -130,10 +131,13 @@ public class SteelServiceImpl implements SteelService {
                             //steelVO.setFTwoCategoryName(recordMap.containsKey("fTwoCategoryName") ? recordMap.get("fTwoCategoryName").toString() : "");
                             //steelVO.setFThreeCategoryName(recordMap.containsKey("fThreeCategoryName") ? recordMap.get("fThreeCategoryName").toString() : "");
                             steelVO.setFThreeCategoryCode(recordMap.containsKey("fThreeCategoryCode") ? recordMap.get("fThreeCategoryCode").toString() : "");
+                            steelVO.setFThreeCategoryId(recordMap.containsKey("fThreeCategoryId") ? recordMap.get("fThreeCategoryId").toString() : "");
+
                         }
                     }
 
                     steelVOS.add(steelVO);
+
                     categorys.put(recordMap.containsKey("fThreeCategoryCode") ? recordMap.get("fThreeCategoryCode").toString() : "", recordMap.containsKey("fThreeCategoryName") ? recordMap.get("fThreeCategoryName").toString() : "");
                     categorys.put(recordMap.containsKey("fTwoCategoryCode") ? recordMap.get("fTwoCategoryCode").toString() : "", recordMap.containsKey("fTwoCategoryName") ? recordMap.get("fTwoCategoryName").toString() : "");
                     brands.put(recordMap.containsKey("proSkuBrandId") ? recordMap.get("proSkuBrandId").toString() : "", recordMap.containsKey("bBrandName") ? recordMap.get("bBrandName").toString() : "");
