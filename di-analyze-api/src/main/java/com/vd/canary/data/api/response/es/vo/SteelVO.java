@@ -5,6 +5,7 @@ import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -24,12 +25,11 @@ public class SteelVO implements Serializable {
     private String spuID;
     //spuname
     private String spuName;
-    //商品属性 key为属性id+属性类型，value为属性值
-//    private Map<String, Map<String,String>> attributeMap ;//Map<String, HashSet<String>> attributeMap;
-
-    //spuid
+    //属性
+    private String attributeMapJson ;
+    //skuid
     private String skuID;
-    //spuname
+    //skuname
     private String skuName;
 
     //商品定价
@@ -44,6 +44,6 @@ public class SteelVO implements Serializable {
     private String fThreeCategoryId;
 //    //三级类目编码
     private String fThreeCategoryCode;
-    //二级类目名称
-//    private String fTwoCategoryName;
+    //三级类目名称
+    private String fThreeCategoryName;
 }

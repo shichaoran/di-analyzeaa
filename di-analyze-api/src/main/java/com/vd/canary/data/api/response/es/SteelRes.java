@@ -28,6 +28,8 @@ public class SteelRes implements Serializable {
 
     private List<SteelVO> SteelVORes; //商品详细列表
 
+    private Map<String,String> spuNames;
+
     private Integer total;//总条数
 
 }

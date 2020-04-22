@@ -17,22 +17,22 @@ public class SteelReq extends RequestPageBO {
 
 
     /**
-     * 商品一级目录id
+     * 商品一级目录
      */
-    private String fOneCategoryId;
+    private String fOneCategoryName;
     /**
-     * 商品二级目录id
+     * 商品二级目录
      */
-    private String fTwoCategoryId;
+    private String fTwoCategoryName;
 
     /**
-     * 商品三级目录id
+     * 商品三级目录
      */
-    private String fThreeCategoryId;
+    private String fThreeCategoryName;
     /**
-     * 品牌id
+     * 品牌
      */
-    private List<String> bBrandId;
+    private List<String> bBrandName;
 
     /**
      * price为desc 或者 asc
@@ -51,8 +51,9 @@ public class SteelReq extends RequestPageBO {
     /**
      * 属性id列表
      */
-    private  Map<String,String> attributes;
+    private Map<String, String> attributes;
 
-    private List<String> spuId;
+    private List<String> spuNames;
 
+    private List<SpecCommand> specCommands;
 }
