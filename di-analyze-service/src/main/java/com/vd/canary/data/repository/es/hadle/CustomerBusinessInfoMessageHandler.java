@@ -52,8 +52,10 @@ public class CustomerBusinessInfoMessageHandler extends BaseMessageHandler imple
             storeDataQueryReq.setStoreId(shopId);
             StoreDataInfoResp storeDataInfoResp = httpClientUtils.getStoreDataInfoResp(storeDataQueryReq);
             ShopTO shopTO = shopDataHandler.assembleShopTo(storeDataInfoResp);
-            if(type.equals("update") ||type.equals("delete")){
-                shopESService.updateShop(shopTO);
+            if(shopTO!=null) {
+                if (type.equals("update") || type.equals("delete")) {
+                    shopESService.updateShop(shopTO);
+                }
             }
         } catch (Exception e) {
             log.error("处理客户经营信息{}data=" + data + ",customerInfoVO=" + customerInfoVO, e);

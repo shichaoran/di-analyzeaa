@@ -49,14 +49,16 @@ public class StoreInfoMessageHandler extends BaseMessageHandler implements BaseH
             storeDataQueryReq.setStoreId(id);
             StoreDataInfoResp storeDataInfoResp = httpClientUtils.getStoreDataInfoResp(storeDataQueryReq);
             ShopTO shopTO = shopDataHandler.assembleShopTo(storeDataInfoResp);
-            if(Constant.INSERT.equals(type)){
-                shopESService.saveShop(shopTO);
-            }
-            if(Constant.UPDATE.equals(type)){
-                shopESService.updateShop(shopTO);
-            }
-            if(Constant.DELETE.equals(type)){
-                shopESService.deletedShopById(shopTO.getId());
+            if(shopTO!=null){
+                if(Constant.INSERT.equals(type)){
+                    shopESService.saveShop(shopTO);
+                }
+                if(Constant.UPDATE.equals(type)){
+                    shopESService.updateShop(shopTO);
+                }
+                if(Constant.DELETE.equals(type)){
+                    shopESService.deletedShopById(shopTO.getId());
+                }
             }
         } catch (Exception e) {
             log.error("处理店铺信息信息{}data=" + data + ",storeInfoVO=" + storeInfoVO, e);
