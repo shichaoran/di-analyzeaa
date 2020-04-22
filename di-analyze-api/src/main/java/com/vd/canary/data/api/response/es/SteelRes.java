@@ -32,4 +32,6 @@ public class SteelRes implements Serializable {
 
     private Integer total;//总条数
 
+    private Integer currentPage;//当前页码
+
 }
