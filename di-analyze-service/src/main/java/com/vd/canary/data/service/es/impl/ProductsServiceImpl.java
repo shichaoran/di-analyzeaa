@@ -131,11 +131,6 @@ public class ProductsServiceImpl implements ProductsService {
         return res;
     }
 
-    //@Override
-    public ResponseBO<ProductsRes> getProductByCategory1(@Valid ThreeCategoryReq threeCategoryReq) throws Exception {
-        ProductsReq productsReq = new ProductsReq();
-        return getProductsByKey(productsReq);
-    }
     @Override
     public ResponseBO<ProductsRes> getProductByCategory(@Valid ThreeCategoryReq threeCategoryReq) throws Exception {
         ResponseBO<ProductsRes> res = new ResponseBO<ProductsRes>();

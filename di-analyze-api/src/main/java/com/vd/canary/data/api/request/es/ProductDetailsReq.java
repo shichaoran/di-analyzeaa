@@ -14,9 +14,11 @@ public class ProductDetailsReq extends RequestBO {
     /**
      * 商品id
      */
-    @NotBlank(message = "spuId不能为空")
+    //@NotBlank(message = "spuId不能为空")
     private String spuId;
 
-    @NotBlank(message = "店铺名不能为空")
+    //@NotBlank(message = "店铺名不能为空")
     private String storeId;
+
+    private String skuId;
 }
