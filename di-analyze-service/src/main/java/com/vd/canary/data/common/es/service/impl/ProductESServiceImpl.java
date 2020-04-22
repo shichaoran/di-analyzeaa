@@ -236,6 +236,13 @@ public class ProductESServiceImpl implements ProductESService {
         String highlightField = null;
         BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
 
+        if (req.getSpecCommands() != null && req.getSpecCommands().size() > 0) {//规格
+            boolQuery.must(QueryBuilders.termsQuery("attributeMapJson.attributeName", req.getSpecCommands()));
+        }
+        if (req.getSpecCommands() != null && req.getSpecCommands().size() > 0) {//规格
+            boolQuery.must(QueryBuilders.termsQuery("attributeMapJson.attributeValue.attributeValueName", req.getSpecCommands()));
+        }
+
         if (req.getSpuNames() != null && req.getSpuNames().size() > 0) {//spu名称
             boolQuery.must(QueryBuilders.termsQuery("proSkuSpuName", req.getSpuNames()));
         }
