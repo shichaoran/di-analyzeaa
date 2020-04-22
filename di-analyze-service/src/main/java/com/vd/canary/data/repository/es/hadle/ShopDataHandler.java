@@ -35,7 +35,7 @@ public class ShopDataHandler {
             StoreInfoVO storeInfoVO = storeDataInfoResp.getStoreInfoVO();
             List<AgreementVO> agreementVOs = storeDataInfoResp.getAgreementVO();
             CustomerBusinessInfoVO customerBusinessInfoVO = storeDataInfoResp.getCustomerBusinessInfoVO();
-            List<StoreLoopBannerVO> storeLoopBannerVO = storeDataInfoResp.getStoreLoopBannerVO();
+            List<StoreLoopBannerVO> storeLoopBannerVOs = storeDataInfoResp.getStoreLoopBannerVO();
             StoreMediaVO storeMediaVO = storeDataInfoResp.getStoreMediaVO();
             StoreTemplateVO storeTemplateVO = storeDataInfoResp.getStoreTemplateVO();
             if(storeInfoVO!=null){
@@ -56,8 +56,13 @@ public class ShopDataHandler {
                 shopTO.setMainProducts(customerBusinessInfoVO.getMainProducts());
                 shopTO.setMainCategory(customerBusinessInfoVO.getBusinessCategory());
             }
-            if(CollectionUtil.isNotEmpty(storeLoopBannerVO)){
-                List<ImageBanerDTO> imageBanerDTOS = BeanUtil.convert(storeLoopBannerVO, ImageBanerDTO.class);
+            if(CollectionUtil.isNotEmpty(storeLoopBannerVOs)){
+                List<ImageBanerDTO> imageBanerDTOS = BeanUtil.convert(storeLoopBannerVOs, ImageBanerDTO.class);
+                for (int i = 0; i <imageBanerDTOS.size() ; i++) {
+                    StoreLoopBannerVO storeLoopBannerVO = storeLoopBannerVOs.get(i);
+                    ImageBanerDTO imageBanerDTO = imageBanerDTOS.get(i);
+                    imageBanerDTO.setImageOrder(storeLoopBannerVO.getImageOrder()+"");
+                }
                 shopTO.setImageBanerJson(imageBanerDTOS);
             }
             if(ObjectUtil.isNotEmpty(storeTemplateVO)){
