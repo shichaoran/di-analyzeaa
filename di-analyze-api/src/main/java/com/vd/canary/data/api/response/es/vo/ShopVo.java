@@ -18,8 +18,8 @@ import lombok.experimental.Accessors;
 @Data
 @ToString
 @Accessors(chain = true)
-
 public class ShopVo implements Serializable {
+    private static final long serialVersionUID = -8274283938195135641L;
     private String name; //店铺名称
     private String id; //店铺id
     private List<String> boothCode;//展厅编号

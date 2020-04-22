@@ -1,18 +1,12 @@
 package com.vd.canary.data.api.response.es;
 
 //import com.alibaba.fastjson.JSON;
+import java.io.Serializable;
+import java.time.LocalDateTime;
+
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
-
-import javax.management.relation.Role;
-import java.io.Serializable;
-import java.lang.invoke.SerializedLambda;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Map;
 
 /**
  * @Author shichaoran
@@ -23,6 +17,7 @@ import java.util.Map;
 @ToString
 @Accessors(chain = true)
 public class ShopProductRes implements Serializable {
+    private static final long serialVersionUID = 3638243643721964455L;
     /**
      * 商品Id
      */
