@@ -19,6 +19,8 @@ import com.vd.canary.data.service.es.ProductsService;
 import com.vd.canary.utils.CollectionUtil;
 import com.vd.canary.utils.DateUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.poi.ss.formula.functions.T;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -227,39 +229,60 @@ public class ProductsServiceImpl implements ProductsService {
     }
 
     @Override
-    public ResponseBO<List<ProductDetailsRes>>  getProductsDetail(@Valid ProductDetailsReq productDetailsReq) throws IOException {
-        ResponseBO<List<ProductDetailsRes>> res = new ResponseBO<List<ProductDetailsRes>>();
-        List<ProductDetailsRes> reslist = new ArrayList<>();
-        List<Map<String, Object>> list = productESServiceImpl.boolQueryForProductDetail(productDetailsReq);
-        if (CollectionUtil.isNotEmpty(list)) {
-            for(Map<String, Object> map : list){
-                ProductDetailsRes productDetailsRes = new ProductDetailsRes();
-                if(map.containsKey("skuId") && map.get("skuId") != null ) productDetailsRes.setSkuId(map.get("skuId").toString());
+    public ResponseBO<ProductDetailsRes>  getProductsDetail(@Valid ProductDetailsReq productDetailsReq) throws IOException {
+        ResponseBO<ProductDetailsRes> res = new ResponseBO<ProductDetailsRes>();
+        ProductDetailsRes productDetailsRes = new ProductDetailsRes();
+        Map<String, Object> map = productESServiceImpl.findById(productDetailsReq.getSkuId());
+        if(map != null){
+            if(map.containsKey("skuId") && map.get("skuId") != null ) productDetailsRes.setSkuId(map.get("skuId").toString());
 
-                if(map.containsKey("proSkuSkuName") && map.get("proSkuSkuName") != null ) productDetailsRes.setSkuName(map.get("proSkuSkuName").toString());
+            if(map.containsKey("proSkuSkuName") && map.get("proSkuSkuName") != null ) productDetailsRes.setSkuName(map.get("proSkuSkuName").toString());
 
-                if(map.containsKey("proSkuTitle") && map.get("proSkuTitle") != null )productDetailsRes.setSkuTitle(map.get("proSkuTitle").toString());
+            if(map.containsKey("proSkuTitle") && map.get("proSkuTitle") != null )productDetailsRes.setSkuTitle(map.get("proSkuTitle").toString());
 
-                if(map.containsKey("proSkuSubTitle") && map.get("proSkuSubTitle") != null )productDetailsRes.setSkuSubTitle(map.get("proSkuSubTitle").toString());
+            if(map.containsKey("proSkuSubTitle") && map.get("proSkuSubTitle") != null )productDetailsRes.setSkuSubTitle(map.get("proSkuSubTitle").toString());
 
-                if(map.containsKey("attributeMap") && map.get("attributeMap") !=null) productDetailsRes.setAttributeMapJson(map.get("attributeMap").toString());
-
-                if(map.containsKey("skuSellPriceJson") && map.get("skuSellPriceJson") != null){
-                    JSONArray array = JSONObject.parseArray(map.get("skuSellPriceJson").toString());
-                    productDetailsRes.setPriceJson(JSONObject.toJSONString(array));
+            if(map.containsKey("attributeMap") && map.get("attributeMap") !=null) {
+                Map<String,String> attributeMapJson = new HashMap<>();
+                List<Map<String, Object>> list = productESServiceImpl.boolQueryForProductDetail(productDetailsReq);
+                if (CollectionUtil.isNotEmpty(list)) {
+                    for(Map<String, Object> submap : list){
+                        if(submap.containsKey("attributeMap") && submap.get("attributeMap") !=null) {
+                            attributeMapJson.put(submap.get("skuId").toString(),submap.get("attributeMap").toString());
+                        }
+                    }
                 }
-
-                if(map.containsKey("skuIntroduce") && map.get("skuIntroduce") != null) productDetailsRes.setSkuIntroduce(map.get("skuIntroduce").toString());
-
-                if(map.containsKey("proSkuSkuPicJson") && map.get("proSkuSkuPicJson") != null ) productDetailsRes.setProSkuSkuPicJson(map.get("proSkuSkuPicJson").toString());
-
-                if(map.containsKey("regionalCode") && map.get("regionalCode") != null ) productDetailsRes.setRegionalId(map.get("regionalCode").toString());
-
-                if(map.containsKey("regionalName") && map.get("regionalName") != null ) productDetailsRes.setRegionalName(map.get("regionalName").toString());
-                reslist.add(productDetailsRes);
+                productDetailsRes.setAttributeMapJson(attributeMapJson);
             }
+
+            if(map.containsKey("skuSellPriceJson") && map.get("skuSellPriceJson") != null){
+                JSONArray array = JSONObject.parseArray(map.get("skuSellPriceJson").toString());
+                productDetailsRes.setPriceJson(JSONObject.toJSONString(array));
+            }
+
+            if(map.containsKey("skuIntroduce") && map.get("skuIntroduce") != null) productDetailsRes.setSkuIntroduce(map.get("skuIntroduce").toString());
+
+            if(map.containsKey("proSkuSkuPicJson") && map.get("proSkuSkuPicJson") != null ) productDetailsRes.setProSkuSkuPicJson(map.get("proSkuSkuPicJson").toString());
+
+            if(map.containsKey("regionalId") && map.get("regionalId") !=null){
+                JSONArray array = JSONArray.parseArray(map.get("regionalId").toString());
+                productDetailsRes.setRegionalId(JSONObject.parseArray(array.toJSONString(), String.class));
+            }
+
+            if(map.containsKey("skuRegionalName") && map.get("skuRegionalName") !=null) {
+                JSONArray array = JSONArray.parseArray(map.get("skuRegionalName").toString());
+                productDetailsRes.setRegionalName(JSONObject.parseArray(array.toJSONString(), String.class));
+            }
+
+            if(map.containsKey("warehouseId") && map.get("warehouseId") != null ) productDetailsRes.setWarehouseId(map.get("warehouseId").toString());
+
+            if(map.containsKey("warehouseName") && map.get("warehouseName") != null ) productDetailsRes.setWarehouseName(map.get("warehouseName").toString());
+
+            if(map.containsKey("inventory") && map.get("inventory") != null ) productDetailsRes.setInventory(map.get("inventory").toString());
         }
-        res.setData(reslist);
+
+
+        res.setData(productDetailsRes);
         res.setSuccess(true);
         res.setCode(200);
         res.setMessage("success.");

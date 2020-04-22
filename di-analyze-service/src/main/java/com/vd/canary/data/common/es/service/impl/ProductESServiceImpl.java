@@ -268,25 +268,6 @@ public class ProductESServiceImpl implements ProductESService {
         return esPageRes;
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     /**
      * 功能：首页顶部商品搜索框通过 关键字分词查询  支持 高亮 排序 并分页
      * 使用QueryBuilders
@@ -323,26 +304,28 @@ public class ProductESServiceImpl implements ProductESService {
                                                          "proSkuSpuName", "proSkuSkuName", "proSkuTitle", "proSkuSubTitle",
                                                          "threeCategoryName", "bBrandName", "brandShorthand").fuzziness(Fuzziness.AUTO));
         }
-        if (req.getBBrandId() != null && req.getBBrandId().size() > 0) {//品牌id
-            boolQuery.must(QueryBuilders.termsQuery("proSkuBrandId", req.getBBrandId()));
+        if (req.getBBrandName() != null && req.getBBrandName().size() > 0) {//品牌id
+            boolQuery.must(QueryBuilders.termsQuery("bBrandName", req.getBBrandName()));
         }
         if (req.getFThreeCategoryName() != null && req.getFThreeCategoryName().size() > 0) {//后台三级分类id
-            boolQuery.must(QueryBuilders.termsQuery("fThreeCategoryId", req.getFThreeCategoryName()));
+            boolQuery.must(QueryBuilders.termsQuery("fThreeCategoryName", req.getFThreeCategoryName()));
         }
-        if (req.getBusinessArea() != null && req.getBusinessArea().size() > 0) { //供货区域id
-            boolQuery.must(QueryBuilders.termsQuery("regionalId", req.getBusinessArea()));
+        if (req.getBusinessAreaName() != null && req.getBusinessAreaName().size() > 0) { //供货区域id
+            boolQuery.must(QueryBuilders.termsQuery("skuRegionalName", req.getBusinessAreaName()));
         }
         if (StringUtils.isNotBlank(req.getPriceSort())) {
-            sortField = "skuSellPriceJson"; // 商品定价信息，需要嵌套查询xxx.xxx
+            sortField = "skuSellPriceJson.price"; // 商品定价信息，需要嵌套查询xxx.xxx
             sortTpye = req.getPriceSort(); // 商品价格排序
         }
-        if (StringUtils.isNotBlank(req.getIsDiscussPrice())) {//是否议价，需要嵌套查询xxx.xxx
+        if (StringUtils.isNotBlank(req.getIsDiscussPrice()) && req.getIsDiscussPrice().equals("1")) {//是否议价，需要嵌套查询xxx.xxx 是否议价 0-包含议价的商品，1-不含议价的商品
             //boolQuery.must(QueryBuilders.rangeQuery("skuSellPriceJson").from(30).to(60).includeLower(true).includeUpper(true)); //适用价格区间查找
-            boolQuery.must(QueryBuilders.rangeQuery("skuSellPriceJson").gt(0));
             //boolQuery.mustNot();
+            //boolQuery.must(QueryBuilders.rangeQuery("skuSellPriceJson.price").gt(0));
+            boolQuery.mustNot(QueryBuilders.termQuery("skuSellPriceJson.price","0"));
         }
-        if (StringUtils.isNotBlank(req.getIsHaveHouse())) {//是否入驻展厅
+        if (StringUtils.isNotBlank(req.getIsHaveHouse()) && req.getIsHaveHouse().equals("1")) {//是否入驻展厅 是否入驻 0-全部商品，1-入驻展厅的商品
             //boolQuery.must();
+            boolQuery.must(QueryBuilders.matchQuery("boothBusinessBoothCode","[*"));
         }
         if(StringUtils.isEmpty(req.getKey())){
             QueryBuilder queryBuilder = QueryBuilders.matchAllQuery();

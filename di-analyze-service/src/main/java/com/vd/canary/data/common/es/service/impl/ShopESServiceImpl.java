@@ -295,11 +295,11 @@ public class ShopESServiceImpl implements ShopESService {
                         builder.endObject();
                         builder.startObject("businessArea"); { builder.field("type", "keyword"); }
                         builder.endObject();
-                        builder.startObject("imageOrder"); { builder.field("type", "keyword"); }
-                        builder.endObject();
-                        builder.startObject("imageName"); { builder.field("type", "keyword"); }
-                        builder.endObject();
-                        builder.startObject("imageUrl"); { builder.field("type", "keyword"); }
+                        //builder.startObject("imageOrder"); { builder.field("type", "keyword"); }
+                        //builder.endObject();
+                        //builder.startObject("imageName"); { builder.field("type", "keyword"); }
+                        //builder.endObject();
+                        builder.startObject("imageBanerJson"); { builder.field("type", "nested"); }
                         builder.endObject();
                         builder.startObject("shopProductRes"); { builder.field("type", "nested"); }
                         builder.endObject();
@@ -315,7 +315,10 @@ public class ShopESServiceImpl implements ShopESService {
                         builder.endObject();
                         builder.startObject("level"); { builder.field("type", "keyword"); }
                         builder.endObject();
-
+                        builder.startObject("remark1"); { builder.field("type", "keyword"); }
+                        builder.endObject();
+                        builder.startObject("remark2"); { builder.field("type", "keyword"); }
+                        builder.endObject();
                     }
                     builder.endObject();
                 }

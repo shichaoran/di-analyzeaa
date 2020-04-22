@@ -16,7 +16,7 @@ public class ProductsBaseReq extends RequestPageBO  {
     /**
      * 品牌id
      */
-    private List<String> bBrandId;
+    private List<String> bBrandName;
     /**
      * 三级类目名称
      */
@@ -24,7 +24,7 @@ public class ProductsBaseReq extends RequestPageBO  {
     /**
      * 所在地
      */
-    private List<String> businessArea;
+    private List<String> businessAreaName;
 
     /**
      * price为desc 或者 asc
@@ -32,12 +32,12 @@ public class ProductsBaseReq extends RequestPageBO  {
     private String priceSort;
 
     /**
-     * 是否议价
+     * 是否议价 0-包含议价的商品，1-不含议价的商品
      */
     private String isDiscussPrice;
 
     /**
-     * 是否入驻
+     * 是否入驻 0-全部商品，1-入驻展厅的商品
      */
     private String isHaveHouse;
 }

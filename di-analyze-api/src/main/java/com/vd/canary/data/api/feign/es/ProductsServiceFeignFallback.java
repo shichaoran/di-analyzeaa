@@ -33,7 +33,7 @@ public class ProductsServiceFeignFallback implements FallbackFactory<ProductsSer
 
 
             @Override
-            public ResponseBO<List<ProductDetailsRes>> getProductsDetail(@Valid ProductDetailsReq productDetailsReq) {
+            public ResponseBO<ProductDetailsRes> getProductsDetail(@Valid ProductDetailsReq productDetailsReq) {
                 throw new BusinessException(FEIGN_EXCEPTION).append(e.getMessage());
             }
 
