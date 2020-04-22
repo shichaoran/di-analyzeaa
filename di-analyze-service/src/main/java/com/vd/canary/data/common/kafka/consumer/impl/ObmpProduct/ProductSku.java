@@ -17,6 +17,7 @@ import com.vd.canary.obmp.product.api.feign.ProductSpuFeign;
 
 import com.vd.canary.obmp.product.api.request.category.foreground.CategoryRelationsReq;
 import com.vd.canary.obmp.product.api.response.brand.BrandManagementResp;
+import com.vd.canary.obmp.product.api.response.category.CategoryBackgroundResp;
 import com.vd.canary.obmp.product.api.response.category.CategoryRelationsResp;
 import com.vd.canary.obmp.product.api.response.file.vo.FileManagementVO;
 import com.vd.canary.obmp.product.api.response.spu.ProductSpuDetailResp;
@@ -29,6 +30,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.io.IOException;
 import java.util.*;
@@ -151,8 +154,41 @@ public class ProductSku implements Function {
                 CategoryRelationsReq categoryRelationsReq = new CategoryRelationsReq();
                 categoryRelationsReq.setBackgroundCategoryId(entry.getValue().toString());
                 try {
-                    ResponseBO<List<CategoryRelationsResp>> res = bigDataApiFeign.listByCondition(categoryRelationsReq);
-                    if(res != null){
+                    //ResponseBO<List<CategoryRelationsResp>> res = bigDataApiFeign.listByCondition(categoryRelationsReq);
+                    CategoryRelationsReq req = new CategoryRelationsReq();
+                    req.setBackgroundCategoryId(entry.getValue().toString());
+                    // 该接口可以通过后台类目查找前台类目，也统一通过
+                    ResponseBO<List<CategoryRelationsResp>> categoryRelationsResps = bigDataApiFeign.listByCondition(req);
+                    HashSet<String> fOneCategoryCode = new HashSet<>();
+                    HashSet<String> fTwoCategoryCode = new HashSet<>();
+                    HashSet<String> fThreeCategoryCode = new HashSet<>();
+                    HashSet<String> fOneCategoryName = new HashSet<>();
+                    HashSet<String> fTwoCategoryName = new HashSet<>();
+                    HashSet<String> fThreeCategoryName = new HashSet<>();
+                    HashSet<String> fOneCategoryId = new HashSet<>();
+                    HashSet<String> fTwoCategoryId = new HashSet<>();
+                    HashSet<String> fThreeCategoryId = new HashSet<>();
+                    if(categoryRelationsResps != null){
+                        List<CategoryRelationsResp> list = categoryRelationsResps.getData();
+                        if(list != null && list.size() > 0){
+                            for(CategoryRelationsResp resp : list){
+                               System.out.println(resp);
+                            }
+                        }
+                    }
+                    esMap.put("fOneCategoryCode",fOneCategoryCode);
+                    esMap.put("fTwoCategoryCode",fTwoCategoryCode);
+                    esMap.put("fThreeCategoryCode",fThreeCategoryCode);
+
+                    esMap.put("fOneCategoryName",fOneCategoryName);
+                    esMap.put("fTwoCategoryName",fTwoCategoryName);
+                    esMap.put("fThreeCategoryName",fThreeCategoryName);
+
+                    esMap.put("fOneCategoryId",fOneCategoryId);
+                    esMap.put("fTwoCategoryId",fTwoCategoryId);
+                    esMap.put("fThreeCategoryId",fThreeCategoryId);
+
+                    /*if(res != null){
                         log.info("ProductSku.reSetValue,three_category_id.res={}.",JSONUtil.toJSON(res).toJSONString());
                         List<CategoryRelationsResp> pro = (List<CategoryRelationsResp>)res.getData();
                         log.info("ProductSku.reSetValue,three_category_id.pro={}.",JSONUtil.toJSON(pro).toJSONString());
@@ -174,7 +210,7 @@ public class ProductSku implements Function {
                                 esMap.put("fThreeCategoryId",foreCategoryFullId[2]);
                             }
                         }
-                    }
+                    }*/
                 }catch (Exception e) {
                     log.info("ProductSku.reSetValue,Exception:bigDataApiFeign.listByCondition .");
                     e.printStackTrace();
