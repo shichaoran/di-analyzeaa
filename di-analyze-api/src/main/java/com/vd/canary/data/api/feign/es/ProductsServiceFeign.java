@@ -1,5 +1,7 @@
 package com.vd.canary.data.api.feign.es;
 
+import java.util.List;
+
 import com.vd.canary.core.api.Feign;
 import com.vd.canary.core.bo.ResponseBO;
 import com.vd.canary.core.bo.ResponsePageBO;
@@ -39,7 +41,7 @@ public interface ProductsServiceFeign extends Feign {
      * 商品详情页
      */
     @PostMapping("/data/products/getProductDetail")
-    ResponseBO<ProductDetailsRes> getProductsDetail(@RequestBody @Valid ProductDetailsReq productDetailsReq);
+    ResponseBO<List<ProductDetailsRes>> getProductsDetail(@RequestBody @Valid ProductDetailsReq productDetailsReq);
 
     /**
      * 根据一级目录、二级目录和三级目录名称返回商品列表
