@@ -10,6 +10,7 @@ import lombok.experimental.Accessors;
 import javax.management.relation.Role;
 import java.io.Serializable;
 import java.lang.invoke.SerializedLambda;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -54,4 +55,6 @@ public class ShopProductRes implements Serializable {
      * 价格类型
      */
     private String priceType;
+
+    private LocalDateTime crateDate;
 }
