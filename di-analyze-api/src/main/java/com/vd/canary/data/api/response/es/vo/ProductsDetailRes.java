@@ -73,5 +73,7 @@ public class ProductsDetailRes implements Serializable {
     //供货区域名称
     private String skuRegionalNameJson;
 
+    //spuid
+    private String proSkuSpuId;
 
 }
