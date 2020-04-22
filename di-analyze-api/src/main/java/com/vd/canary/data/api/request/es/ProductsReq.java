@@ -15,7 +15,6 @@ public class ProductsReq extends ProductsBaseReq {
     /**
      * 输入框中关键字
      */
-    @NotBlank(message = "关键字不能为空")
     private String key;
 
 }
