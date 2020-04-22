@@ -40,8 +40,8 @@ public class ProductsController extends BaseController {
     }
 
     @PostMapping("/data/products/getProductDetail")
-    public ResponseBO<List<ProductDetailsRes>> getProductsDetail(@RequestBody @Valid ProductDetailsReq productDetailsReq) throws IOException {
-        ResponseBO<List<ProductDetailsRes>> res = productsService.getProductsDetail(productDetailsReq);
+    public ResponseBO<ProductDetailsRes> getProductsDetail(@RequestBody @Valid ProductDetailsReq productDetailsReq) throws IOException {
+        ResponseBO<ProductDetailsRes> res = productsService.getProductsDetail(productDetailsReq);
         return res;
     }
 

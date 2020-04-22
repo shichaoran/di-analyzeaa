@@ -20,7 +20,7 @@ public interface ProductsService {
 
     ResponseBO<ProductsRes> getProductByCategory(@RequestBody @Valid ThreeCategoryReq threeCategoryReq) throws Exception;
 
-    ResponseBO<List<ProductDetailsRes>>  getProductsDetail(@RequestBody @Valid ProductDetailsReq productDetailsReq) throws IOException;
+    ResponseBO<ProductDetailsRes>  getProductsDetail(@RequestBody @Valid ProductDetailsReq productDetailsReq) throws IOException;
 
     ResponseBO<CategoryRes> categoryRes(@RequestBody @Valid CategoryReq categoryReq);
 }

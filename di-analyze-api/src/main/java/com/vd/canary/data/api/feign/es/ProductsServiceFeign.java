@@ -41,7 +41,7 @@ public interface ProductsServiceFeign extends Feign {
      * 商品详情页
      */
     @PostMapping("/data/products/getProductDetail")
-    ResponseBO<List<ProductDetailsRes>> getProductsDetail(@RequestBody @Valid ProductDetailsReq productDetailsReq);
+    ResponseBO<ProductDetailsRes> getProductsDetail(@RequestBody @Valid ProductDetailsReq productDetailsReq);
 
     /**
      * 根据一级目录、二级目录和三级目录名称返回商品列表
