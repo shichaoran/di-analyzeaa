@@ -1,13 +1,13 @@
 package com.vd.canary.data.common.es.model;
 
-import com.vd.canary.data.api.response.es.ShopProductRes;
-import lombok.*;
-
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
-import java.util.Map;
+
+import com.vd.canary.data.api.response.es.ShopProductRes;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
 
 @Data
 @Builder
@@ -23,7 +23,7 @@ public class ShopTO implements Serializable {
     private String businessArea;//区域
     //private String imageOrder;
     //private String imageName; //名
-    private String imageBanerJson;
+    private List<ImageBanerDTO> imageBanerJson;
     private List<ShopProductRes> shopProductRes;
     private String customerId;  // 客户·ID
     private String storeTemplateId; //模板id

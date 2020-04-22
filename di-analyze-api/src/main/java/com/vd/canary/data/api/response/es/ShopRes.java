@@ -1,16 +1,16 @@
 package com.vd.canary.data.api.response.es;
 
-import com.vd.canary.data.api.response.es.vo.ShopBrand;
-
-import com.vd.canary.data.api.response.es.vo.ShopVo;
-
-import com.vd.canary.data.api.response.es.vo.ShopThreeCategory;
-import lombok.*;
-import lombok.experimental.Accessors;
-
 import java.io.Serializable;
 import java.util.List;
-import java.util.Map;
+
+import com.vd.canary.data.api.response.es.vo.ShopVo;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+import lombok.experimental.Accessors;
 
 /**
  * @Author shichaoran
@@ -27,7 +27,14 @@ import java.util.Map;
 public class ShopRes implements Serializable {
     private static final long serialVersionUID = 3799924045437177866L;
     private List<ShopVo> shopVos;
-    private Map<String,String> brands;
-    private Map<String,String> categories;
+    /**
+     * 品牌类目集合
+     */
+    private List<String> brands;
+    /**
+     * 类目集合
+     */
+    private List<String> categories;
+
     private int total;
 }

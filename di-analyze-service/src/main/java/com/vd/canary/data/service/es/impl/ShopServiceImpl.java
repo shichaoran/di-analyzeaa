@@ -1,26 +1,32 @@
 package com.vd.canary.data.service.es.impl;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.validation.Valid;
+
+import com.alibaba.fastjson.JSON;
+import com.google.common.collect.Lists;
 import com.vd.canary.core.bo.ResponseBO;
 import com.vd.canary.data.api.request.es.SearchShopReq;
 import com.vd.canary.data.api.response.es.ShopProductRes;
 import com.vd.canary.data.api.response.es.ShopRes;
-import com.vd.canary.data.api.response.es.vo.ProductsDetailRes;
-import com.vd.canary.data.api.response.es.vo.ShopBrand;
+import com.vd.canary.data.api.response.es.vo.ImageBanerVO;
 import com.vd.canary.data.api.response.es.vo.ShopVo;
 import com.vd.canary.data.common.es.helper.ESPageRes;
-import com.vd.canary.data.common.es.index.ShopTO;
 import com.vd.canary.data.common.es.service.impl.ShopESServiceImpl;
 import com.vd.canary.data.service.es.ShopService;
 import com.vd.canary.utils.DateUtil;
+import com.vd.canary.utils.ObjectUtil;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import javax.validation.Valid;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.*;
-
-import static org.apache.logging.log4j.ThreadContext.get;
 
 /**
  * @Author shichaoran
@@ -48,15 +54,15 @@ public class ShopServiceImpl implements ShopService {
         booth.add("2");
         shopVO.setBoothCode(booth);//List<String>"[\"100#\"]"
         shopVO.setMediaUrl("http://123");
-        shopVO.setBusinessCategory("2");
+      //  shopVO.setBusinessCategory("2");
         List<String> businessBrand = new ArrayList<>();
         businessBrand.add("品牌1");
         businessBrand.add("品牌2");
         shopVO.setBusinessBrand(businessBrand);//List<String>
         shopVO.setBusinessArea("北京");
-        shopVO.setImageOrder("2");
+       /* shopVO.setImageOrder("2");
         shopVO.setImageName("图片");
-        shopVO.setImageUrl("http://234");
+        shopVO.setImageUrl("http://234");*/
         List<ShopProductRes> products = new ArrayList<>();
         ShopProductRes shopProductRes = new ShopProductRes();
         shopProductRes.setSkuId("1");
@@ -80,15 +86,15 @@ public class ShopServiceImpl implements ShopService {
         list.add(shopVO);
         shopRes.setShopVos(list);
 
-        Map<String, String> brands = new HashMap<>();
+      /*  Map<String, String> brands = new HashMap<>();
         brands.put("1","品牌1");
         brands.put("2","品牌2");
-        shopRes.setBrands(brands);
+        shopRes.setBrands(brands);*/
 
         Map<String, String> categories = new HashMap<>();
         categories.put("1","分类1");
         categories.put("2","分类2");
-        shopRes.setCategories(categories);
+      //  shopRes.setCategories(categories);
         shopRes.setTotal(100);
 
         res.setData(shopRes);
@@ -105,7 +111,51 @@ public class ShopServiceImpl implements ShopService {
         ShopRes shopRes = new ShopRes();
         ESPageRes esPageRes = shopESService.boolQueryByKeyword(shopSearchBO.getPageNum(), shopSearchBO.getPageSize(), shopSearchBO);
         List<Map<String, Object>> recordList = esPageRes.getRecordList();
+        List<ShopVo> shopVos= Lists.newArrayList();
         if (recordList != null && recordList.size() > 0) {
+            Set<String> brandsSet = new HashSet<>();
+            Set<String> categoriesSet = new HashSet<>();
+            for (Map<String, Object> stringObjectMap : recordList) {
+                String jsonString = JSON.toJSONString(stringObjectMap);
+                ShopVo shopVo = JSON.parseObject(jsonString, ShopVo.class);
+                if (stringObjectMap.containsKey("boothScheduledTime")) {
+                    shopVo.setBoothScheduledTime(LocalDateTime.parse(stringObjectMap.get("boothScheduledTime").toString()));
+                }
+                Object businessBrand = stringObjectMap.get("businessBrand");
+                if(ObjectUtil.isNotEmpty(businessBrand)){
+                    List<String> businessBrandList = JSON.parseArray(businessBrand.toString(), String.class);
+                    brandsSet.addAll(businessBrandList);
+                    shopVo.setBusinessBrand(  businessBrandList);
+                }
+                Object businessCategory = stringObjectMap.get("businessCategory");
+                if(ObjectUtil.isNotEmpty(businessCategory)){
+                    List<String> businessCategoryList = JSON.parseArray(businessCategory.toString(), String.class);
+                    categoriesSet.addAll(businessCategoryList);
+                    shopVo.setBusinessBrand(  businessCategoryList);
+                }
+                Object imageBanerJson = stringObjectMap.get("imageBanerJson");
+                if(ObjectUtil.isNotEmpty(imageBanerJson)){
+                    List<ImageBanerVO> imageBanerVOS = JSON.parseArray(businessCategory.toString(), ImageBanerVO.class);
+                    shopVo.setImageBanerVOS(imageBanerVOS);
+                }
+                Object shopProductRes = stringObjectMap.get("shopProductRes");
+                if(ObjectUtil.isNotEmpty(shopProductRes)){
+                    List<ShopProductRes> shopProductResList = JSON.parseArray(shopProductRes.toString(), ShopProductRes.class);
+                    shopVo.setShopProductRes(  shopProductResList);
+                }
+                Object mainCategory = stringObjectMap.get("mainCategory");
+                if(ObjectUtil.isNotEmpty(mainCategory)){
+                    List<String> mainCategoryList = JSON.parseArray(mainCategory.toString(), String.class);
+                    shopVo.setMainCategory(mainCategoryList);
+                }
+                shopVos.add(shopVo);
+                shopRes.setTotal(esPageRes.getRecordCount());
+                shopRes.setBrands(new ArrayList<>(brandsSet));
+                shopRes.setShopVos(shopVos);
+                shopRes.setCategories(new ArrayList<>(categoriesSet));
+            }
+        }
+        /*if (recordList != null && recordList.size() > 0) {
             Map<String, String> categories = new HashMap<>();
             Map<String, String> brands = new HashMap<>();
             Map<String, Map<String, String>> attributes = new HashMap<>(); //属性
@@ -128,10 +178,12 @@ public class ShopServiceImpl implements ShopService {
                 if (recordMap.containsKey("boothScheduledTime")) {
                     shopVo.setBoothScheduledTime(LocalDateTime.parse(recordMap.get("boothScheduledTime").toString()));
                 }
-                shopVo.setBusinessBrand(Collections.singletonList(recordMap.containsKey("businessBrand") ? recordMap.get("businessBrand").toString() : ""));
+                List<String> businessBrand = recordMap.containsKey("businessBrand") ? JSON.parseArray(recordMap.get(
+                        "businessBrand").toString(), String.class);
+                shopVo.setBusinessBrand(  businessBrand);
                 shopVo.setMemberOrder(recordMap.containsKey("memberOrder") ? recordMap.get("memberOrder").toString() : "");
-                shopVo.setImageOrder(recordMap.containsKey("imageOrder") ? recordMap.get("imageOrder").toString() : "");
-                shopVo.setImageName(recordMap.containsKey("imageName") ? recordMap.get("imageName").toString() : "");
+               // shopVo.setImageOrder(recordMap.containsKey("imageOrder") ? recordMap.get("imageOrder").toString() : "");
+               // shopVo.setImageName(recordMap.containsKey("imageName") ? recordMap.get("imageName").toString() : "");
                 shopProductRes.setPriceType(recordMap.containsKey("priceType") ? recordMap.get("priceType").toString() : "");
                 shopProductRes.setSkuName(recordMap.containsKey("skuName") ? recordMap.get("skuName").toString() : "");
                 shopProductRes.setSkuPrice(recordMap.containsKey("skuPrice") ? recordMap.get("skuPrice").toString() : "");
@@ -155,7 +207,7 @@ public class ShopServiceImpl implements ShopService {
             shopRes.setBrands(brands);
             shopRes.setShopVos(shopVos);
             shopRes.setCategories(categories);
-        }
+        }*/
         res.setData(shopRes);
         return res;
     }

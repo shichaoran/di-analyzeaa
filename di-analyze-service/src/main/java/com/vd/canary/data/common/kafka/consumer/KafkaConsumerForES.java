@@ -1,21 +1,22 @@
 package com.vd.canary.data.common.kafka.consumer;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import com.alibaba.fastjson.JSONObject;
-import com.vd.canary.data.common.kafka.consumer.impl.Function;
-import com.vd.canary.data.common.kafka.consumer.impl.FunctionFactory;
-import com.vd.canary.data.common.kafka.consumer.impl.ObmpCustomer.*;
+import com.vd.canary.data.common.kafka.consumer.impl.ObmpCustomer.CustomerBusinessInfo;
+import com.vd.canary.data.common.kafka.consumer.impl.ObmpCustomer.ProtocolAgreement;
+import com.vd.canary.data.common.kafka.consumer.impl.ObmpCustomer.StoreInfo;
+import com.vd.canary.data.common.kafka.consumer.impl.ObmpCustomer.StoreLoopBanner;
+import com.vd.canary.data.common.kafka.consumer.impl.ObmpCustomer.StoreMedia;
+import com.vd.canary.data.common.kafka.consumer.impl.ObmpCustomer.StoreTemplate;
 import com.vd.canary.data.common.kafka.consumer.impl.ObmpProduct.ProductSku;
 import com.vd.canary.data.common.kafka.consumer.impl.ObmpProduct.SkuAttributeRelations;
 import com.vd.canary.data.common.kafka.consumer.impl.ObmpProduct.SkuSellingPrice;
 import com.vd.canary.data.common.kafka.consumer.impl.ObmpProduct.SkuWarehouseRelations;
 import com.vd.canary.data.common.kafka.consumer.impl.ObmpProduct.StoreProductRelations;
+import com.vd.canary.data.repository.es.hadle.BaseHandler;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.kafka.clients.consumer.ConsumerRecord;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -53,6 +54,13 @@ public class KafkaConsumerForES {
     private ProtocolAgreement protocolAgreement;
     @Autowired
     private CustomerBusinessInfo customerBusinessInfo;
+
+    @Autowired
+    private List<BaseHandler> serviceHandlerlist;
+
+
+
+
 
 
     /**
@@ -92,6 +100,7 @@ public class KafkaConsumerForES {
     }*/
     @KafkaListener(topics = "binglog_obmp_product_2r3p", id = "product_es1" )
     public void listenProduct(String msg) {
+
         log.info("<------this is kafka consumer,topic = binglog_obmp_product_2r3p, msg = {}",msg);
         JSONObject jsonMap = JSONObject.parseObject(msg);
         String database = jsonMap.getString("database");
@@ -148,11 +157,15 @@ public class KafkaConsumerForES {
             e.printStackTrace();
         }
     }*/
-    @KafkaListener(topics = "binglog_obmp_customer_2r3p", id = "customer_es1" )
+    @KafkaListener(topics = "binglog_obmp_customer_2r3p", id = "customer_es1121" )
     public void listenCustomer(String msg) throws IOException {
-        log.info("<------this is kafka consumer,topic = binglog_obmp_customer_2r3p, msg = {}",msg);
+        log.info("<------this is kafka consumer,topic = binglog_obmp_customer_2r3p, msg = {}", msg);
         JSONObject jsonMap = JSONObject.parseObject(msg);
-        String database = jsonMap.getString("database");
+        for (BaseHandler baseHandler : serviceHandlerlist) {
+            baseHandler.handler(jsonMap);
+        }
+
+       /* String database = jsonMap.getString("database");
         String table = jsonMap.getString("table");
         //Function function = FunctionFactory.instance().createFunction(database + "." + table);
         //function.performES(msg);
@@ -179,7 +192,6 @@ public class KafkaConsumerForES {
         case "obmp_customer.protocol_agreement":
             protocolAgreement.performES(msg);
             break;
-        }
+        }*/
     }
-
 }

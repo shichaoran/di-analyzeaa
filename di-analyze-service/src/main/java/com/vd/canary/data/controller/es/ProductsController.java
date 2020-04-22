@@ -1,5 +1,10 @@
 package com.vd.canary.data.controller.es;
 
+import java.io.IOException;
+import java.util.List;
+
+import javax.validation.Valid;
+
 import com.vd.canary.core.bo.ResponseBO;
 import com.vd.canary.data.api.request.es.CategoryReq;
 import com.vd.canary.data.api.request.es.ProductDetailsReq;
@@ -11,21 +16,20 @@ import com.vd.canary.data.api.response.es.ProductsRes;
 import com.vd.canary.data.service.es.ProductsService;
 import com.vd.canary.service.controller.BaseController;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.validation.Valid;
-import java.io.IOException;
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class ProductsController extends BaseController {
 
     private final ProductsService productsService;
+
+
+
 
     @PostMapping("/data/products/getProductsByKey")
     public ResponseBO<ProductsRes> getProductsByKey(@RequestBody @Valid ProductsReq productsReq) throws Exception {
