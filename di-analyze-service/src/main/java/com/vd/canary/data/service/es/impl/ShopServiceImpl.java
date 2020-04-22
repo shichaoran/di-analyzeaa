@@ -12,6 +12,7 @@ import java.util.Set;
 import javax.validation.Valid;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.google.common.collect.Lists;
 import com.vd.canary.core.bo.ResponseBO;
 import com.vd.canary.data.api.request.es.SearchShopReq;
@@ -123,33 +124,33 @@ public class ShopServiceImpl implements ShopService {
                 }
                 Object businessBrand = stringObjectMap.get("businessBrand");
                 if(ObjectUtil.isNotEmpty(businessBrand)){
-                    String businessBrandJson= JSON.toJSONString(businessBrand);
+                    String businessBrandJson= JSONArray.toJSONString(businessBrand);
                     List<String> businessBrandList = JSON.parseArray(businessBrandJson, String.class);
                     brandsSet.addAll(businessBrandList);
-                    shopVo.setBusinessBrand(  businessBrandList);
+                    shopVo.setBusinessBrand(businessBrandList);
                 }
                 Object businessCategory = stringObjectMap.get("businessCategory");
                 if(ObjectUtil.isNotEmpty(businessCategory)){
-                    String businessCategoryJson= JSON.toJSONString(businessCategory);
+                    String businessCategoryJson= JSONArray.toJSONString(businessCategory);
                     List<String> businessCategoryList = JSON.parseArray(businessCategoryJson, String.class);
                     categoriesSet.addAll(businessCategoryList);
                     shopVo.setBusinessBrand(  businessCategoryList);
                 }
                 Object imageBaner = stringObjectMap.get("imageBanerJson");
                 if(ObjectUtil.isNotEmpty(imageBaner)){
-                    String imageBanerJson = JSON.toJSONString(imageBaner);
+                    String imageBanerJson = JSONArray.toJSONString(imageBaner);
                     List<ImageBanerVO> imageBanerVOS = JSON.parseArray(imageBanerJson, ImageBanerVO.class);
                     shopVo.setImageBanerVOS(imageBanerVOS);
                 }
                 Object shopProductRes = stringObjectMap.get("shopProductRes");
                 if(ObjectUtil.isNotEmpty(shopProductRes)){
-                    String shopProductResJson = JSON.toJSONString(shopProductRes);
+                    String shopProductResJson = JSONArray.toJSONString(shopProductRes);
                     List<ShopProductRes> shopProductResList = JSON.parseArray(shopProductResJson, ShopProductRes.class);
                     shopVo.setShopProductRes(  shopProductResList);
                 }
                 Object mainCategory = stringObjectMap.get("mainCategory");
                 if(ObjectUtil.isNotEmpty(mainCategory)){
-                    String mainCategoryJson = JSON.toJSONString(mainCategory);
+                    String mainCategoryJson = JSONArray.toJSONString(mainCategory);
                     List<String> mainCategoryList = JSON.parseArray(mainCategoryJson, String.class);
                     shopVo.setMainCategory(mainCategoryList);
                 }
