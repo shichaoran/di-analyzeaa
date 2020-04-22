@@ -15,5 +15,5 @@ import javax.validation.Valid;
 public interface ShopService {
 
 
-    ResponseBO<ShopRes> search(@RequestBody @Valid SearchShopReq shopSearchBO);
+    ResponseBO<ShopRes> search(@RequestBody @Valid SearchShopReq shopSearchBO) throws Exception;
 }

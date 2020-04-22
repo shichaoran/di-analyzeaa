@@ -238,8 +238,8 @@ public class ShopESServiceImpl implements ShopESService {
         if(StringUtils.isNotBlank(req.getKey())){// keyword 关键字搜索
             String escapeKey = QueryParser.escape(req.getKey());
             boolQuery.must(QueryBuilders.multiMatchQuery(escapeKey,
-                    "name","customerId","proSkuTitle","proSkuSubTitle",
-                    "threeCategoryName","bBrandName","brandShorthand").fuzziness(Fuzziness.AUTO));
+                    "name","customerId","mediaUrl","imageOrder",
+                    "imageName","imageUrl","boothCode","storeTemplateId").fuzziness(Fuzziness.AUTO));
         }
         if(req.getBrandIds() != null && req.getBrandIds().size() > 0 ){//品牌id
             boolQuery.must(QueryBuilders.termsQuery("proSkuBrandId",req.getBrandIds()));

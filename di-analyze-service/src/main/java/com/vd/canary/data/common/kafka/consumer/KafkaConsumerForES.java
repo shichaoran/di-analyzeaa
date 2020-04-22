@@ -1,5 +1,6 @@
 package com.vd.canary.data.common.kafka.consumer;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -7,7 +8,7 @@ import java.util.Optional;
 import com.alibaba.fastjson.JSONObject;
 import com.vd.canary.data.common.kafka.consumer.impl.Function;
 import com.vd.canary.data.common.kafka.consumer.impl.FunctionFactory;
-import com.vd.canary.data.common.kafka.consumer.impl.ObmpCustomer.StoreInfo;
+import com.vd.canary.data.common.kafka.consumer.impl.ObmpCustomer.*;
 import com.vd.canary.data.common.kafka.consumer.impl.ObmpProduct.ProductSku;
 import com.vd.canary.data.common.kafka.consumer.impl.ObmpProduct.SkuAttributeRelations;
 import com.vd.canary.data.common.kafka.consumer.impl.ObmpProduct.SkuSellingPrice;
@@ -42,6 +43,18 @@ public class KafkaConsumerForES {
     private StoreProductRelations storeProductRelations;
     @Autowired
     private StoreInfo storeInfo;
+    @Autowired
+    private StoreTemplate storeTemplate;
+    @Autowired
+    private StoreMedia storeMedia;
+    @Autowired
+    private StoreLoopBanner storeLoopBanner;
+    @Autowired
+    private ProtocolAgreement protocolAgreement;
+    @Autowired
+    private CustomerBusinessInfo customerBusinessInfo;
+
+
     /**
      * concurrency="3" 即消费者个数(注意，消费者数要小于等于你开的所有topic的分区数总和)
      * @param msg
@@ -135,8 +148,8 @@ public class KafkaConsumerForES {
             e.printStackTrace();
         }
     }*/
-    @KafkaListener(topics = "binglog_obmp_customer_2r3p", id = "customer_es" )
-    public void listenCustomer(String msg) {
+    @KafkaListener(topics = "binglog_obmp_customer_2r3p", id = "customer_es1" )
+    public void listenCustomer(String msg) throws IOException {
         log.info("<------this is kafka consumer,topic = binglog_obmp_customer_2r3p, msg = {}",msg);
         JSONObject jsonMap = JSONObject.parseObject(msg);
         String database = jsonMap.getString("database");
@@ -151,23 +164,21 @@ public class KafkaConsumerForES {
         case "obmp_customer.store_info":
             storeInfo.performES(msg);
             break;
-        //case "obmp_customer.store_media":
-        //    x.performES(msg);
-        //    break;
-        //case "obmp_customer.customer_business_info":
-        //    x.performES(msg);
-        //    break;
-        //case "obmp_customer.store_loop_banner":
-        //    x.performES(msg);
-        //    break;
-        //case "obmp_customer.protocol_agreement":
-        //    x.performES(msg);
-        //    break;
-        //case "obmp_customer.customer_profiles":
-        //    x.performES(msg);
-        //    break;
-        //case default:
-        //    break;
+        case "obmp_customer.store_template":
+            storeTemplate.performES(msg);
+            break;
+        case "obmp_customer.store_media":
+            storeMedia.performES(msg);
+            break;
+        case "obmp_customer.customer_business_info":
+            customerBusinessInfo.performES(msg);
+            break;
+        case "obmp_customer.store_loop_banner":
+            storeLoopBanner.performES(msg);
+            break;
+        case "obmp_customer.protocol_agreement":
+            protocolAgreement.performES(msg);
+            break;
         }
     }
 

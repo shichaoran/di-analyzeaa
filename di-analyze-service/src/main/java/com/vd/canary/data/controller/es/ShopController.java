@@ -26,7 +26,7 @@ public class ShopController extends BaseController {
 
 
     @PostMapping("/data/shop/search")
-    public ResponseBO<ShopRes> search(@RequestBody @Valid SearchShopReq shopSearchBO) {
+    public ResponseBO<ShopRes> search(@RequestBody @Valid SearchShopReq shopSearchBO) throws Exception {
         ResponseBO<ShopRes> res = shopService.search(shopSearchBO);
         return res;
     }
