@@ -236,16 +236,19 @@ public class ProductESServiceImpl implements ProductESService {
         String highlightField = null;
         BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
 
-        if (req.getBBrandName() != null && req.getBBrandName().size() > 0) {//品牌id
+        if (req.getSpuNames() != null && req.getSpuNames().size() > 0) {//spu名称
+            boolQuery.must(QueryBuilders.termsQuery("proSkuSpuName", req.getSpuNames()));
+        }
+        if (req.getBBrandName() != null && req.getBBrandName().size() > 0) {//品牌
             boolQuery.must(QueryBuilders.termsQuery("proSkuBrandName", req.getBBrandName()));
         }
-        if (req.getFThreeCategoryName() != null) {//后台三级分类
+        if (req.getFThreeCategoryName() != null) {//三级分类
             boolQuery.must(QueryBuilders.termsQuery("fThreeCategoryName", req.getFThreeCategoryName()));
         }
-        if (req.getFTwoCategoryName() != null) {//后台三级分类
+        if (req.getFTwoCategoryName() != null) {//二级分类
             boolQuery.must(QueryBuilders.termsQuery("fTwoCategoryName", req.getFTwoCategoryName()));
         }
-        if (req.getFOneCategoryName() != null) {//后台三级分类
+        if (req.getFOneCategoryName() != null) {//一级分类
             boolQuery.must(QueryBuilders.termsQuery("fOneCategoryName", req.getFOneCategoryName()));
         }
         if (req.getSkuRegionalName() != null) { //供货区域

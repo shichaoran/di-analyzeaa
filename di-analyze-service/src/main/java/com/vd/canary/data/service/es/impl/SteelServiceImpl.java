@@ -1,5 +1,6 @@
 package com.vd.canary.data.service.es.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.vd.canary.core.bo.ResponseBO;
@@ -17,9 +18,11 @@ import com.vd.canary.data.constants.Constant;
 import com.vd.canary.data.service.es.SteelService;
 import com.vd.canary.utils.DateUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections.map.TransformedMap;
 import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.nustaq.kson.JSonSerializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -121,7 +124,48 @@ public class SteelServiceImpl implements SteelService {
                     steelVO.setSkuName(recordMap.containsKey("proSkuSkuName") ? recordMap.get("proSkuSkuName").toString() : "");
                     steelVO.setSpuID(recordMap.containsKey("proSkuSpuId") ? recordMap.get("proSkuSpuId").toString() : "");
                     steelVO.setSpuName(recordMap.containsKey("proSkuSpuName") ? recordMap.get("proSkuSpuName").toString() : "");
-                    steelVO.setAttributeMapJson(recordMap.containsKey("attributeMap") ? recordMap.get("attributeMap").toString() : "");
+//                    steelVO.setAttributeMapJson(recordMap.containsKey("attributeMap") ? recordMap.get("attributeMap").toString() : "");
+                    if(recordMap.containsKey("attributeMap")){
+                        steelVO.setAttributeMapJson(recordMap.get("attributeMap").toString());
+                        JSONArray array = JSONObject.parseArray(recordMap.get("attributeMap").toString());
+
+                        if (array != null && array.size() > 0) {
+                            for (int i=0;i<array.size();i++){
+                                if (array.getJSONObject(i).containsKey("attributeName")){
+                                    String attributeName =  array.getJSONObject(i).get("attributeName").toString();
+                                    if (array.getJSONObject(i).containsKey("attributeValue")) {
+                                        JSONArray arr = JSONObject.parseArray(array.getJSONObject(i).get("attributeValue").toString());
+                                        if (arr != null && arr.size() > 0) {
+                                            for (int j = 0; j < arr.size(); j++) {
+                                                Map map = new HashMap();
+                                                if (arr.getJSONObject(j).containsKey("attributeValueId")) {
+                                                    String attributeValueId = arr.getJSONObject(j).get("attributeValueId").toString();
+                                                    if (arr.getJSONObject(j).containsKey("attributeValueName") ) {
+                                                        String attributeValueName = arr.getJSONObject(j).get("attributeValueName").toString();
+                                                        map.put(attributeValueId, attributeValueName);
+                                                        attributes.put(attributeName, map);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+
+//                           for (Object obj : array){
+//                               Map requestMap = (Map)(JSON.parse(array.toString()));
+//                               Map map = new HashMap();
+//                               for (Object key : requestMap.keySet()){
+//                                   map.put(key,requestMap.get(key));
+//                               }
+//                               Map attri = new HashMap();
+//                               attri.put(map.get("attributeId"),map.get("attributeValue"));
+//                               attributes.put(map.get("attributeName").toString(),attri);
+//                           }
+                        }
+                    }
+
                     if(recordMap.containsKey("skuSellPriceJson")){
                         JSONArray array = JSONObject.parseArray(recordMap.get("skuSellPriceJson").toString());
                         steelVO.setSkuSellPriceJson(JSONObject.toJSONString(array));
@@ -150,14 +194,16 @@ public class SteelServiceImpl implements SteelService {
                     categorys.put(recordMap.containsKey("fTwoCategoryCode") ? recordMap.get("fTwoCategoryCode").toString() : "", recordMap.containsKey("fTwoCategoryName") ? recordMap.get("fTwoCategoryName").toString() : "");
                     brands.put(recordMap.containsKey("proSkuBrandId") ? recordMap.get("proSkuBrandId").toString() : "", recordMap.containsKey("bBrandName") ? recordMap.get("bBrandName").toString() : "");
                     spuNames.put(recordMap.containsKey("proSkuSpuId") ? recordMap.get("proSkuSpuId").toString() : "", recordMap.containsKey("proSkuSpuName") ? recordMap.get("proSkuSpuName").toString() : "");
-                    if (attributes.containsKey(recordMap.containsKey("attributeName") ? recordMap.get("attributeName").toString() : "")) {
-                        Map<String, String> mapt = attributes.get(recordMap.containsKey("attributeName") ? recordMap.get("attributeName").toString() : "");
-                        mapt.put(recordMap.containsKey("attributeValueId") ? recordMap.get("attributeValueId").toString() : "", recordMap.containsKey("value_Name") ? recordMap.get("value_Name").toString() : "");
-                    } else {
-                        Map<String, String> mapt = new HashMap<>();
-                        mapt.put(recordMap.containsKey("attributeValueId") ? recordMap.get("attributeValueId").toString() : "", recordMap.containsKey("value_Name") ? recordMap.get("value_Name").toString() : "");
-                        attributes.put(recordMap.containsKey("attributeName") ? recordMap.get("attributeName").toString() : "", mapt);
-                    }
+
+
+//                    if (attributes.containsKey(recordMap.containsKey("attributeName") ? recordMap.get("attributeName").toString() : "")) {
+//                        Map<String, String> mapt = attributes.get(recordMap.containsKey("attributeName") ? recordMap.get("attributeName").toString() : "");
+//                        mapt.put(recordMap.containsKey("attributeValueId") ? recordMap.get("attributeValueId").toString() : "", recordMap.containsKey("value_Name") ? recordMap.get("value_Name").toString() : "");
+//                    } else {
+//                        Map<String, String> mapt = new HashMap<>();
+//                        mapt.put(recordMap.containsKey("attributeValueId") ? recordMap.get("attributeValueId").toString() : "", recordMap.containsKey("value_Name") ? recordMap.get("value_Name").toString() : "");
+//                        attributes.put(recordMap.containsKey("attributeName") ? recordMap.get("attributeName").toString() : "", mapt);
+//                    }
 
                 }
                 steelRes.setCategorys(categorys);
@@ -166,6 +212,7 @@ public class SteelServiceImpl implements SteelService {
                 steelRes.setSteelVORes(steelVOS);
                 steelRes.setTotal(esPageRes.getRecordCount());
                 steelRes.setSpuNames(spuNames);
+                steelRes.setCurrentPage(esPageRes.getCurrentPage());
             }
         }
         res.setData(steelRes);
