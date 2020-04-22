@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.vd.canary.core.bo.ResponseBO;
 import com.vd.canary.data.api.request.es.ProductsReq;
+import com.vd.canary.data.api.request.es.SpecCommand;
 import com.vd.canary.data.api.request.es.SteelReq;
 import com.vd.canary.data.api.response.es.ProductsRes;
 import com.vd.canary.data.api.response.es.SteelRes;
@@ -115,6 +116,8 @@ public class SteelServiceImpl implements SteelService {
                 Map<String, Map<String, String>> attributes = new HashMap<>(); //属性
                 List<SteelVO> steelVOS = new ArrayList<>(); //商品详细列表
                 Map<String, String> spuNames = new HashMap<>();//spu名称
+                List<SpecCommand> specCommands = new ArrayList<>();
+                SpecCommand specCommand = new SpecCommand();
                 for (Map<String, Object> recordMap : recordList) {
 //                    ProductsDetailRes productsDetailRes = new ProductsDetailRes();
 
@@ -142,6 +145,20 @@ public class SteelServiceImpl implements SteelService {
                                                     String attributeValueId = arr.getJSONObject(j).get("attributeValueId").toString();
                                                     if (arr.getJSONObject(j).containsKey("attributeValueName") ) {
                                                         String attributeValueName = arr.getJSONObject(j).get("attributeValueName").toString();
+
+                                                        if(attributeName.equals("规格")){
+                                                            if ( Double.parseDouble(attributeValueName) >= specCommand.getLongMin() && Double.parseDouble(attributeValueName) <= specCommand.getLongMax() ){
+                                                                map.put(attributeValueId, attributeValueName);
+                                                            }
+                                                            if ( Double.parseDouble(attributeValueName) >= specCommand.getThickMin() && Double.parseDouble(attributeValueName) <= specCommand.getThickMax() ){
+                                                                map.put(attributeValueId, attributeValueName);
+                                                            }
+                                                            if ( Double.parseDouble(attributeValueName) >= specCommand.getWideMin() && Double.parseDouble(attributeValueName) <= specCommand.getWideMax() ){
+                                                                map.put(attributeValueId, attributeValueName);
+                                                            }
+
+                                                        }
+
                                                         map.put(attributeValueId, attributeValueName);
                                                         attributes.put(attributeName, map);
                                                     }

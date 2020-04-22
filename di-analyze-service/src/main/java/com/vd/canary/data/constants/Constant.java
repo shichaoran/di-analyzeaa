@@ -13,14 +13,14 @@ public class Constant {
     /**
      * 添加
      */
-    public static String  INSERT;
+    public static String  INSERT="insert";
     /**
      * 更改
      */
-    public static String UPDATE;
+    public static String UPDATE="update";
     /**
      * 删除
      */
-    public static String DELETE;
+    public static String DELETE="delete";
 
 }

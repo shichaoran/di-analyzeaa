@@ -17,6 +17,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ImageBanerVO implements Serializable {
 
+    private static final long serialVersionUID = -2470332116101712746L;
     private String imageOrder;
     private String imageName;
     private  String imageUrl;

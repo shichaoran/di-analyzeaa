@@ -1,6 +1,7 @@
 package com.vd.canary.data.repository.es.hadle;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.vd.canary.data.common.es.model.ImageBanerDTO;
 import com.vd.canary.data.common.es.model.ShopTO;
@@ -32,7 +33,7 @@ public class ShopDataHandler {
         ShopTO shopTO =new ShopTO();
         try {
             StoreInfoVO storeInfoVO = storeDataInfoResp.getStoreInfoVO();
-            AgreementVO agreementVO = storeDataInfoResp.getAgreementVO();
+            List<AgreementVO> agreementVOs = storeDataInfoResp.getAgreementVO();
             CustomerBusinessInfoVO customerBusinessInfoVO = storeDataInfoResp.getCustomerBusinessInfoVO();
             List<StoreLoopBannerVO> storeLoopBannerVO = storeDataInfoResp.getStoreLoopBannerVO();
             StoreMediaVO storeMediaVO = storeDataInfoResp.getStoreMediaVO();
@@ -43,9 +44,12 @@ public class ShopDataHandler {
                 shopTO.setCustomerId(storeInfoVO.getCustomerId()+"");
                 shopTO.setBoothScheduledTime(storeInfoVO.getGmtCreateTime());
             }
-            if(ObjectUtil.isNotEmpty(agreementVO)){
-                shopTO.setBoothCode(agreementVO.getBoothCode());
-                shopTO.setBoothCode(agreementVO.getBoothCode());
+            if(CollectionUtil.isNotEmpty(agreementVOs)){
+                List<String> boothCodeList = agreementVOs.stream()
+                                                   .map(AgreementVO::getBoothCode)
+                                                   .collect(Collectors.toList());
+                shopTO.setBoothCode(boothCodeList);
+                shopTO.setMemberOrder(agreementVOs.get(0).getMemberOrder());
             }
             if(ObjectUtil.isNotEmpty(customerBusinessInfoVO)){
                 shopTO.setBusinessArea(customerBusinessInfoVO.getBusinessArea());
@@ -57,7 +61,7 @@ public class ShopDataHandler {
                 shopTO.setImageBanerJson(imageBanerDTOS);
             }
             if(ObjectUtil.isNotEmpty(storeTemplateVO)){
-                shopTO.setMediaUrl(storeTemplateVO.getId());
+                shopTO.setStoreTemplateId(storeTemplateVO.getId());
             }
             if(ObjectUtil.isNotEmpty(storeMediaVO)){
                 shopTO.setMediaUrl(storeMediaVO.getMediaUrl());
