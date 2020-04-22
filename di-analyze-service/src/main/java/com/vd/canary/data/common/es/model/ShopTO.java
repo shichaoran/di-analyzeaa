@@ -16,7 +16,7 @@ public class ShopTO implements Serializable {
 
     private String id; //店铺id
     private String name; //店铺名称
-    private String boothCode;//展厅编号
+    private List<String> boothCode;//展厅编号
     private String mediaUrl; //多媒体地址
     private List<String> businessCategory; //类目
     private List<String> businessBrand;//品牌
@@ -30,7 +30,7 @@ public class ShopTO implements Serializable {
     private String mainProducts;  //主营产品 -> 来自企业档案
     private String mainCategory; //主营类目（经营类目） -> 来自企业档案
     private LocalDateTime boothScheduledTime; //入驻时间
-    private String level; //会员等级
+    private String memberOrder; //会员等级
     private String remark1;
     private String remark2;
 
