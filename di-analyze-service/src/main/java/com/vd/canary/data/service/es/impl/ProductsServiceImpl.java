@@ -96,15 +96,9 @@ public class ProductsServiceImpl implements ProductsService {
                         productsDetailRes.setGmtCreateTime(t);
                     }
 
-                    if(recordMap.containsKey("regionalId") && recordMap.get("regionalId") !=null){
-                        JSONArray array = JSONArray.parseArray(recordMap.get("regionalId").toString());
-                        productsDetailRes.setRegionalIdJson(JSONObject.parseArray(array.toJSONString(), String.class));
-                    }
+                    if(recordMap.containsKey("regionalId") && recordMap.get("regionalId") !=null) productsDetailRes.setRegionalIdJson(recordMap.get("regionalId").toString());
 
-                    if(recordMap.containsKey("skuRegionalName") && recordMap.get("skuRegionalName") !=null) {
-                        JSONArray array = JSONArray.parseArray(recordMap.get("skuRegionalName").toString());
-                        productsDetailRes.setSkuRegionalNameJson(JSONObject.parseArray(array.toJSONString(), String.class));
-                    }
+                    if(recordMap.containsKey("skuRegionalName") && recordMap.get("skuRegionalName") !=null) productsDetailRes.setSkuRegionalNameJson(recordMap.get("skuRegionalName").toString());
 
                     if(recordMap.containsKey("attributeMap") && recordMap.get("attributeMap") !=null) productsDetailRes.setAttributeMapJson(recordMap.get("attributeMap").toString());
 
@@ -197,15 +191,9 @@ public class ProductsServiceImpl implements ProductsService {
                         productsDetailRes.setGmtCreateTime(t);
                     }
 
-                    if(recordMap.containsKey("regionalId") && recordMap.get("regionalId") !=null){
-                        JSONArray array = JSONArray.parseArray(recordMap.get("regionalId").toString());
-                        productsDetailRes.setRegionalIdJson(JSONObject.parseArray(array.toJSONString(), String.class));
-                    }
+                    if(recordMap.containsKey("regionalId") && recordMap.get("regionalId") !=null) productsDetailRes.setRegionalIdJson(recordMap.get("regionalId").toString());
 
-                    if(recordMap.containsKey("skuRegionalName") && recordMap.get("skuRegionalName") !=null) {
-                        JSONArray array = JSONArray.parseArray(recordMap.get("skuRegionalName").toString());
-                        productsDetailRes.setSkuRegionalNameJson(JSONObject.parseArray(array.toJSONString(), String.class));
-                    }
+                    if(recordMap.containsKey("skuRegionalName") && recordMap.get("skuRegionalName") !=null) productsDetailRes.setSkuRegionalNameJson(recordMap.get("skuRegionalName").toString());
 
                     if(recordMap.containsKey("attributeMap") && recordMap.get("attributeMap") !=null) productsDetailRes.setAttributeMapJson(recordMap.get("attributeMap").toString());
 

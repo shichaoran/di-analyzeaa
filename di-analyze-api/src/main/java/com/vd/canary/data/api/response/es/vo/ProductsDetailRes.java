@@ -69,9 +69,9 @@ public class ProductsDetailRes implements Serializable {
     private LocalDateTime boothScheduledTime; //入驻时间
 
     //供货区域id
-    private List<String> regionalIdJson;
+    private String regionalIdJson;
     //供货区域名称
-    private List<String> skuRegionalNameJson;
+    private String skuRegionalNameJson;
 
     //spuid
     private String proSkuSpuId;
