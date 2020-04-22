@@ -359,8 +359,15 @@ public class ProductESServiceImpl implements ProductESService {
             return result;
         }
         BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
-        boolQuery.must(QueryBuilders.termsQuery("storeId", req.getStoreId()));
-        boolQuery.must(QueryBuilders.termsQuery("proSkuSpuId", req.getSpuId()));
+        if (StringUtils.isNotBlank(req.getStoreId())){
+            boolQuery.must(QueryBuilders.termsQuery("storeId", req.getStoreId()));
+        }
+        if(StringUtils.isNotBlank(req.getSpuId())){
+            boolQuery.must(QueryBuilders.termsQuery("proSkuSpuId", req.getSpuId()));
+        }
+        if(StringUtils.isNotBlank(req.getSkuId())){
+            boolQuery.must(QueryBuilders.termsQuery("skuId", req.getSkuId()));
+        }
         List<Map<String, Object>> list = ElasticsearchUtil.searchByQuery(indexName,boolQuery);
         return list;
     }
