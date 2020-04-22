@@ -236,20 +236,20 @@ public class ProductESServiceImpl implements ProductESService {
         String highlightField = null;
         BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
 
-        if (req.getBBrandId() != null && req.getBBrandId().size() > 0) {//品牌id
-            boolQuery.must(QueryBuilders.termsQuery("proSkuBrandId", req.getBBrandId()));
+        if (req.getBBrandName() != null && req.getBBrandName().size() > 0) {//品牌id
+            boolQuery.must(QueryBuilders.termsQuery("proSkuBrandName", req.getBBrandName()));
         }
-        if (req.getFThreeCategoryId() != null) {//后台三级分类id
-            boolQuery.must(QueryBuilders.termsQuery("fThreeCategoryId", req.getFThreeCategoryId()));
+        if (req.getFThreeCategoryName() != null) {//后台三级分类
+            boolQuery.must(QueryBuilders.termsQuery("fThreeCategoryName", req.getFThreeCategoryName()));
         }
-        if (req.getFTwoCategoryId() != null) {//后台三级分类id
-            boolQuery.must(QueryBuilders.termsQuery("fTwoCategoryId", req.getFTwoCategoryId()));
+        if (req.getFTwoCategoryName() != null) {//后台三级分类
+            boolQuery.must(QueryBuilders.termsQuery("fTwoCategoryName", req.getFTwoCategoryName()));
         }
-        if (req.getFOneCategoryId() != null) {//后台三级分类id
-            boolQuery.must(QueryBuilders.termsQuery("fOneCategoryId", req.getFOneCategoryId()));
+        if (req.getFOneCategoryName() != null) {//后台三级分类
+            boolQuery.must(QueryBuilders.termsQuery("fOneCategoryName", req.getFOneCategoryName()));
         }
-        if (req.getSkuRegionalName() != null) { //供货区域id
-            boolQuery.must(QueryBuilders.termsQuery("regionalId", req.getSkuRegionalName()));
+        if (req.getSkuRegionalName() != null) { //供货区域
+            boolQuery.must(QueryBuilders.termsQuery("regionalName", req.getSkuRegionalName()));
         }
         if (StringUtils.isNotBlank(req.getPriceSort())) {
             sortField = "skuSellPriceJson"; // 商品定价信息，需要嵌套查询xxx.xxx
