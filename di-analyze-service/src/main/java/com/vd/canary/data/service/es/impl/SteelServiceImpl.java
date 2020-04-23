@@ -127,14 +127,13 @@ public class SteelServiceImpl implements SteelService {
                     steelVO.setSkuName(recordMap.containsKey("proSkuSkuName") ? recordMap.get("proSkuSkuName").toString() : "");
                     steelVO.setSpuID(recordMap.containsKey("proSkuSpuId") ? recordMap.get("proSkuSpuId").toString() : "");
                     steelVO.setSpuName(recordMap.containsKey("proSkuSpuName") ? recordMap.get("proSkuSpuName").toString() : "");
-//                    steelVO.setAttributeMapJson(recordMap.containsKey("attributeMap") ? recordMap.get("attributeMap").toString() : "");
                     if(recordMap.containsKey("attributeMap")){
                         steelVO.setAttributeMapJson(recordMap.get("attributeMap").toString());
                         JSONArray array = JSONObject.parseArray(recordMap.get("attributeMap").toString());
 
                         if (array != null && array.size() > 0) {
                             for (int i=0;i<array.size();i++){
-                                if (array.getJSONObject(i).containsKey("attributeName")){
+                                if (array.getJSONObject(i).containsKey("attributeName") && array.getJSONObject(i).get("attributeType").equals("0") && array.getJSONObject(i).containsKey("attributeName")){
                                     String attributeName =  array.getJSONObject(i).get("attributeName").toString();
                                     if (array.getJSONObject(i).containsKey("attributeValue")) {
                                         JSONArray arr = JSONObject.parseArray(array.getJSONObject(i).get("attributeValue").toString());
@@ -168,18 +167,6 @@ public class SteelServiceImpl implements SteelService {
                                     }
                                 }
                             }
-
-
-//                           for (Object obj : array){
-//                               Map requestMap = (Map)(JSON.parse(array.toString()));
-//                               Map map = new HashMap();
-//                               for (Object key : requestMap.keySet()){
-//                                   map.put(key,requestMap.get(key));
-//                               }
-//                               Map attri = new HashMap();
-//                               attri.put(map.get("attributeId"),map.get("attributeValue"));
-//                               attributes.put(map.get("attributeName").toString(),attri);
-//                           }
                         }
                     }
 
@@ -194,19 +181,22 @@ public class SteelServiceImpl implements SteelService {
                     }
                     steelVO.setSkuAuxiliaryUnit(recordMap.containsKey("skuAuxiliaryUnit") ? recordMap.get("skuAuxiliaryUnit").toString() : "");
 
-                    FinalSteel finalSteel = new FinalSteel();
+                    steelVO.setFThreeCategoryCode(recordMap.containsKey("fThreeCategoryCode") ? recordMap.get("fThreeCategoryCode").toString() : "");
+                    steelVO.setFThreeCategoryId(recordMap.containsKey("fThreeCategoryId") ? recordMap.get("fThreeCategoryId").toString() : "");
+                    steelVO.setFThreeCategoryName(recordMap.containsKey("fThreeCategoryName") ? recordMap.get("fThreeCategoryName").toString() : "");
+                   /* FinalSteel finalSteel = new FinalSteel();
                     for (Integer i=0;i<finalSteel.getList().size();i++) {
                         if (finalSteel.getList().contains(recordMap.get("fThreeCategoryCode"))) {
-//                            steelVO.setFTwoCategoryName(recordMap.containsKey("fTwoCategoryName") ? recordMap.get("fTwoCategoryName").toString() : "");
-//                            steelVO.setFThreeCategoryName(recordMap.containsKey("fThreeCategoryName") ? recordMap.get("fThreeCategoryName").toString() : "");
                             steelVO.setFThreeCategoryCode(recordMap.containsKey("fThreeCategoryCode") ? recordMap.get("fThreeCategoryCode").toString() : "");
                             steelVO.setFThreeCategoryId(recordMap.containsKey("fThreeCategoryId") ? recordMap.get("fThreeCategoryId").toString() : "");
-
+//                            categorys.put(recordMap.containsKey("fThreeCategoryCode") ? recordMap.get("fThreeCategoryCode").toString() : "", recordMap.containsKey("fThreeCategoryName") ? recordMap.get("fThreeCategoryName").toString() : "");
+//                            categorys.put(recordMap.containsKey("fOneCategoryCode") ? recordMap.get("fOneCategoryCode").toString() : "", recordMap.containsKey("fOneCategoryName") ? recordMap.get("fOneCategoryName").toString() : "");
+//                            categorys.put(recordMap.containsKey("fTwoCategoryCode") ? recordMap.get("fTwoCategoryCode").toString() : "", recordMap.containsKey("fTwoCategoryName") ? recordMap.get("fTwoCategoryName").toString() : "");
                         }
-                    }
-
+                    }*/
                     steelVOS.add(steelVO);
 
+                    categorys.put(recordMap.containsKey("fOneCategoryCode") ? recordMap.get("fOneCategoryCode").toString() : "", recordMap.containsKey("fOneCategoryName") ? recordMap.get("fOneCategoryName").toString() : "");
                     categorys.put(recordMap.containsKey("fThreeCategoryCode") ? recordMap.get("fThreeCategoryCode").toString() : "", recordMap.containsKey("fThreeCategoryName") ? recordMap.get("fThreeCategoryName").toString() : "");
                     categorys.put(recordMap.containsKey("fTwoCategoryCode") ? recordMap.get("fTwoCategoryCode").toString() : "", recordMap.containsKey("fTwoCategoryName") ? recordMap.get("fTwoCategoryName").toString() : "");
                     brands.put(recordMap.containsKey("proSkuBrandId") ? recordMap.get("proSkuBrandId").toString() : "", recordMap.containsKey("bBrandName") ? recordMap.get("bBrandName").toString() : "");
