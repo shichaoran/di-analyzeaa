@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 
 import com.alibaba.fastjson.JSONObject;
+import com.vd.canary.data.common.hadle.BaseHandler;
 import com.vd.canary.data.common.kafka.consumer.impl.ObmpCustomer.CustomerBusinessInfo;
 import com.vd.canary.data.common.kafka.consumer.impl.ObmpCustomer.ProtocolAgreement;
 import com.vd.canary.data.common.kafka.consumer.impl.ObmpCustomer.StoreInfo;
@@ -15,7 +16,6 @@ import com.vd.canary.data.common.kafka.consumer.impl.ObmpProduct.SkuAttributeRel
 import com.vd.canary.data.common.kafka.consumer.impl.ObmpProduct.SkuSellingPrice;
 import com.vd.canary.data.common.kafka.consumer.impl.ObmpProduct.SkuWarehouseRelations;
 import com.vd.canary.data.common.kafka.consumer.impl.ObmpProduct.StoreProductRelations;
-import com.vd.canary.data.repository.es.hadle.BaseHandler;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;

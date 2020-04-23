@@ -1,12 +1,12 @@
-package com.vd.canary.data.repository.es.hadle;
+package com.vd.canary.data.common.hadle;
 
 import com.alibaba.fastjson.JSONObject;
 import com.vd.canary.data.common.es.model.ShopTO;
 import com.vd.canary.data.common.es.service.impl.ShopESServiceImpl;
 import com.vd.canary.data.constants.Constant;
 import com.vd.canary.data.util.HttpClientUtils;
+import com.vd.canary.obmp.customer.api.feign.data.DataFeignClient;
 import com.vd.canary.obmp.customer.api.request.customer.store.StoreDataQueryReq;
-import com.vd.canary.obmp.customer.api.response.customer.StoreDataInfoResp;
 import com.vd.canary.obmp.customer.api.response.customer.vo.store.StoreTemplateVO;
 import lombok.extern.slf4j.Slf4j;
 
@@ -21,7 +21,7 @@ import org.springframework.stereotype.Component;
  **/
 @Slf4j
 @Component
-public class StoreTemplateMessageHandler extends BaseMessageHandler implements BaseHandler{
+public class StoreTemplateMessageHandler extends BaseMessageHandler implements BaseHandler {
     public final static String         DATA_BASE    = "obmp_customer";
     public final static String         T_CAR = "store_template";
     @Autowired
@@ -30,6 +30,9 @@ public class StoreTemplateMessageHandler extends BaseMessageHandler implements B
     private ShopDataHandler shopDataHandler;
     @Autowired
     private HttpClientUtils httpClientUtils;
+    @Autowired
+    private DataFeignClient dataFeignClient;
+
     @Override
     public void handler(JSONObject data) {
         String type = data.getString("type");
@@ -44,8 +47,7 @@ public class StoreTemplateMessageHandler extends BaseMessageHandler implements B
             String id = storeTemplateVO.getId();
             StoreDataQueryReq storeDataQueryReq=new StoreDataQueryReq();
             storeDataQueryReq.setStoreTemplateId(id);
-            StoreDataInfoResp storeDataInfoResp = httpClientUtils.getStoreDataInfoResp(storeDataQueryReq);
-            ShopTO shopTO = shopDataHandler.assembleShopTo(storeDataInfoResp);
+            ShopTO shopTO = shopDataHandler.assembleShopTo(storeDataQueryReq);
             if(shopTO!=null) {
                 if (Constant.UPDATE.equals(type) || Constant.DELETE.equals(type)) {
                     shopESService.updateShop(shopTO);
