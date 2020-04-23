@@ -33,6 +33,9 @@ public class ShopTO implements Serializable {
     private String remark1;
     private String remark2;
 
+    private String logoImageUrl; // 企业档案logo地址
+
+
     public ShopTO() {
 
     }

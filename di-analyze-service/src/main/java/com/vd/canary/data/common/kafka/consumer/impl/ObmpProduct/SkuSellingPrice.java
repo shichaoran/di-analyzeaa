@@ -159,11 +159,13 @@ public class SkuSellingPrice implements Function {
             Map<String, Object> esShopMap = shopESService.findById(storeId);
             esShopMap.put("businessCategory",businessCategory);
             esShopMap.put("businessBrand",businessBrand);
-            //if(shopProductRes.size() >=3 ){
-            //    esShopMap.put("shopProductRes",shopProductRes.subList(0,2));
-            //}else{
-            //    esShopMap.put("shopProductRes",shopProductRes);
-            //}
+            if(shopProductRes.size() >=3 ){
+                JSONArray array = JSONArray.parseArray(JSONUtil.toJSONString(shopProductRes.subList(0,2)));
+                esShopMap.put("shopProductRes",array);
+            }else{
+                JSONArray array = JSONArray.parseArray(JSONUtil.toJSONString(shopProductRes));
+                esShopMap.put("shopProductRes",array);
+            }
 
             shopESService.updateShop(esShopMap);
         }catch (IOException e) {

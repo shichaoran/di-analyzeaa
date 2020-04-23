@@ -95,7 +95,6 @@ public class ProductSku implements Function {
         }
     }
 
-    //public JSONObject reSetValue(JSONObject esMap,Map<String,Object> binlogMap){
     public Map<String, Object> reSetValue(Map<String, Object> esMap,Map<String,Object> binlogMap){
         Set<Map.Entry<String, Object>> entries = binlogMap.entrySet();
         for (Map.Entry<String, Object> entry : entries) {
@@ -154,7 +153,6 @@ public class ProductSku implements Function {
                 CategoryRelationsReq categoryRelationsReq = new CategoryRelationsReq();
                 categoryRelationsReq.setBackgroundCategoryId(entry.getValue().toString());
                 try {
-                    //ResponseBO<List<CategoryRelationsResp>> res = bigDataApiFeign.listByCondition(categoryRelationsReq);
                     CategoryRelationsReq req = new CategoryRelationsReq();
                     req.setBackgroundCategoryId(entry.getValue().toString());
                     // 该接口可以通过后台类目查找前台类目，也统一通过该接口
@@ -174,7 +172,6 @@ public class ProductSku implements Function {
                     HashSet<String> oneCategoryName = new HashSet<>();
                     HashSet<String> twoCategoryName = new HashSet<>();
                     HashSet<String> threeCategoryName = new HashSet<>();
-
 
                     if(categoryRelationsResps != null){
                         List<CategoryRelationsResp> list = categoryRelationsResps.getData();
@@ -231,8 +228,7 @@ public class ProductSku implements Function {
                     e.printStackTrace();
                 }
             }
-            //if (entry.getKey().equals("three_category_code")) esMap.put("threeCategoryCode", entry.getValue() );
-            //if (entry.getKey().equals("three_category_name")) esMap.put("threeCategoryName", entry.getValue() );
+
             if (entry.getKey().equals("sku_supplier_id")) esMap.put("skuSupplierId", entry.getValue() );
             if (entry.getKey().equals("sku_supplier_name")) esMap.put("skuSupplierName", entry.getValue() );
             if (entry.getKey().equals("sku_state")) esMap.put("skuState", entry.getValue() );
@@ -266,6 +262,10 @@ public class ProductSku implements Function {
             if (entry.getKey().equals("gmt_create_time")) esMap.put("skuGmtCreateTime",entry.getValue());
             if (entry.getKey().equals("gmt_modify_time")) esMap.put("skuGmtModifyTime",entry.getValue());
             if (entry.getKey().equals("sku_auxiliary_unit")) esMap.put("skuAuxiliaryUnit", entry.getValue() );
+
+            if (entry.getKey().equals("is_gm_product")) esMap.put("isGmProduct", entry.getValue() );
+
+
         }
         System.out.println("------------ProductSku.reSetValue.json:"+esMap);
         return esMap;
