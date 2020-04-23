@@ -192,7 +192,7 @@ public class ProductESServiceImpl implements ProductESService {
 
     //通过一级类目 二级类目 三级类目 分页搜索数据 分页
     public ESPageRes boolQueryByDiffCategorys(Integer pageNumber, Integer pageSize, @Valid ThreeCategoryReq req) {
-        if (req == null || ( req.getFOneCategoryId()==null && req.getFTwoCategoryId()==null && req.getFThreeCategoryId()== null ) ) {
+        if (req == null || ( req.getFOneCategoryCode()==null && req.getFTwoCategoryCode()==null && req.getFThreeCategoryCode()== null ) ) {
             List<Map<String, Object>> recordList = new ArrayList<>();
             return new ESPageRes(pageNumber, pageSize, 0, recordList);
         }
@@ -207,14 +207,14 @@ public class ProductESServiceImpl implements ProductESService {
         String sortTpye = null;
         String highlightField = null;
         BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
-        if( req.getFOneCategoryId() != null){
-            boolQuery.must(QueryBuilders.termQuery("fOneCategoryId", req.getFOneCategoryId() ));
+        if( req.getFOneCategoryCode() != null){
+            boolQuery.must(QueryBuilders.termQuery("fOneCategoryCode.keyword", req.getFOneCategoryCode() ));
         }
-        if( req.getFTwoCategoryId() != null){
-            boolQuery.must(QueryBuilders.termQuery("fTwoCategoryId", req.getFTwoCategoryId() ));
+        if( req.getFTwoCategoryCode() != null){
+            boolQuery.must(QueryBuilders.termQuery("fTwoCategoryCode.keyword", req.getFTwoCategoryCode() ));
         }
-        if( req.getFThreeCategoryId() != null){
-            boolQuery.must(QueryBuilders.termQuery("fThreeCategoryId", req.getFThreeCategoryId() ));
+        if( req.getFThreeCategoryCode() != null){
+            boolQuery.must(QueryBuilders.termQuery("fThreeCategoryCode.keyword", req.getFThreeCategoryCode() ));
         }
         ESPageRes esPageRes = ElasticsearchUtil.searchDataPage(indexName, pageNumber, pageSize, boolQuery, fields, sortField, sortTpye, highlightField);
         return esPageRes;
@@ -228,13 +228,13 @@ public class ProductESServiceImpl implements ProductESService {
         }
         BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
         if (StringUtils.isNotBlank(req.getStoreId())){
-            boolQuery.must(QueryBuilders.termsQuery("storeId", req.getStoreId()));
+            boolQuery.must(QueryBuilders.termQuery("storeId.keyword", req.getStoreId()));
         }
         if(StringUtils.isNotBlank(req.getSpuId())){
-            boolQuery.must(QueryBuilders.termsQuery("proSkuSpuId", req.getSpuId()));
+            boolQuery.must(QueryBuilders.termQuery("proSkuSpuId.keyword", req.getSpuId()));
         }
         if(StringUtils.isNotBlank(req.getSkuId())){
-            boolQuery.must(QueryBuilders.termsQuery("skuId", req.getSkuId()));
+            boolQuery.must(QueryBuilders.termQuery("skuId.keyword", req.getSkuId()));
         }
         List<Map<String, Object>> list = ElasticsearchUtil.searchByQuery(indexName,boolQuery);
         return list;
@@ -304,7 +304,7 @@ public class ProductESServiceImpl implements ProductESService {
         }
         BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
         if (StringUtils.isNotBlank(req.getKey())){
-            boolQuery.must(QueryBuilders.wildcardQuery("storeName.keyword", "*"+req.getKey()+"*"));
+            boolQuery.must(QueryBuilders.wildcardQuery("storeName", "*"+req.getKey()+"*"));
         }
         List<Map<String, Object>> list = ElasticsearchUtil.searchByQuery(indexName,boolQuery);
         return list;
@@ -483,30 +483,30 @@ public class ProductESServiceImpl implements ProductESService {
                         builder.endObject();
                         builder.startObject("brandIntroduction"); { builder.field("type", "keyword"); }
                         builder.endObject();
-                        builder.startObject("fOneCategoryId"); { builder.field("type", "keyword"); }
-                        builder.endObject();
+                        //builder.startObject("fOneCategoryId"); { builder.field("type", "keyword"); }
+                        //builder.endObject();
                         builder.startObject("fOneCategoryCode"); { builder.field("type", "keyword"); }
                         builder.endObject();
                         builder.startObject("fOneCategoryName"); { builder.field("type", "keyword"); }
                         builder.endObject();
-                        builder.startObject("fTwoCategoryId"); { builder.field("type", "keyword"); }
-                        builder.endObject();
+                        //builder.startObject("fTwoCategoryId"); { builder.field("type", "keyword"); }
+                        //builder.endObject();
                         builder.startObject("fTwoCategoryCode"); { builder.field("type", "keyword"); }
                         builder.endObject();
                         builder.startObject("fTwoCategoryName"); { builder.field("type", "keyword"); }
                         builder.endObject();
-                        builder.startObject("fThreeCategoryId"); { builder.field("type", "keyword"); }
-                        builder.endObject();
+                        //builder.startObject("fThreeCategoryId"); { builder.field("type", "keyword"); }
+                        //builder.endObject();
                         builder.startObject("fThreeCategoryCode"); { builder.field("type", "keyword"); }
                         builder.endObject();
                         builder.startObject("fThreeCategoryName"); { builder.field("type", "keyword"); }
                         builder.endObject();
-                        builder.startObject("type"); { builder.field("type", "keyword"); }
-                        builder.endObject();
-                        builder.startObject("fileUrl"); { builder.field("type", "keyword"); }
-                        builder.endObject();
-                        builder.startObject("fileSortNumber"); { builder.field("type", "keyword"); }
-                        builder.endObject();
+                        //builder.startObject("type"); { builder.field("type", "keyword"); }
+                        //builder.endObject();
+                        //builder.startObject("fileUrl"); { builder.field("type", "keyword"); }
+                        //builder.endObject();
+                        //builder.startObject("fileSortNumber"); { builder.field("type", "keyword"); }
+                        //builder.endObject();
                         builder.startObject("regionalCode"); { builder.field("type", "keyword"); }
                         builder.endObject();
                         builder.startObject("regionalName"); { builder.field("type", "keyword"); }

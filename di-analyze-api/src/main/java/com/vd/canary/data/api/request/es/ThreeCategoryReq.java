@@ -12,16 +12,16 @@ import lombok.experimental.Accessors;
 public class ThreeCategoryReq extends ProductsBaseReq {
 
     /**
-     * 商品一级目录id
+     * 商品一级目录code
      */
-    private String fOneCategoryId;
+    private String fOneCategoryCode;
     /**
-     * 商品二级目录id
+     * 商品二级目录code
      */
-    private String fTwoCategoryId;
+    private String fTwoCategoryCode;
 
     /**
-     * 商品三级目录id
+     * 商品三级目录code
      */
-    private String fThreeCategoryId;
+    private String fThreeCategoryCode;
 }

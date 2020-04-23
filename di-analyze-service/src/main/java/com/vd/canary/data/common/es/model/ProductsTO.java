@@ -36,7 +36,7 @@ public class ProductsTO implements Serializable {
     //sku副标题
     private String proSkuSubTitle;
     //后台三级分类id
-    private String threeCategoryId;  // 该值没有实际意义，目前没有赋值
+    //private String threeCategoryId;  // 该值没有实际意义，目前没有赋值
     //后台三级分类code
     private String threeCategoryCode;  // 数组格式
     //后台三级分类
@@ -80,25 +80,25 @@ public class ProductsTO implements Serializable {
      * attribute_management表   属性管理
      */
     //属性编码
-    private String attributeCode;  // 该字段目前没实际作用  因为商品和属性是一对多的关系，都整合到 attributeMap 字段中保存
+    //private String attributeCode;  // 该字段目前没实际作用  因为商品和属性是一对多的关系，都整合到 attributeMap 字段中保存
     //属性名称
-    private String attributeName;  // 该字段目前没实际作用  因为商品和属性是一对多的关系，都整合到 attributeMap 字段中保存
+    //private String attributeName;  // 该字段目前没实际作用  因为商品和属性是一对多的关系，都整合到 attributeMap 字段中保存
 
 
     /**
      * attribute_value表   属性值
      */
     //属性值名称
-    private String value_Name;  // 该字段目前没实际作用  因为商品和属性是一对多的关系，都整合到 attributeMap 字段中保存
+    //private String value_Name;  // 该字段目前没实际作用  因为商品和属性是一对多的关系，都整合到 attributeMap 字段中保存
 
 
     /**
      * sku_attribute_relations表   sku属性映射关系
      */
     //属性id -> attribute_management.id
-    private String attributeId;  // 该字段目前没实际作用  因为商品和属性是一对多的关系，都整合到 attributeMap 字段中保存
+    //private String attributeId;  // 该字段目前没实际作用  因为商品和属性是一对多的关系，都整合到 attributeMap 字段中保存
     //属性值id -> attribute_value.id
-    private String attributeValueId;  // 该字段目前没实际作用  因为商品和属性是一对多的关系，都整合到 attributeMap 字段中保存
+    //private String attributeValueId;  // 该字段目前没实际作用  因为商品和属性是一对多的关系，都整合到 attributeMap 字段中保存
     // 商品 所有属性和属性值 合集 格式如下：
     /**
      * [{
@@ -111,20 +111,20 @@ public class ProductsTO implements Serializable {
      */
     private String attributeMap;
     //属性类型：0定价属性   1一般属性
-    private Integer attributeType;  //  该字段目前没实际作用  因为商品和属性是一对多的关系，都整合到 attributeMap 字段中保存
+    //private Integer attributeType;  //  该字段目前没实际作用  因为商品和属性是一对多的关系，都整合到 attributeMap 字段中保存
 
 
     /**
      * background_category表  后台类目
      */
     //后台一级分类id
-    private String oneCategoryId;  // 该值没有实际意义，目前没有赋值
+    //private String oneCategoryId;  // 该值没有实际意义，目前没有赋值
     //后台一级分类code
     private String oneCategoryCode;  // 数组格式
     //后台一级分类
     private String oneCategoryName;  // 数组格式
     //后台二级分类id
-    private String twoCategoryId;  // 该值没有实际意义，目前没有赋值
+    //private String twoCategoryId;  // 该值没有实际意义，目前没有赋值
     //后台二级分类code
     private String twoCategoryCode;  // 数组格式
     //后台二级分类
@@ -154,19 +154,19 @@ public class ProductsTO implements Serializable {
      * category_relations前后台类目映射关系
      */
     //前台一级分类id
-    private String fOneCategoryId;  // 该值没有实际意义，目前没有赋值
+    //private String fOneCategoryId;  // 该值没有实际意义，目前没有赋值
     //前台一级分类code
     private String fOneCategoryCode; // 数组格式
     //前台一级分类
     private String fOneCategoryName; // 数组格式
     //前台二级分类id
-    private String fTwoCategoryId;  // 该值没有实际意义，目前没有赋值
+    //private String fTwoCategoryId;  // 该值没有实际意义，目前没有赋值
     //前台二级分类code
     private String fTwoCategoryCode;  // 数组格式
     //前台二级分类
     private String fTwoCategoryName;  // 数组格式
     //前台三级分类id
-    private String fThreeCategoryId;  // 该值没有实际意义，目前没有赋值
+    //private String fThreeCategoryId;  // 该值没有实际意义，目前没有赋值
     //前台三级分类code
     private String fThreeCategoryCode;  // 数组格式
     //前台三级分类
@@ -176,11 +176,11 @@ public class ProductsTO implements Serializable {
      * file_management表   文件管理
      */
     //文件类型  0图片 1视频
-    private String type; // 该字段目前没实际作用  因为商品和图片属性是一对多的关系，都整合到 proSkuSkuPicJson 字段中保存
+    //private String type; // 该字段目前没实际作用  因为商品和图片属性是一对多的关系，都整合到 proSkuSkuPicJson 字段中保存
     //文件存储地址
-    private String fileUrl;// 该字段目前没实际作用  因为商品和图片属性是一对多的关系，都整合到 proSkuSkuPicJson 字段中保存
+    //private String fileUrl;// 该字段目前没实际作用  因为商品和图片属性是一对多的关系，都整合到 proSkuSkuPicJson 字段中保存
     //排序号
-    private Integer fileSortNumber;// 该字段目前没实际作用  因为商品和图片属性是一对多的关系，都整合到 proSkuSkuPicJson 字段中保存
+    //private Integer fileSortNumber;// 该字段目前没实际作用  因为商品和图片属性是一对多的关系，都整合到 proSkuSkuPicJson 字段中保存
 
 
     /**
