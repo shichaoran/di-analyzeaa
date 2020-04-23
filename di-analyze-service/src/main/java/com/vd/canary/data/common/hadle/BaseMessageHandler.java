@@ -1,4 +1,4 @@
-package com.vd.canary.data.repository.es.hadle;
+package com.vd.canary.data.common.hadle;
 
 import com.alibaba.fastjson.JSONObject;
 

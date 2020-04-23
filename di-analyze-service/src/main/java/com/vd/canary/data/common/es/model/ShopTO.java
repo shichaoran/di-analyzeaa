@@ -1,7 +1,6 @@
 package com.vd.canary.data.common.es.model;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.List;
 
 import com.vd.canary.data.api.response.es.ShopProductRes;
@@ -29,7 +28,7 @@ public class ShopTO implements Serializable {
     private String storeTemplateId; //模板id
     private String mainProducts;  //主营产品 -> 来自企业档案
     private String mainCategory; //主营类目（经营类目） -> 来自企业档案
-    private LocalDateTime boothScheduledTime; //入驻时间
+    private String boothScheduledTime; //入驻时间
     private String memberOrder; //会员等级
     private String remark1;
     private String remark2;
