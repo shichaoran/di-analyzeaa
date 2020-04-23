@@ -1,22 +1,16 @@
 package com.vd.canary.data.api.feign.es;
 
-import java.util.List;
-
 import com.vd.canary.core.api.Feign;
 import com.vd.canary.core.bo.ResponseBO;
-import com.vd.canary.core.bo.ResponsePageBO;
 import com.vd.canary.data.api.request.es.*;
 import com.vd.canary.data.api.response.es.CategoryRes;
-import com.vd.canary.data.api.response.es.ProductDetailsRes;
+import com.vd.canary.data.api.response.es.ProductSpuResponse;
 import com.vd.canary.data.api.response.es.ProductsRes;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 
 
 @FeignClient(value = "canary-dataanalyze",
@@ -41,7 +35,7 @@ public interface ProductsServiceFeign extends Feign {
      * 商品详情页
      */
     @PostMapping("/data/products/getProductDetail")
-    ResponseBO<ProductDetailsRes> getProductsDetail(@RequestBody @Valid ProductDetailsReq productDetailsReq);
+    ResponseBO<ProductSpuResponse> getProductsDetail(@RequestBody @Valid ProductDetailsReq productDetailsReq);
 
     /**
      * 根据一级目录、二级目录和三级目录名称返回商品列表

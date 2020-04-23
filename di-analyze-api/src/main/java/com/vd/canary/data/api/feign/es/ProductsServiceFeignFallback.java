@@ -1,13 +1,10 @@
 package com.vd.canary.data.api.feign.es;
 
-import java.util.List;
-
 import com.vd.canary.core.bo.ResponseBO;
-import com.vd.canary.core.bo.ResponsePageBO;
 import com.vd.canary.core.exception.BusinessException;
 import com.vd.canary.data.api.request.es.*;
 import com.vd.canary.data.api.response.es.CategoryRes;
-import com.vd.canary.data.api.response.es.ProductDetailsRes;
+import com.vd.canary.data.api.response.es.ProductSpuResponse;
 import com.vd.canary.data.api.response.es.ProductsRes;
 import feign.hystrix.FallbackFactory;
 
@@ -33,7 +30,7 @@ public class ProductsServiceFeignFallback implements FallbackFactory<ProductsSer
 
 
             @Override
-            public ResponseBO<ProductDetailsRes> getProductsDetail(@Valid ProductDetailsReq productDetailsReq) {
+            public ResponseBO<ProductSpuResponse> getProductsDetail(@Valid ProductDetailsReq productDetailsReq) {
                 throw new BusinessException(FEIGN_EXCEPTION).append(e.getMessage());
             }
 

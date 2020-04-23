@@ -150,29 +150,63 @@ public class ProductSku implements Function {
             if (entry.getKey().equals("sku_title")) esMap.put("proSkuTitle", entry.getValue() );
             if (entry.getKey().equals("sku_sub_title")) esMap.put("proSkuSubTitle", entry.getValue() );
             if (entry.getKey().equals("three_category_id")) {
-                esMap.put("threeCategoryId",entry.getValue());
+                //esMap.put("threeCategoryId",entry.getValue());
                 CategoryRelationsReq categoryRelationsReq = new CategoryRelationsReq();
                 categoryRelationsReq.setBackgroundCategoryId(entry.getValue().toString());
                 try {
                     //ResponseBO<List<CategoryRelationsResp>> res = bigDataApiFeign.listByCondition(categoryRelationsReq);
                     CategoryRelationsReq req = new CategoryRelationsReq();
                     req.setBackgroundCategoryId(entry.getValue().toString());
-                    // 该接口可以通过后台类目查找前台类目，也统一通过
+                    // 该接口可以通过后台类目查找前台类目，也统一通过该接口
                     ResponseBO<List<CategoryRelationsResp>> categoryRelationsResps = bigDataApiFeign.listByCondition(req);
                     HashSet<String> fOneCategoryCode = new HashSet<>();
                     HashSet<String> fTwoCategoryCode = new HashSet<>();
                     HashSet<String> fThreeCategoryCode = new HashSet<>();
+
                     HashSet<String> fOneCategoryName = new HashSet<>();
                     HashSet<String> fTwoCategoryName = new HashSet<>();
                     HashSet<String> fThreeCategoryName = new HashSet<>();
-                    HashSet<String> fOneCategoryId = new HashSet<>();
-                    HashSet<String> fTwoCategoryId = new HashSet<>();
-                    HashSet<String> fThreeCategoryId = new HashSet<>();
+
+                    HashSet<String> oneCategoryCode = new HashSet<>();
+                    HashSet<String> twoCategoryCode = new HashSet<>();
+                    HashSet<String> threeCategoryCode = new HashSet<>();
+
+                    HashSet<String> oneCategoryName = new HashSet<>();
+                    HashSet<String> twoCategoryName = new HashSet<>();
+                    HashSet<String> threeCategoryName = new HashSet<>();
+
+
                     if(categoryRelationsResps != null){
                         List<CategoryRelationsResp> list = categoryRelationsResps.getData();
                         if(list != null && list.size() > 0){
                             for(CategoryRelationsResp resp : list){
-                               System.out.println(resp);
+                                String[] foreCategoryFullCode = resp.getForeCategoryFullCode().split("-");
+                                if(foreCategoryFullCode != null && foreCategoryFullCode.length > 0){
+                                    fOneCategoryCode.add(foreCategoryFullCode[0]);
+                                    fTwoCategoryCode.add(foreCategoryFullCode[1]);
+                                    fThreeCategoryCode.add(foreCategoryFullCode[2]);
+                                }
+
+                                String[] backCategoryFullCode = resp.getBackCategoryFullCode().split("-");
+                                if(backCategoryFullCode != null && backCategoryFullCode.length > 0){
+                                    oneCategoryCode.add(backCategoryFullCode[0]);
+                                    twoCategoryCode.add(backCategoryFullCode[1]);
+                                    threeCategoryCode.add(backCategoryFullCode[2]);
+                                }
+
+                                String[] foreCategoryFullName = resp.getForeCategoryFullName().split("-");
+                                if(foreCategoryFullName != null && foreCategoryFullName.length > 0){
+                                    fOneCategoryName.add(foreCategoryFullName[0]);
+                                    fTwoCategoryName.add(foreCategoryFullName[1]);
+                                    fThreeCategoryName.add(foreCategoryFullName[2]);
+                                }
+
+                                String[] backCategoryFullName = resp.getBackCategoryFullName().split("-");
+                                if(backCategoryFullName != null && backCategoryFullName.length > 0){
+                                    oneCategoryName.add(backCategoryFullName[0]);
+                                    twoCategoryName.add(backCategoryFullName[1]);
+                                    threeCategoryName.add(backCategoryFullName[2]);
+                                }
                             }
                         }
                     }
@@ -184,40 +218,21 @@ public class ProductSku implements Function {
                     esMap.put("fTwoCategoryName",fTwoCategoryName);
                     esMap.put("fThreeCategoryName",fThreeCategoryName);
 
-                    esMap.put("fOneCategoryId",fOneCategoryId);
-                    esMap.put("fTwoCategoryId",fTwoCategoryId);
-                    esMap.put("fThreeCategoryId",fThreeCategoryId);
+                    esMap.put("oneCategoryCode",oneCategoryCode);
+                    esMap.put("twoCategoryCode",twoCategoryCode);
+                    esMap.put("threeCategoryCode",threeCategoryCode);
 
-                    /*if(res != null){
-                        log.info("ProductSku.reSetValue,three_category_id.res={}.",JSONUtil.toJSON(res).toJSONString());
-                        List<CategoryRelationsResp> pro = (List<CategoryRelationsResp>)res.getData();
-                        log.info("ProductSku.reSetValue,three_category_id.pro={}.",JSONUtil.toJSON(pro).toJSONString());
-                        if(pro != null && pro.size() > 0){
-                            for(CategoryRelationsResp categoryRelationsResp :pro){
-                                String[] foreCategoryFullCode = categoryRelationsResp.getForeCategoryFullCode().split("-");
-                                esMap.put("fOneCategoryCode",foreCategoryFullCode[0]);
-                                esMap.put("fTwoCategoryCode",foreCategoryFullCode[1]);
-                                esMap.put("fThreeCategoryCode",foreCategoryFullCode[2]);
+                    esMap.put("oneCategoryName",oneCategoryName);
+                    esMap.put("twoCategoryName",twoCategoryName);
+                    esMap.put("threeCategoryName",threeCategoryName);
 
-                                String[] foreCategoryFullName = categoryRelationsResp.getForeCategoryFullName().split("-");
-                                esMap.put("fOneCategoryName",foreCategoryFullName[0]);
-                                esMap.put("fTwoCategoryName",foreCategoryFullName[1]);
-                                esMap.put("fThreeCategoryName",foreCategoryFullName[2]);
-
-                                String[] foreCategoryFullId = categoryRelationsResp.getForegroundCategoryId().split("-");
-                                esMap.put("fOneCategoryId",foreCategoryFullId[0]);
-                                esMap.put("fTwoCategoryId",foreCategoryFullId[1]);
-                                esMap.put("fThreeCategoryId",foreCategoryFullId[2]);
-                            }
-                        }
-                    }*/
                 }catch (Exception e) {
                     log.info("ProductSku.reSetValue,Exception:bigDataApiFeign.listByCondition .");
                     e.printStackTrace();
                 }
             }
-            if (entry.getKey().equals("three_category_code")) esMap.put("threeCategoryCode", entry.getValue() );
-            if (entry.getKey().equals("three_category_name")) esMap.put("threeCategoryName", entry.getValue() );
+            //if (entry.getKey().equals("three_category_code")) esMap.put("threeCategoryCode", entry.getValue() );
+            //if (entry.getKey().equals("three_category_name")) esMap.put("threeCategoryName", entry.getValue() );
             if (entry.getKey().equals("sku_supplier_id")) esMap.put("skuSupplierId", entry.getValue() );
             if (entry.getKey().equals("sku_supplier_name")) esMap.put("skuSupplierName", entry.getValue() );
             if (entry.getKey().equals("sku_state")) esMap.put("skuState", entry.getValue() );

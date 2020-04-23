@@ -1,7 +1,6 @@
 package com.vd.canary.data.controller.es;
 
 import java.io.IOException;
-import java.util.List;
 
 import javax.validation.Valid;
 
@@ -11,7 +10,7 @@ import com.vd.canary.data.api.request.es.ProductDetailsReq;
 import com.vd.canary.data.api.request.es.ProductsReq;
 import com.vd.canary.data.api.request.es.ThreeCategoryReq;
 import com.vd.canary.data.api.response.es.CategoryRes;
-import com.vd.canary.data.api.response.es.ProductDetailsRes;
+import com.vd.canary.data.api.response.es.ProductSpuResponse;
 import com.vd.canary.data.api.response.es.ProductsRes;
 import com.vd.canary.data.service.es.ProductsService;
 import com.vd.canary.service.controller.BaseController;
@@ -44,8 +43,8 @@ public class ProductsController extends BaseController {
     }
 
     @PostMapping("/data/products/getProductDetail")
-    public ResponseBO<ProductDetailsRes> getProductsDetail(@RequestBody @Valid ProductDetailsReq productDetailsReq) throws IOException {
-        ResponseBO<ProductDetailsRes> res = productsService.getProductsDetail(productDetailsReq);
+    public ResponseBO<ProductSpuResponse> getProductsDetail(@RequestBody @Valid ProductDetailsReq productDetailsReq) throws IOException {
+        ResponseBO<ProductSpuResponse> res = productsService.getProductsDetail(productDetailsReq);
         return res;
     }
 
