@@ -46,8 +46,10 @@ public class StoreTemplateMessageHandler extends BaseMessageHandler implements B
             storeDataQueryReq.setStoreTemplateId(id);
             StoreDataInfoResp storeDataInfoResp = httpClientUtils.getStoreDataInfoResp(storeDataQueryReq);
             ShopTO shopTO = shopDataHandler.assembleShopTo(storeDataInfoResp);
-            if(Constant.UPDATE.equals(type) || Constant.DELETE.equals(type)){
-                shopESService.updateShop(shopTO);
+            if(shopTO!=null) {
+                if (Constant.UPDATE.equals(type) || Constant.DELETE.equals(type)) {
+                    shopESService.updateShop(shopTO);
+                }
             }
         } catch (Exception e) {
             log.error("处理店铺模板信息{}data=" + data + ",storeTemplateVO=" + storeTemplateVO, e);

@@ -48,8 +48,10 @@ public class StoreLoopBannerMessageHandler extends BaseMessageHandler implements
             storeDataQueryReq.setStoreTemplateId(storeTemplateId);
             StoreDataInfoResp storeDataInfoResp = httpClientUtils.getStoreDataInfoResp(storeDataQueryReq);
             ShopTO shopTO = shopDataHandler.assembleShopTo(storeDataInfoResp);
-            if(Constant.UPDATE.equals(type) || Constant.DELETE.equals(type)){
-                shopESService.updateShop(shopTO);
+            if(shopTO!=null) {
+                if (Constant.UPDATE.equals(type) || Constant.DELETE.equals(type)) {
+                    shopESService.updateShop(shopTO);
+                }
             }
         } catch (Exception e) {
             log.error("处理店铺轮播图信息{}data=" + data + ",storeLoopBannerVO=" + storeLoopBannerVO, e);

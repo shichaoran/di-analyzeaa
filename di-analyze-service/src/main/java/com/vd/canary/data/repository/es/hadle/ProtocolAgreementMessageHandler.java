@@ -53,8 +53,10 @@ public class ProtocolAgreementMessageHandler extends BaseMessageHandler implemen
             storeDataQueryReq.setStoreId(shopId);
             StoreDataInfoResp storeDataInfoResp = httpClientUtils.getStoreDataInfoResp(storeDataQueryReq);
             ShopTO shopTO = shopDataHandler.assembleShopTo(storeDataInfoResp);
-            if(Constant.UPDATE.equals(type) || Constant.DELETE.equals(type)){
-                shopESService.updateShop(shopTO);
+            if(shopTO!=null){
+                if(Constant.UPDATE.equals(type) || Constant.DELETE.equals(type)){
+                    shopESService.updateShop(shopTO);
+                }
             }
         } catch (Exception e) {
             log.error("处理协议合同表失败{}data=" + data + ",agreementVO=" + agreementVO, e);
