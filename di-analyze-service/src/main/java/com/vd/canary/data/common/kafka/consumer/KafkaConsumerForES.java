@@ -11,11 +11,7 @@ import com.vd.canary.data.common.kafka.consumer.impl.ObmpCustomer.StoreInfo;
 import com.vd.canary.data.common.kafka.consumer.impl.ObmpCustomer.StoreLoopBanner;
 import com.vd.canary.data.common.kafka.consumer.impl.ObmpCustomer.StoreMedia;
 import com.vd.canary.data.common.kafka.consumer.impl.ObmpCustomer.StoreTemplate;
-import com.vd.canary.data.common.kafka.consumer.impl.ObmpProduct.ProductSku;
-import com.vd.canary.data.common.kafka.consumer.impl.ObmpProduct.SkuAttributeRelations;
-import com.vd.canary.data.common.kafka.consumer.impl.ObmpProduct.SkuSellingPrice;
-import com.vd.canary.data.common.kafka.consumer.impl.ObmpProduct.SkuWarehouseRelations;
-import com.vd.canary.data.common.kafka.consumer.impl.ObmpProduct.StoreProductRelations;
+import com.vd.canary.data.common.kafka.consumer.impl.ObmpProduct.*;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +38,8 @@ public class KafkaConsumerForES {
     private SkuWarehouseRelations skuWarehouseRelations;
     @Autowired
     private StoreProductRelations storeProductRelations;
-
+    @Autowired
+    private SkuShelves skuShelves ;
 
 
     @Autowired
@@ -89,7 +86,7 @@ public class KafkaConsumerForES {
         }
     }*/
     @KafkaListener(topics = "binglog_obmp_product_2r3p", id = "product_es1" )
-    public void listenProduct(String msg) {
+    public void listenProduct(String msg) throws IOException {
 
         log.info("<------this is kafka consumer,topic = binglog_obmp_product_2r3p, msg = {}",msg);
         JSONObject jsonMap = JSONObject.parseObject(msg);
@@ -113,6 +110,9 @@ public class KafkaConsumerForES {
             break;
         case "obmp_product.store_product_relations":
             storeProductRelations.performES(msg);
+            break;
+        case "obmp_product.sku_shelves":
+            skuShelves.performES(msg);
             break;
 
         }
