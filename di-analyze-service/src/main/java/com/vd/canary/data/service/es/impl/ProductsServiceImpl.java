@@ -8,8 +8,8 @@ import com.vd.canary.data.api.request.es.ProductDetailsReq;
 import com.vd.canary.data.api.request.es.ProductsReq;
 import com.vd.canary.data.api.request.es.ThreeCategoryReq;
 import com.vd.canary.data.api.response.es.CategoryRes;
-import com.vd.canary.data.api.response.es.ProductSkuVO;
-import com.vd.canary.data.api.response.es.ProductSpuResponse;
+import com.vd.canary.data.api.response.es.ProductSkuInfoVO;
+import com.vd.canary.data.api.response.es.ProductSpuInfoResponse;
 import com.vd.canary.data.api.response.es.vo.CategoryVO;
 import com.vd.canary.data.common.es.helper.ESPageRes;
 import com.vd.canary.data.api.response.es.ProductsRes;
@@ -226,68 +226,68 @@ public class ProductsServiceImpl implements ProductsService {
     }
 
     @Override
-    public ResponseBO<ProductSpuResponse>  getProductsDetail(@Valid ProductDetailsReq productDetailsReq) throws IOException {
-        ResponseBO<ProductSpuResponse> res = new ResponseBO<ProductSpuResponse>();
-        ProductSpuResponse productSpuResponse = new ProductSpuResponse();
+    public ResponseBO<ProductSpuInfoResponse>  getProductsDetail(@Valid ProductDetailsReq productDetailsReq) throws IOException {
+        ResponseBO<ProductSpuInfoResponse> res = new ResponseBO<ProductSpuInfoResponse>();
+        ProductSpuInfoResponse productSpuInfoResponse = new ProductSpuInfoResponse();
         Map<String, Object> map = productESServiceImpl.findById(productDetailsReq.getSkuId());
         if(map != null){
-            if(map.containsKey("proSkuSpuId") && map.get("proSkuSpuId") != null ) productSpuResponse.setSpuId(map.get("proSkuSpuId").toString());
+            if(map.containsKey("proSkuSpuId") && map.get("proSkuSpuId") != null ) productSpuInfoResponse.setSpuId(map.get("proSkuSpuId").toString());
 
-            if(map.containsKey("proSkuSpuName") && map.get("proSkuSpuName") != null ) productSpuResponse.setSpuName(map.get("proSkuSpuName").toString());
+            if(map.containsKey("proSkuSpuName") && map.get("proSkuSpuName") != null ) productSpuInfoResponse.setSpuName(map.get("proSkuSpuName").toString());
 
-            if(map.containsKey("proSpuSpuPic") && map.get("proSpuSpuPic") != null ) productSpuResponse.setSpuPic(map.get("proSpuSpuPic").toString());
+            if(map.containsKey("proSpuSpuPic") && map.get("proSpuSpuPic") != null ) productSpuInfoResponse.setSpuPic(map.get("proSpuSpuPic").toString());
 
-            if(map.containsKey("spuTitle") && map.get("spuTitle") != null ) productSpuResponse.setSpuTitle(map.get("spuTitle").toString());
+            if(map.containsKey("spuTitle") && map.get("spuTitle") != null ) productSpuInfoResponse.setSpuTitle(map.get("spuTitle").toString());
 
             ProductDetailsReq req = new ProductDetailsReq();
             req.setSpuId(productDetailsReq.getSpuId());
             req.setStoreId(productDetailsReq.getStoreId());
             List<Map<String, Object>> list = productESServiceImpl.boolQueryForProductDetail(req);
-            List<ProductSkuVO> productSkuVOs = new ArrayList<>();
+            List<ProductSkuInfoVO> productSkuInfoVOS = new ArrayList<>();
             if (CollectionUtil.isNotEmpty(list)) {
                 for(Map<String, Object> submap : list){
-                    ProductSkuVO productSkuVO = new ProductSkuVO();
-                    if(submap.containsKey("skuId") && submap.get("skuId") != null ) productSkuVO.setSkuId(submap.get("skuId").toString());
+                    ProductSkuInfoVO productSkuInfoVO = new ProductSkuInfoVO();
+                    if(submap.containsKey("skuId") && submap.get("skuId") != null ) productSkuInfoVO.setSkuId(submap.get("skuId").toString());
 
-                    if(submap.containsKey("proSkuSkuName") && submap.get("proSkuSkuName") != null ) productSkuVO.setSkuName(submap.get("proSkuSkuName").toString());
+                    if(submap.containsKey("proSkuSkuName") && submap.get("proSkuSkuName") != null ) productSkuInfoVO.setSkuName(submap.get("proSkuSkuName").toString());
 
-                    if(submap.containsKey("proSkuTitle") && submap.get("proSkuTitle") != null ) productSkuVO.setSkuTitle(submap.get("proSkuTitle").toString());
+                    if(submap.containsKey("proSkuTitle") && submap.get("proSkuTitle") != null ) productSkuInfoVO.setSkuTitle(submap.get("proSkuTitle").toString());
 
-                    if(submap.containsKey("proSkuSubTitle") && submap.get("proSkuSubTitle") != null ) productSkuVO.setSkuSubTitle(submap.get("proSkuSubTitle").toString());
+                    if(submap.containsKey("proSkuSubTitle") && submap.get("proSkuSubTitle") != null ) productSkuInfoVO.setSkuSubTitle(submap.get("proSkuSubTitle").toString());
 
-                    if(submap.containsKey("attributeMap") && submap.get("attributeMap") !=null) productSkuVO.setAttributeMapJson(submap.get("attributeMap").toString());
+                    if(submap.containsKey("attributeMap") && submap.get("attributeMap") !=null) productSkuInfoVO.setAttributeMapJson(submap.get("attributeMap").toString());
 
                     if(submap.containsKey("skuSellPriceJson") && submap.get("skuSellPriceJson") != null){
                         JSONArray array = JSONObject.parseArray(submap.get("skuSellPriceJson").toString());
-                        productSkuVO.setPriceJson(JSONObject.toJSONString(array));
+                        productSkuInfoVO.setPriceJson(JSONObject.toJSONString(array));
                     }
 
-                    if(submap.containsKey("skuIntroduce") && submap.get("skuIntroduce") != null) productSkuVO.setSkuIntroduce(submap.get("skuIntroduce").toString());
+                    if(submap.containsKey("skuIntroduce") && submap.get("skuIntroduce") != null) productSkuInfoVO.setSkuIntroduce(submap.get("skuIntroduce").toString());
 
-                    if(submap.containsKey("proSkuSkuPicJson") && submap.get("proSkuSkuPicJson") != null ) productSkuVO.setProSkuSkuPicJson(submap.get("proSkuSkuPicJson").toString());
+                    if(submap.containsKey("proSkuSkuPicJson") && submap.get("proSkuSkuPicJson") != null ) productSkuInfoVO.setProSkuSkuPicJson(submap.get("proSkuSkuPicJson").toString());
 
                     if(submap.containsKey("regionalId") && submap.get("regionalId") !=null){
                         JSONArray array = JSONArray.parseArray(submap.get("regionalId").toString());
-                        productSkuVO.setRegionalId(JSONObject.parseArray(array.toJSONString(), String.class));
+                        productSkuInfoVO.setRegionalId(JSONObject.parseArray(array.toJSONString(), String.class));
                     }
 
                     if(submap.containsKey("skuRegionalName") && submap.get("skuRegionalName") !=null) {
                         JSONArray array = JSONArray.parseArray(submap.get("skuRegionalName").toString());
-                        productSkuVO.setRegionalName(JSONObject.parseArray(array.toJSONString(), String.class));
+                        productSkuInfoVO.setRegionalName(JSONObject.parseArray(array.toJSONString(), String.class));
                     }
 
-                    if(submap.containsKey("warehouseId") && submap.get("warehouseId") != null ) productSkuVO.setWarehouseId(submap.get("warehouseId").toString());
+                    if(submap.containsKey("warehouseId") && submap.get("warehouseId") != null ) productSkuInfoVO.setWarehouseId(submap.get("warehouseId").toString());
 
-                    if(submap.containsKey("warehouseName") && submap.get("warehouseName") != null ) productSkuVO.setWarehouseName(submap.get("warehouseName").toString());
+                    if(submap.containsKey("warehouseName") && submap.get("warehouseName") != null ) productSkuInfoVO.setWarehouseName(submap.get("warehouseName").toString());
 
-                    if(submap.containsKey("inventory") && submap.get("inventory") != null ) productSkuVO.setInventory(submap.get("inventory").toString());
+                    if(submap.containsKey("inventory") && submap.get("inventory") != null ) productSkuInfoVO.setInventory(submap.get("inventory").toString());
 
-                    productSkuVOs.add(productSkuVO);
+                    productSkuInfoVOS.add(productSkuInfoVO);
                 }
-                productSpuResponse.setProductSkuVO(productSkuVOs);
+                productSpuInfoResponse.setProductSkuInfoVO(productSkuInfoVOS);
             }
         }
-        res.setData(productSpuResponse);
+        res.setData(productSpuInfoResponse);
         res.setSuccess(true);
         res.setCode(200);
         res.setMessage("success.");

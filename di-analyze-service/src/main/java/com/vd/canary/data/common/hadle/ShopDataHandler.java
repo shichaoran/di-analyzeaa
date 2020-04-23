@@ -1,10 +1,16 @@
-package com.vd.canary.data.repository.es.hadle;
+package com.vd.canary.data.common.hadle;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.vd.canary.core.bo.ResponseBO;
 import com.vd.canary.data.common.es.model.ImageBanerDTO;
 import com.vd.canary.data.common.es.model.ShopTO;
+import com.vd.canary.obmp.customer.api.feign.data.DataFeignClient;
+import com.vd.canary.obmp.customer.api.request.customer.store.StoreDataQueryReq;
 import com.vd.canary.obmp.customer.api.response.agreement.AgreementVO;
 import com.vd.canary.obmp.customer.api.response.customer.StoreDataInfoResp;
 import com.vd.canary.obmp.customer.api.response.customer.vo.CustomerBusinessInfoVO;
@@ -14,8 +20,11 @@ import com.vd.canary.obmp.customer.api.response.customer.vo.store.StoreMediaVO;
 import com.vd.canary.obmp.customer.api.response.customer.vo.store.StoreTemplateVO;
 import com.vd.canary.utils.BeanUtil;
 import com.vd.canary.utils.CollectionUtil;
+import com.vd.canary.utils.LocalDateUtil;
 import com.vd.canary.utils.ObjectUtil;
+import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -25,11 +34,26 @@ import org.springframework.stereotype.Component;
  * @create: 2020-04-22 13:42
  **/
 @Component
+@Slf4j
 public class ShopDataHandler {
 
+      @Autowired
+   private DataFeignClient dataFeignClient;
 
+    public ShopTO assembleShopTo(StoreDataQueryReq storeDataQueryReq){
+        StoreDataInfoResp storeDataInfoResp =new StoreDataInfoResp();
+        try {
+            ResponseBO<StoreDataInfoResp> storeDataInfoRespResponseBO = dataFeignClient.queryStoreDataInfo(storeDataQueryReq);
+            if(storeDataInfoRespResponseBO.isFailed()){
+                log.error("查询店铺数据信息{}storeDataQueryReq=" + storeDataQueryReq + ",storeDataInfoRespResponseBO=" + storeDataInfoRespResponseBO);
+                return null;
+            }
+             storeDataInfoResp = storeDataInfoRespResponseBO.getData();
+        }catch (Exception e){
+            log.error("查询店铺数据信息{}storeDataQueryReq=" + storeDataQueryReq + ",e="+ e);
+            return null;
+        }
 
-    public ShopTO assembleShopTo(StoreDataInfoResp storeDataInfoResp){
         ShopTO shopTO =new ShopTO();
         try {
             StoreInfoVO storeInfoVO = storeDataInfoResp.getStoreInfoVO();
@@ -42,13 +66,19 @@ public class ShopDataHandler {
                 shopTO.setId(storeInfoVO.getId());
                 shopTO.setName(storeInfoVO.getName());
                 shopTO.setCustomerId(storeInfoVO.getCustomerId()+"");
-                shopTO.setBoothScheduledTime(storeInfoVO.getGmtCreateTime());
+                LocalDateTime gmtCreateTime = storeInfoVO.getGmtCreateTime();
+                DateTimeFormatter df = DateTimeFormatter.ofPattern(LocalDateUtil.DEFAULT_PATTERN_TO_SECOND);
+                String format = df.format(gmtCreateTime);
+                shopTO.setBoothScheduledTime(format);
             }
             if(CollectionUtil.isNotEmpty(agreementVOs)){
                 List<String> boothCodeList = agreementVOs.stream()
                                                    .map(AgreementVO::getBoothCode)
                                                    .collect(Collectors.toList());
                 shopTO.setBoothCode(boothCodeList);
+               if(agreementVOs.size()>1){
+                   agreementVOs.sort(Comparator.comparing(AgreementVO::getGmtCreateTime));
+               }
                 shopTO.setMemberOrder(agreementVOs.get(0).getMemberOrder());
             }
             if(ObjectUtil.isNotEmpty(customerBusinessInfoVO)){
@@ -76,5 +106,4 @@ public class ShopDataHandler {
         }
         return shopTO;
     }
-
 }

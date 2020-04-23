@@ -1,4 +1,4 @@
-package com.vd.canary.data.repository.es.hadle;
+package com.vd.canary.data.common.hadle;
 
 import com.alibaba.fastjson.JSONObject;
 
@@ -11,5 +11,5 @@ import com.alibaba.fastjson.JSONObject;
  */
 public interface BaseHandler {
 
-    void handler( JSONObject data);
+    void handler(JSONObject data);
 }

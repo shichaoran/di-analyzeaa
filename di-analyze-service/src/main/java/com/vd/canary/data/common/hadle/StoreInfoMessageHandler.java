@@ -1,13 +1,13 @@
-package com.vd.canary.data.repository.es.hadle;
+package com.vd.canary.data.common.hadle;
 
 import com.alibaba.fastjson.JSONObject;
 import com.vd.canary.data.common.es.model.ShopTO;
 import com.vd.canary.data.common.es.service.impl.ShopESServiceImpl;
 import com.vd.canary.data.constants.Constant;
+import com.vd.canary.data.repository.es.dto.StoreInfoDTO;
 import com.vd.canary.data.util.HttpClientUtils;
+import com.vd.canary.obmp.customer.api.feign.data.DataFeignClient;
 import com.vd.canary.obmp.customer.api.request.customer.store.StoreDataQueryReq;
-import com.vd.canary.obmp.customer.api.response.customer.StoreDataInfoResp;
-import com.vd.canary.obmp.customer.api.response.customer.vo.store.StoreInfoVO;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,22 +33,27 @@ public class StoreInfoMessageHandler extends BaseMessageHandler implements BaseH
     private ShopDataHandler shopDataHandler;
     @Autowired
     private HttpClientUtils httpClientUtils;
+    @Autowired
+    private DataFeignClient dataFeignClient;
+
     @Override
     public void handler(JSONObject data) {
         String type = data.getString("type");
-        StoreInfoVO storeInfoVO=null;
+        StoreInfoDTO storeInfoDTO=null;
         long curTime = System.currentTimeMillis();
         try {
-            storeInfoVO = getRawData(data, DATA_BASE, T_CAR, StoreInfoVO.class);
-            if(storeInfoVO==null){
+            storeInfoDTO = getRawData(data, DATA_BASE, T_CAR, StoreInfoDTO.class);
+            if(storeInfoDTO==null){
                 return;
             }
-            log.info("处理店铺信息信息：customerInfoVO="+storeInfoVO);
-            String id = storeInfoVO.getId();
+            log.info("处理店铺信息信息：customerInfoVO="+storeInfoDTO);
+            String id = storeInfoDTO.getId();
+            if(storeInfoDTO.getDeleted()==1){
+                shopESService.deletedShopById(id);
+            }
             StoreDataQueryReq storeDataQueryReq=new StoreDataQueryReq();
             storeDataQueryReq.setStoreId(id);
-            StoreDataInfoResp storeDataInfoResp = httpClientUtils.getStoreDataInfoResp(storeDataQueryReq);
-            ShopTO shopTO = shopDataHandler.assembleShopTo(storeDataInfoResp);
+            ShopTO shopTO = shopDataHandler.assembleShopTo(storeDataQueryReq);
             if(shopTO!=null){
                 if(Constant.INSERT.equals(type)){
                     shopESService.saveShop(shopTO);
@@ -56,12 +61,9 @@ public class StoreInfoMessageHandler extends BaseMessageHandler implements BaseH
                 if(Constant.UPDATE.equals(type)){
                     shopESService.updateShop(shopTO);
                 }
-                if(Constant.DELETE.equals(type)){
-                    shopESService.deletedShopById(shopTO.getId());
-                }
             }
         } catch (Exception e) {
-            log.error("处理店铺信息信息{}data=" + data + ",storeInfoVO=" + storeInfoVO, e);
+            log.error("处理店铺信息信息{}data=" + data + ",storeInfoVO=" + storeInfoDTO, e);
         }finally {
             log.info("StoreInfoMessageHandler--处理店铺信息信息cost-time:{}",System.currentTimeMillis()-curTime);
         }

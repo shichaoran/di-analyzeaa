@@ -1,12 +1,12 @@
-package com.vd.canary.data.repository.es.hadle;
+package com.vd.canary.data.common.hadle;
 
 import com.alibaba.fastjson.JSONObject;
 import com.vd.canary.data.common.es.model.ShopTO;
 import com.vd.canary.data.common.es.service.impl.ShopESServiceImpl;
 import com.vd.canary.data.constants.Constant;
 import com.vd.canary.data.util.HttpClientUtils;
+import com.vd.canary.obmp.customer.api.feign.data.DataFeignClient;
 import com.vd.canary.obmp.customer.api.request.customer.store.StoreDataQueryReq;
-import com.vd.canary.obmp.customer.api.response.customer.StoreDataInfoResp;
 import com.vd.canary.obmp.customer.api.response.customer.vo.store.StoreLoopBannerVO;
 import lombok.extern.slf4j.Slf4j;
 
@@ -32,6 +32,9 @@ public class StoreLoopBannerMessageHandler extends BaseMessageHandler implements
     private ShopDataHandler shopDataHandler;
     @Autowired
     private HttpClientUtils httpClientUtils;
+    @Autowired
+    private DataFeignClient dataFeignClient;
+
     @Override
     public void handler(JSONObject data) {
         String type = data.getString("type");
@@ -46,8 +49,7 @@ public class StoreLoopBannerMessageHandler extends BaseMessageHandler implements
             String storeTemplateId = storeLoopBannerVO.getStoreTemplateId();
             StoreDataQueryReq storeDataQueryReq=new StoreDataQueryReq();
             storeDataQueryReq.setStoreTemplateId(storeTemplateId);
-            StoreDataInfoResp storeDataInfoResp = httpClientUtils.getStoreDataInfoResp(storeDataQueryReq);
-            ShopTO shopTO = shopDataHandler.assembleShopTo(storeDataInfoResp);
+            ShopTO shopTO = shopDataHandler.assembleShopTo(storeDataQueryReq);
             if(shopTO!=null) {
                 if (Constant.UPDATE.equals(type) || Constant.DELETE.equals(type)) {
                     shopESService.updateShop(shopTO);

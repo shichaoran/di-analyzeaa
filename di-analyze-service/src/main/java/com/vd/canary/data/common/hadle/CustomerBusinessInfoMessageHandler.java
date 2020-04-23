@@ -1,4 +1,4 @@
-package com.vd.canary.data.repository.es.hadle;
+package com.vd.canary.data.common.hadle;
 
 import java.util.Map;
 
@@ -6,9 +6,9 @@ import com.alibaba.fastjson.JSONObject;
 import com.vd.canary.data.common.es.model.ShopTO;
 import com.vd.canary.data.common.es.service.impl.ShopESServiceImpl;
 import com.vd.canary.data.util.HttpClientUtils;
+import com.vd.canary.obmp.customer.api.feign.data.DataFeignClient;
 import com.vd.canary.obmp.customer.api.request.customer.store.StoreDataQueryReq;
 import com.vd.canary.obmp.customer.api.response.agreement.CustomerInfoVO;
-import com.vd.canary.obmp.customer.api.response.customer.StoreDataInfoResp;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +24,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class CustomerBusinessInfoMessageHandler extends BaseMessageHandler implements BaseHandler {
     public final static String         DATA_BASE    = "obmp_customer";
-    public final static String         T_CAR = "customer_business_info";
+    public final static String         T_CAR = "customebusiness_info";
+
+    @Autowired
+    private DataFeignClient dataFeignClient;
 
     @Autowired
     private ShopESServiceImpl shopESService;
@@ -50,8 +53,7 @@ public class CustomerBusinessInfoMessageHandler extends BaseMessageHandler imple
             String shopId = (String)stringObjectMap.get("id");
             StoreDataQueryReq storeDataQueryReq=new StoreDataQueryReq();
             storeDataQueryReq.setStoreId(shopId);
-            StoreDataInfoResp storeDataInfoResp = httpClientUtils.getStoreDataInfoResp(storeDataQueryReq);
-            ShopTO shopTO = shopDataHandler.assembleShopTo(storeDataInfoResp);
+            ShopTO shopTO = shopDataHandler.assembleShopTo(storeDataQueryReq);
             if(shopTO!=null) {
                 if (type.equals("update") || type.equals("delete")) {
                     shopESService.updateShop(shopTO);
