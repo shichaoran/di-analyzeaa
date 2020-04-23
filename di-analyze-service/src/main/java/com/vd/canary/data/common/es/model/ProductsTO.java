@@ -36,11 +36,11 @@ public class ProductsTO implements Serializable {
     //sku副标题
     private String proSkuSubTitle;
     //后台三级分类id
-    private String threeCategoryId;
+    private String threeCategoryId;  // 该值没有实际意义，目前没有赋值
     //后台三级分类code
-    private String threeCategoryCode;
+    private String threeCategoryCode;  // 数组格式
     //后台三级分类
-    private String threeCategoryName;
+    private String threeCategoryName;  // 数组格式
     //供应商id
     private String skuSupplierId;
     //供应商名称
@@ -118,17 +118,17 @@ public class ProductsTO implements Serializable {
      * background_category表  后台类目
      */
     //后台一级分类id
-    private String oneCategoryId; // 写搜索缺失
+    private String oneCategoryId;  // 该值没有实际意义，目前没有赋值
     //后台一级分类code
-    private String oneCategoryCode; // 写搜索缺失
+    private String oneCategoryCode;  // 数组格式
     //后台一级分类
-    private String oneCategoryName; // 写搜索缺失
+    private String oneCategoryName;  // 数组格式
     //后台二级分类id
-    private String twoCategoryId; // 写搜索缺失
+    private String twoCategoryId;  // 该值没有实际意义，目前没有赋值
     //后台二级分类code
-    private String twoCategoryCode; // 写搜索缺失
+    private String twoCategoryCode;  // 数组格式
     //后台二级分类
-    private String twoCategoryName; // 写搜索缺失
+    private String twoCategoryName;  // 数组格式
 
     /**
      * brand_management表   品牌管理
@@ -154,23 +154,23 @@ public class ProductsTO implements Serializable {
      * category_relations前后台类目映射关系
      */
     //前台一级分类id
-    private String fOneCategoryId; // 需要测试
+    private String fOneCategoryId;  // 该值没有实际意义，目前没有赋值
     //前台一级分类code
-    private String fOneCategoryCode;// 需要测试
+    private String fOneCategoryCode; // 数组格式
     //前台一级分类
-    private String fOneCategoryName;// 需要测试
+    private String fOneCategoryName; // 数组格式
     //前台二级分类id
-    private String fTwoCategoryId;// 需要测试
+    private String fTwoCategoryId;  // 该值没有实际意义，目前没有赋值
     //前台二级分类code
-    private String fTwoCategoryCode;// 需要测试
+    private String fTwoCategoryCode;  // 数组格式
     //前台二级分类
-    private String fTwoCategoryName;// 需要测试
+    private String fTwoCategoryName;  // 数组格式
     //前台三级分类id
-    private String fThreeCategoryId;// 需要测试
+    private String fThreeCategoryId;  // 该值没有实际意义，目前没有赋值
     //前台三级分类code
-    private String fThreeCategoryCode;// 需要测试
+    private String fThreeCategoryCode;  // 数组格式
     //前台三级分类
-    private String fThreeCategoryName;// 需要测试
+    private String fThreeCategoryName;  // 数组格式
 
     /**
      * file_management表   文件管理

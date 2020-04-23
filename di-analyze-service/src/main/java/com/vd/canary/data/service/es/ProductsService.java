@@ -6,13 +6,12 @@ import com.vd.canary.data.api.request.es.ProductDetailsReq;
 import com.vd.canary.data.api.request.es.ProductsReq;
 import com.vd.canary.data.api.request.es.ThreeCategoryReq;
 import com.vd.canary.data.api.response.es.CategoryRes;
-import com.vd.canary.data.api.response.es.ProductDetailsRes;
+import com.vd.canary.data.api.response.es.ProductSpuResponse;
 import com.vd.canary.data.api.response.es.ProductsRes;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.validation.Valid;
 import java.io.IOException;
-import java.util.List;
 
 public interface ProductsService {
 
@@ -20,7 +19,7 @@ public interface ProductsService {
 
     ResponseBO<ProductsRes> getProductByCategory(@RequestBody @Valid ThreeCategoryReq threeCategoryReq) throws Exception;
 
-    ResponseBO<ProductDetailsRes>  getProductsDetail(@RequestBody @Valid ProductDetailsReq productDetailsReq) throws IOException;
+    ResponseBO<ProductSpuResponse>  getProductsDetail(@RequestBody @Valid ProductDetailsReq productDetailsReq) throws IOException;
 
     ResponseBO<CategoryRes> categoryRes(@RequestBody @Valid CategoryReq categoryReq);
 }
