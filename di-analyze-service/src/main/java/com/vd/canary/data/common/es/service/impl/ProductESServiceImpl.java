@@ -416,7 +416,7 @@ public class ProductESServiceImpl implements ProductESService {
                         builder.endObject();
                         builder.startObject("skuState"); { builder.field("type", "keyword"); }
                         builder.endObject();
-                        builder.startObject("proSkuSkuPicJson"); { builder.field("type", "keyword"); }
+                        builder.startObject("proSkuSkuPicJson"); { builder.field("type", "nested"); } // keyword
                         builder.endObject();
                         builder.startObject("skuValuationUnit"); { builder.field("type", "keyword"); }
                         builder.endObject();
@@ -444,7 +444,7 @@ public class ProductESServiceImpl implements ProductESService {
                         builder.endObject();
                         builder.startObject("attributeValueId"); { builder.field("type", "keyword"); }
                         builder.endObject();
-                        builder.startObject("attributeMap"); { builder.field("type", "object"); }
+                        builder.startObject("attributeMap"); { builder.field("type", "nested"); } // object
                         builder.endObject();
                         builder.startObject("attributeType"); { builder.field("type", "keyword"); }
                         builder.endObject();
@@ -500,7 +500,7 @@ public class ProductESServiceImpl implements ProductESService {
                         builder.endObject();
                         builder.startObject("regionalScope"); { builder.field("type", "keyword"); }
                         builder.endObject();
-                        builder.startObject("skuSellPriceJson"); { builder.field("type", "keyword"); }
+                        builder.startObject("skuSellPriceJson"); { builder.field("type", "nested"); } // keyword
                         builder.endObject();
                         builder.startObject("skuSellPriceType"); { builder.field("type", "keyword"); }
                         builder.endObject();
@@ -548,6 +548,15 @@ public class ProductESServiceImpl implements ProductESService {
                         builder.endObject();
                         builder.startObject("detailedAddress"); { builder.field("type", "keyword"); }
                         builder.endObject();
+                        builder.startObject("spuAttributeMap"); { builder.field("type", "nested"); } // keyword
+                        builder.endObject();
+                        builder.startObject("isGmProduct"); { builder.field("type", "keyword"); }
+                        builder.endObject();
+                        builder.startObject("isGmProduct"); { builder.field("type", "keyword"); }
+                        builder.endObject();
+                        builder.startObject("shelvesState"); { builder.field("type", "keyword"); }
+                        builder.endObject();
+
                     }
                     builder.endObject();
                 }

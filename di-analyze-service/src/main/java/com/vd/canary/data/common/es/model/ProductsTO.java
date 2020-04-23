@@ -270,6 +270,10 @@ public class ProductsTO implements Serializable {
      * }]
      *
      */
-    private String spuAttributeMap;   ///暂时还没加
+    private String spuAttributeMap;   // SPU 属性 暂时还没加
+
+    private String isGmProduct;  //是否钢贸商品
+
+    private String shelvesState;  // 上架状态 1 上架
 
 }

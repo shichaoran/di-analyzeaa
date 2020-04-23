@@ -15,7 +15,6 @@ import com.vd.canary.data.common.kafka.consumer.impl.ObmpProduct.ProductSku;
 import com.vd.canary.data.common.kafka.consumer.impl.ObmpProduct.SkuAttributeRelations;
 import com.vd.canary.data.common.kafka.consumer.impl.ObmpProduct.SkuSellingPrice;
 import com.vd.canary.data.common.kafka.consumer.impl.ObmpProduct.SkuWarehouseRelations;
-import com.vd.canary.data.common.kafka.consumer.impl.ObmpProduct.SpuAttributeRelations;
 import com.vd.canary.data.common.kafka.consumer.impl.ObmpProduct.StoreProductRelations;
 import lombok.extern.slf4j.Slf4j;
 
@@ -43,8 +42,7 @@ public class KafkaConsumerForES {
     private SkuWarehouseRelations skuWarehouseRelations;
     @Autowired
     private StoreProductRelations storeProductRelations;
-    @Autowired
-    private SpuAttributeRelations spuAttributeRelations;
+
 
 
     @Autowired
@@ -116,9 +114,7 @@ public class KafkaConsumerForES {
         case "obmp_product.store_product_relations":
             storeProductRelations.performES(msg);
             break;
-        //case "obmp_product.spu_attribute_relations":
-        //    spuAttributeRelations.performES(msg);
-        //    break;
+
         }
 
     }
