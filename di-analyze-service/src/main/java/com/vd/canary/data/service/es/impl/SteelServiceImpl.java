@@ -133,7 +133,7 @@ public class SteelServiceImpl implements SteelService {
 
                         if (array != null && array.size() > 0) {
                             for (int i=0;i<array.size();i++){
-                                if (array.getJSONObject(i).containsKey("attributeName") && array.getJSONObject(i).get("attributeType").equals("0") && array.getJSONObject(i).containsKey("attributeName")){
+                                if (array.getJSONObject(i).containsKey("attributeName") && array.getJSONObject(i).get("attributeType").equals("0") && array.getJSONObject(i).get("attributeName") != null){
                                     String attributeName =  array.getJSONObject(i).get("attributeName").toString();
                                     if (array.getJSONObject(i).containsKey("attributeValue")) {
                                         JSONArray arr = JSONObject.parseArray(array.getJSONObject(i).get("attributeValue").toString());
