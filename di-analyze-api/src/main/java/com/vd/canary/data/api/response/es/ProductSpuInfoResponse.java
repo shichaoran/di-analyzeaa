@@ -20,6 +20,8 @@ public class ProductSpuInfoResponse implements Serializable {
     private String spuName;
     private String spuPic;
     private String spuTitle;
+    //SPU属性
+    private String spuAttributeMapJson;
     private List<ProductSkuInfoVO> productSkuInfoVO;
 
 }

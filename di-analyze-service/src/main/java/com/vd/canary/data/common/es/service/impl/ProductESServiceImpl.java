@@ -175,16 +175,20 @@ public class ProductESServiceImpl implements ProductESService {
         return list;
     }
 
-//    public List<Map<String, Object>> findByIds(List<String> skuIdList) {
-//        List<Map<String, Object>> result = Lists.newArrayList();
-//        if(skuIdList == null || skuIdList.size() == 0){
-//            return result;
-//        }
-//        BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
-//        boolQuery.must(QueryBuilders.termsQuery("skuId", skuIdList));
-//        List<Map<String, Object>> list = ElasticsearchUtil.searchByQuery(indexName,boolQuery);
-//        return list;
-//    }
+    // 自定义Map参数查找，不分页, 目前只支持全must格式
+    public List<Map<String, Object>> boolQueryByCustomMap( Map<String,String> map) {
+        List<Map<String, Object>> result = Lists.newArrayList();
+        if(map == null ){
+            return result;
+        }
+        BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
+        Set<Map.Entry<String, String>> entries = map.entrySet();
+        for (Map.Entry<String, String> entry : entries) {
+            boolQuery.must(QueryBuilders.termQuery(entry.getKey(), entry.getValue() ));
+        }
+        List<Map<String, Object>> list = ElasticsearchUtil.searchByQuery(indexName,boolQuery);
+        return list;
+    }
 
     //通过一级类目 二级类目 三级类目 分页搜索数据 分页
     public ESPageRes boolQueryByDiffCategorys(Integer pageNumber, Integer pageSize, @Valid ThreeCategoryReq req) {
@@ -217,8 +221,27 @@ public class ProductESServiceImpl implements ProductESService {
     }
 
 
+    // 商详页数据展示
+    public List<Map<String, Object>> boolQueryForProductDetail(ProductDetailsReq req) {
+        List<Map<String, Object>> result = Lists.newArrayList();
+        if(req == null && req.getStoreId() == null && req.getSpuId() == null ){
+            return result;
+        }
+        BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
+        if (StringUtils.isNotBlank(req.getStoreId())){
+            boolQuery.must(QueryBuilders.termsQuery("storeId", req.getStoreId()));
+        }
+        if(StringUtils.isNotBlank(req.getSpuId())){
+            boolQuery.must(QueryBuilders.termsQuery("proSkuSpuId", req.getSpuId()));
+        }
+        if(StringUtils.isNotBlank(req.getSkuId())){
+            boolQuery.must(QueryBuilders.termsQuery("skuId", req.getSkuId()));
+        }
+        List<Map<String, Object>> list = ElasticsearchUtil.searchByQuery(indexName,boolQuery);
+        return list;
+    }
 
-
+    // 商城首页 钢筑采 频道搜索入口
     public ESPageRes boolQueryByKeyword(Integer pageNumber, Integer pageSize, SteelReq req) {
         if (req == null) {
             List<Map<String, Object>> recordList = new ArrayList<>();
@@ -343,26 +366,6 @@ public class ProductESServiceImpl implements ProductESService {
             return esPageRes;
         }
 
-    }
-
-    // 商详页数据展示
-    public List<Map<String, Object>> boolQueryForProductDetail(ProductDetailsReq req) {
-        List<Map<String, Object>> result = Lists.newArrayList();
-        if(req == null && req.getStoreId() == null && req.getSpuId() == null ){
-            return result;
-        }
-        BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
-        if (StringUtils.isNotBlank(req.getStoreId())){
-            boolQuery.must(QueryBuilders.termsQuery("storeId", req.getStoreId()));
-        }
-        if(StringUtils.isNotBlank(req.getSpuId())){
-            boolQuery.must(QueryBuilders.termsQuery("proSkuSpuId", req.getSpuId()));
-        }
-        if(StringUtils.isNotBlank(req.getSkuId())){
-            boolQuery.must(QueryBuilders.termsQuery("skuId", req.getSkuId()));
-        }
-        List<Map<String, Object>> list = ElasticsearchUtil.searchByQuery(indexName,boolQuery);
-        return list;
     }
 
     /**

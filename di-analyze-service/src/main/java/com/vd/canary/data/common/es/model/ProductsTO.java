@@ -261,4 +261,15 @@ public class ProductsTO implements Serializable {
     private String detailedAddress;// 写搜索缺失
 
 
+    /**
+     * [{
+     *    "attributeType": "1",
+     *    "attributeId": "1252129898609266689",
+     *    "attributeName": "颜色",
+     *    "attributeValue": [{"attributeValueId":"1252129898630238210","attributeValueName":"红"},{"attributeValueId":"1252129898651209730","attributeValueName":"蓝"}]
+     * }]
+     *
+     */
+    private String spuAttributeMap;   ///暂时还没加
+
 }
