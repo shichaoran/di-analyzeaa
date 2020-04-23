@@ -220,7 +220,6 @@ public class ProductESServiceImpl implements ProductESService {
         return esPageRes;
     }
 
-
     // 商详页数据展示
     public List<Map<String, Object>> boolQueryForProductDetail(ProductDetailsReq req) {
         List<Map<String, Object>> result = Lists.newArrayList();
@@ -296,6 +295,19 @@ public class ProductESServiceImpl implements ProductESService {
 
         ESPageRes esPageRes = ElasticsearchUtil.searchDataPage(indexName, pageNumber, pageSize, boolQuery, fields, sortField, sortTpye, highlightField);
         return esPageRes;
+    }
+
+    // 关键菜搜索时是否能精准匹配到店铺
+    public List<Map<String, Object>> boolQueryByExistsShopKeyword(ProductsReq req) {
+        if(req == null || req.getKey() == null){
+            return null;
+        }
+        BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
+        if (StringUtils.isNotBlank(req.getKey())){
+            boolQuery.must(QueryBuilders.wildcardQuery("storeName.keyword", "*"+req.getKey()+"*"));
+        }
+        List<Map<String, Object>> list = ElasticsearchUtil.searchByQuery(indexName,boolQuery);
+        return list;
     }
 
     /**
@@ -404,8 +416,8 @@ public class ProductESServiceImpl implements ProductESService {
                         builder.endObject();
                         builder.startObject("proSkuSubTitle"); { builder.field("type", "text").field("analyzer", "ik_max_word").field("search_analyzer", "ik_smart"); }
                         builder.endObject();
-                        builder.startObject("threeCategoryId"); { builder.field("type", "keyword"); }
-                        builder.endObject();
+                        //builder.startObject("threeCategoryId"); { builder.field("type", "keyword"); }
+                        //builder.endObject();
                         builder.startObject("threeCategoryCode"); { builder.field("type", "keyword"); }
                         builder.endObject();
                         builder.startObject("threeCategoryName"); { builder.field("type", "keyword"); }
@@ -434,28 +446,29 @@ public class ProductESServiceImpl implements ProductESService {
                         builder.endObject();
                         builder.startObject("spuTitle"); { builder.field("type", "text").field("analyzer", "ik_max_word").field("search_analyzer", "ik_smart"); }
                         builder.endObject();
-                        builder.startObject("attributeCode"); { builder.field("type", "keyword"); }
-                        builder.endObject();
-                        builder.startObject("attributeName"); { builder.field("type", "text").field("analyzer", "ik_max_word").field("search_analyzer", "ik_smart"); }
-                        builder.endObject();
-                        builder.startObject("value_Name"); { builder.field("type", "keyword"); }
-                        builder.endObject();
-                        builder.startObject("attributeId"); { builder.field("type", "keyword"); }
-                        builder.endObject();
-                        builder.startObject("attributeValueId"); { builder.field("type", "keyword"); }
-                        builder.endObject();
+                        //builder.startObject("attributeCode"); { builder.field("type", "keyword"); }
+                        //builder.endObject();
+                        //builder.startObject("attributeName"); { builder.field("type", "text").field("analyzer", "ik_max_word")
+                        // .field("search_analyzer", "ik_smart"); }
+                        //builder.endObject();
+                        //builder.startObject("value_Name"); { builder.field("type", "keyword"); }
+                        //builder.endObject();
+                        //builder.startObject("attributeId"); { builder.field("type", "keyword"); }
+                        //builder.endObject();
+                        //builder.startObject("attributeValueId"); { builder.field("type", "keyword"); }
+                        //builder.endObject();
                         builder.startObject("attributeMap"); { builder.field("type", "nested"); } // object
                         builder.endObject();
-                        builder.startObject("attributeType"); { builder.field("type", "keyword"); }
-                        builder.endObject();
-                        builder.startObject("oneCategoryId"); { builder.field("type", "keyword"); }
-                        builder.endObject();
+                        //builder.startObject("attributeType"); { builder.field("type", "keyword"); }
+                        //builder.endObject();
+                        //builder.startObject("oneCategoryId"); { builder.field("type", "keyword"); }
+                        //builder.endObject();
                         builder.startObject("oneCategoryCode"); { builder.field("type", "keyword"); }
                         builder.endObject();
                         builder.startObject("oneCategoryName"); { builder.field("type", "keyword"); }
                         builder.endObject();
-                        builder.startObject("twoCategoryId"); { builder.field("type", "keyword"); }
-                        builder.endObject();
+                        //builder.startObject("twoCategoryId"); { builder.field("type", "keyword"); }
+                        //builder.endObject();
                         builder.startObject("twoCategoryCode"); { builder.field("type", "keyword"); }
                         builder.endObject();
                         builder.startObject("twoCategoryName"); { builder.field("type", "keyword"); }

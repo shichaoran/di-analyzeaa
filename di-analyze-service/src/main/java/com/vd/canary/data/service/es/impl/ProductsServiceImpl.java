@@ -41,6 +41,15 @@ public class ProductsServiceImpl implements ProductsService {
         ResponseBO<ProductsRes> res = new ResponseBO<ProductsRes>();
         ProductsRes productsRes = new ProductsRes();
         log.info("getProductsByKey,productsReq:" + JSONObject.toJSON(productsReq).toString());
+        // 搜索是否能精准定位到店铺
+        List<Map<String, Object>> existsShop = productESServiceImpl.boolQueryByExistsShopKeyword(productsReq);
+        if(existsShop != null){
+
+            //productsRes.setExistsShop()
+            //existsShop
+        }
+
+        // 商品关键字搜索
         ESPageRes esPageRes = productESServiceImpl.boolQueryByKeyword(productsReq.getPageNum(), productsReq.getPageSize(), productsReq);
         if (esPageRes!=null) {
             List<Map<String, Object>> recordList = esPageRes.getRecordList();
