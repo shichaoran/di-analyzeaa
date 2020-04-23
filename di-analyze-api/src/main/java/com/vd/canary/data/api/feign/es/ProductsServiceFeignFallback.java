@@ -4,7 +4,7 @@ import com.vd.canary.core.bo.ResponseBO;
 import com.vd.canary.core.exception.BusinessException;
 import com.vd.canary.data.api.request.es.*;
 import com.vd.canary.data.api.response.es.CategoryRes;
-import com.vd.canary.data.api.response.es.ProductSpuResponse;
+import com.vd.canary.data.api.response.es.ProductSpuInfoResponse;
 import com.vd.canary.data.api.response.es.ProductsRes;
 import feign.hystrix.FallbackFactory;
 
@@ -30,7 +30,7 @@ public class ProductsServiceFeignFallback implements FallbackFactory<ProductsSer
 
 
             @Override
-            public ResponseBO<ProductSpuResponse> getProductsDetail(@Valid ProductDetailsReq productDetailsReq) {
+            public ResponseBO<ProductSpuInfoResponse> getProductsDetail(@Valid ProductDetailsReq productDetailsReq) {
                 throw new BusinessException(FEIGN_EXCEPTION).append(e.getMessage());
             }
 

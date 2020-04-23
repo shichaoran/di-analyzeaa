@@ -19,7 +19,7 @@ import lombok.experimental.Accessors;
 @Setter
 @ToString
 @Accessors(chain = true)
-public class ProductSkuVO implements Serializable {
+public class ProductSkuInfoVO implements Serializable {
 
     //skuid
     private String skuId;

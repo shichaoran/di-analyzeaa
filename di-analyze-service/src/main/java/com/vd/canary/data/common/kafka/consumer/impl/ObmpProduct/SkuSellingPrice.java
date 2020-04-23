@@ -3,6 +3,7 @@ package com.vd.canary.data.common.kafka.consumer.impl.ObmpProduct;
 import com.alibaba.fastjson.JSON;
 import com.vd.canary.data.common.es.model.ProductsTO;
 import com.vd.canary.data.common.es.service.impl.ProductESServiceImpl;
+import com.vd.canary.data.common.es.service.impl.ShopESServiceImpl;
 import com.vd.canary.data.common.kafka.consumer.impl.Function;
 import com.vd.canary.utils.JSONUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +24,8 @@ public class SkuSellingPrice implements Function {
     @Autowired
     private ProductESServiceImpl productESServiceImplTemp;
 
+    @Autowired
+    public ShopESServiceImpl shopESService;
 
     @Override
     public void performES(String msg) {
@@ -34,6 +37,7 @@ public class SkuSellingPrice implements Function {
         HashMap hashMap = JSON.parseObject(msg, HashMap.class);
         String type = (String) hashMap.get("type");
         String skuid = null;
+        String storeId = null;
         HashMap<String,Object> binlogMap = null;
         if(hashMap.containsKey("info")){
             binlogMap = JSON.parseObject(hashMap.get("info").toString(), HashMap.class);
@@ -44,6 +48,7 @@ public class SkuSellingPrice implements Function {
                 skuid = binlogMap.get("sku_id").toString();
                 try {
                     Map<String, Object> esMap = productESServiceImplTemp.findById(skuid);
+                    storeId = esMap.get(storeId).toString();
                     log.info("SkuSellingPrice.performES,brand_id.esMap={}.", JSONUtil.toJSON(esMap).toJSONString());
                     if(esMap != null){
                         Map<String, Object> resjson = reSetValue(esMap, binlogMap);
@@ -55,6 +60,8 @@ public class SkuSellingPrice implements Function {
             }
         }
 
+        // 商品新增后同步店铺索引中的字段：businessCategory businessBrand skuPrice ...
+        updateShopIndexProduct(skuid,storeId);
     }
 
     public Map<String, Object> reSetValue(Map<String, Object> esMap,Map<String,Object> binlogMap){
@@ -64,7 +71,19 @@ public class SkuSellingPrice implements Function {
         return esMap;
     }
 
+    public void updateShopIndexProduct(String skuid,String storeId){
+        if(skuid == null || storeId == null){
+            return;
+        }
+        //Map<String, Object> findById
+        try {
+            Map<String, Object> esShopMap = shopESService.findById(storeId);
 
+            shopESService.updateShop(esShopMap);
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 
 }

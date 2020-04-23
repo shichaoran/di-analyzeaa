@@ -4,7 +4,7 @@ import com.vd.canary.core.api.Feign;
 import com.vd.canary.core.bo.ResponseBO;
 import com.vd.canary.data.api.request.es.*;
 import com.vd.canary.data.api.response.es.CategoryRes;
-import com.vd.canary.data.api.response.es.ProductSpuResponse;
+import com.vd.canary.data.api.response.es.ProductSpuInfoResponse;
 import com.vd.canary.data.api.response.es.ProductsRes;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -35,7 +35,7 @@ public interface ProductsServiceFeign extends Feign {
      * 商品详情页
      */
     @PostMapping("/data/products/getProductDetail")
-    ResponseBO<ProductSpuResponse> getProductsDetail(@RequestBody @Valid ProductDetailsReq productDetailsReq);
+    ResponseBO<ProductSpuInfoResponse> getProductsDetail(@RequestBody @Valid ProductDetailsReq productDetailsReq);
 
     /**
      * 根据一级目录、二级目录和三级目录名称返回商品列表
