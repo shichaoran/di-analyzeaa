@@ -103,16 +103,51 @@ public class ProductsServiceImpl implements ProductsService {
 
                     productDetailResList.add(productsDetailRes);
 
+                    categorys.put(recordMap.containsKey("fOneCategoryCode") ? recordMap.get("fOneCategoryCode").toString() : "", recordMap.containsKey("fOneCategoryName") ? recordMap.get("fOneCategoryName").toString() : "");
                     categorys.put(recordMap.containsKey("fThreeCategoryCode") ? recordMap.get("fThreeCategoryCode").toString() : "", recordMap.containsKey("fThreeCategoryName") ? recordMap.get("fThreeCategoryName").toString() : "");
+                    categorys.put(recordMap.containsKey("fTwoCategoryCode") ? recordMap.get("fTwoCategoryCode").toString() : "", recordMap.containsKey("fTwoCategoryName") ? recordMap.get("fTwoCategoryName").toString() : "");
                     brands.put(recordMap.containsKey("proSkuBrandId") ? recordMap.get("proSkuBrandId").toString() : "", recordMap.containsKey("bBrandName") ? recordMap.get("bBrandName").toString() : "");
-                    if (attributes.containsKey(recordMap.containsKey("attributeName") ? recordMap.get("attributeName").toString() : "")) {
+
+                    if(recordMap.containsKey("attributeMap")){
+                        productsDetailRes.setAttributeMapJson(recordMap.get("attributeMap").toString());
+                        JSONArray array = JSONObject.parseArray(recordMap.get("attributeMap").toString());
+
+                        if (array != null && array.size() > 0) {
+                            for (int i=0;i<array.size();i++){
+                                if (array.getJSONObject(i).containsKey("attributeName") && array.getJSONObject(i).get("attributeType").equals("0") && array.getJSONObject(i).get("attributeName") != null){
+                                    String attributeName =  array.getJSONObject(i).get("attributeName").toString();
+                                    if (array.getJSONObject(i).containsKey("attributeValue")) {
+                                        JSONArray arr = JSONObject.parseArray(array.getJSONObject(i).get("attributeValue").toString());
+                                        if (arr != null && arr.size() > 0) {
+                                            for (int j = 0; j < arr.size(); j++) {
+                                                Map map = new HashMap();
+                                                if (arr.getJSONObject(j).containsKey("attributeValueId")) {
+                                                    String attributeValueId = arr.getJSONObject(j).get("attributeValueId").toString();
+                                                    if (arr.getJSONObject(j).containsKey("attributeValueName") ) {
+                                                        String attributeValueName = arr.getJSONObject(j).get("attributeValueName").toString();
+                                                        map.put(attributeValueId, attributeValueName);
+                                                        attributes.put(attributeName, map);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    /*if (attributes.containsKey(recordMap.containsKey("attributeName") ? recordMap.get("attributeName").toString() : "")) {
                         Map<String, String> mapt = attributes.get(recordMap.containsKey("attributeName") ? recordMap.get("attributeName").toString() : "");
                         mapt.put(recordMap.containsKey("attributeValueId") ? recordMap.get("attributeValueId").toString() : "", recordMap.containsKey("value_Name") ? recordMap.get("value_Name").toString() : "");
                     } else {
                         Map<String, String> mapt = new HashMap<>();
                         mapt.put(recordMap.containsKey("attributeValueId") ? recordMap.get("attributeValueId").toString() : "", recordMap.containsKey("value_Name") ? recordMap.get("value_Name").toString() : "");
                         attributes.put(recordMap.containsKey("attributeName") ? recordMap.get("attributeName").toString() : "", mapt);
-                    }
+                    }*/
+
+
+
+
                     productsDetailRes.setSkuAuxiliaryUnit(recordMap.containsKey("skuAuxiliaryUnit") ? recordMap.get("skuAuxiliaryUnit").toString() : "");
                     productsDetailRes.setSkuName(recordMap.containsKey("proSkuSkuName")?recordMap.get("proSkuSkuName").toString() : "");
                 }
