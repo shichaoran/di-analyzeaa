@@ -268,17 +268,17 @@ public class ProductESServiceImpl implements ProductESService {
         if (req.getSpuNames() != null && req.getSpuNames().size() > 0) {//spu名称
             boolQuery.must(QueryBuilders.termsQuery("proSkuSpuName", req.getSpuNames()));
         }
-        if (req.getBBrandName() != null && req.getBBrandName().size() > 0) {//品牌
-            boolQuery.must(QueryBuilders.termsQuery("proSkuBrandName", req.getBBrandName()));
+        if (req.getBBrandNames() != null && req.getBBrandNames().size() > 0) {//品牌
+            boolQuery.must(QueryBuilders.termsQuery("proSkuBrandName", req.getBBrandNames()));
         }
-        if (req.getFThreeCategoryName() != null) {//三级分类
-            boolQuery.must(QueryBuilders.termsQuery("fThreeCategoryName", req.getFThreeCategoryName()));
+        if (req.getThreeCategoryNameF() != null) {//三级分类
+            boolQuery.must(QueryBuilders.termsQuery("fThreeCategoryName", req.getThreeCategoryNameF()));
         }
-        if (req.getFTwoCategoryName() != null) {//二级分类
-            boolQuery.must(QueryBuilders.termsQuery("fTwoCategoryName", req.getFTwoCategoryName()));
+        if (req.getTwoCategoryNameF() != null) {//二级分类
+            boolQuery.must(QueryBuilders.termsQuery("fTwoCategoryName", req.getTwoCategoryNameF()));
         }
-        if (req.getFOneCategoryName() != null) {//一级分类
-            boolQuery.must(QueryBuilders.termsQuery("fOneCategoryName", req.getFOneCategoryName()));
+        if (req.getOneCategoryNameF() != null) {//一级分类
+            boolQuery.must(QueryBuilders.termsQuery("fOneCategoryName", req.getOneCategoryNameF()));
         }
         if (req.getSkuRegionalName() != null) { //供货区域
             boolQuery.must(QueryBuilders.termsQuery("regionalName", req.getSkuRegionalName()));
