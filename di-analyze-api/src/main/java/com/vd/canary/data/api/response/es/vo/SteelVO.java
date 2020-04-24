@@ -26,7 +26,8 @@ public class SteelVO implements Serializable {
     //spuname
     private String spuName;
     //属性
-    private String attributeMapJson ;
+//    private String attributeMapJson ;
+    private Map<String,Map<String,String>> skuAttributes;
     //skuid
     private String skuID;
     //skuname
@@ -46,4 +47,6 @@ public class SteelVO implements Serializable {
     private String fThreeCategoryCode;
     //三级类目名称
     private String fThreeCategoryName;
+    //品牌
+    private String brand;
 }
