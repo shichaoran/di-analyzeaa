@@ -27,7 +27,7 @@ public class SteelReq extends RequestPageBO {
     /**
      * 品牌
      */
-    private List<String> bBrandNames;
+    private List<String> bBrandName;
 
 
 

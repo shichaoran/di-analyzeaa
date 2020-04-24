@@ -266,10 +266,10 @@ public class ProductESServiceImpl implements ProductESService {
         }
 
         if (req.getSpuNames() != null && req.getSpuNames().size() > 0) {//spu名称
-            boolQuery.must(QueryBuilders.termsQuery("proSkuSpuName", req.getSpuNames()));
+            boolQuery.must(QueryBuilders.termsQuery("proSkuSpuNames", req.getSpuNames()));
         }
-        if (req.getBBrandNames() != null && req.getBBrandNames().size() > 0) {//品牌
-            boolQuery.must(QueryBuilders.termsQuery("proSkuBrandName", req.getBBrandNames()));
+        if (req.getBBrandName() != null && req.getBBrandName().size() > 0) {//品牌
+            boolQuery.must(QueryBuilders.termsQuery("proSkuBrandName", req.getBBrandName()));
         }
         if (req.getThreeCategoryNameF() != null) {//三级分类
             boolQuery.must(QueryBuilders.termsQuery("fThreeCategoryName", req.getThreeCategoryNameF()));
