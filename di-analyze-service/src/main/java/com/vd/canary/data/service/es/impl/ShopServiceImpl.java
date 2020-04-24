@@ -2,6 +2,7 @@ package com.vd.canary.data.service.es.impl;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -124,7 +125,10 @@ public class ShopServiceImpl implements ShopService {
                 String jsonString = JSON.toJSONString(stringObjectMap);
                 ShopVo shopVo = JSON.parseObject(jsonString, ShopVo.class);
                 if (stringObjectMap.containsKey("boothScheduledTime")) {
-                    shopVo.setBoothScheduledTime(LocalDateTime.parse(stringObjectMap.get("boothScheduledTime").toString()));
+                    LocalDateTime t = LocalDateTime.parse(stringObjectMap.get("boothScheduledTime").toString(),
+                                                          DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+
+                    shopVo.setBoothScheduledTime(t);
                 }
                 Object businessBrand = stringObjectMap.get("businessBrand");
                 if(ObjectUtil.isNotEmpty(businessBrand)){
