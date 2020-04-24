@@ -7,8 +7,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.vd.canary.data.common.es.model.ShopTO;
 import com.vd.canary.data.common.es.service.impl.ShopESServiceImpl;
 import com.vd.canary.data.constants.Constant;
-import com.vd.canary.data.util.HttpClientUtils;
-import com.vd.canary.obmp.customer.api.feign.data.DataFeignClient;
 import com.vd.canary.obmp.customer.api.request.customer.store.StoreDataQueryReq;
 import com.vd.canary.obmp.customer.api.response.agreement.AgreementVO;
 import lombok.extern.slf4j.Slf4j;
@@ -28,16 +26,13 @@ public class ProtocolAgreementMessageHandler extends BaseMessageHandler implemen
 
     public final static String         DATA_BASE    = "obmp_customer";
     public final static String         T_CAR = "protocol_agreement";
-    @Autowired
-    private DataFeignClient dataFeignClient;
 
     @Autowired
     private ShopESServiceImpl shopESService;
 
     @Autowired
     private ShopDataHandler shopDataHandler;
-    @Autowired
-    private HttpClientUtils httpClientUtils;
+
     @Override
     public void handler(JSONObject data) {
         String type = data.getString("type");
@@ -56,7 +51,7 @@ public class ProtocolAgreementMessageHandler extends BaseMessageHandler implemen
             storeDataQueryReq.setStoreId(shopId);
             ShopTO shopTO = shopDataHandler.assembleShopTo(storeDataQueryReq);
             if(shopTO!=null){
-                if(Constant.UPDATE.equals(type) || Constant.DELETE.equals(type)){
+                if(Constant.UPDATE.equals(type)){
                     shopESService.updateShop(shopTO);
                 }
             }

@@ -7,23 +7,23 @@ import com.vd.canary.data.common.es.model.ShopTO;
 import com.vd.canary.data.common.es.service.impl.ShopESServiceImpl;
 import com.vd.canary.data.constants.Constant;
 import com.vd.canary.obmp.customer.api.request.customer.store.StoreDataQueryReq;
-import com.vd.canary.obmp.customer.api.response.customer.vo.CustomerBusinessInfoVO;
+import com.vd.canary.obmp.customer.api.response.customer.vo.CustomerProfilesVO;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
- * @program: di-analyze->CustomerBusinessInfoHandler
+ * @program: di-analyze->CustomerProfilesMessageHandler
  * @description:
  * @author: zcy
- * @create: 2020-04-22 13:10
+ * @create: 2020-04-24 21:31
  **/
 @Slf4j
 @Component
-public class CustomerBusinessInfoMessageHandler extends BaseMessageHandler implements BaseHandler {
+public class CustomerProfilesMessageHandler extends BaseMessageHandler implements BaseHandler {
     public final static String         DATA_BASE    = "obmp_customer";
-    public final static String         T_CAR = "customebusiness_info";
+    public final static String         T_CAR = "customer_profiles";
 
 
 
@@ -37,15 +37,15 @@ public class CustomerBusinessInfoMessageHandler extends BaseMessageHandler imple
     @Override
     public void handler(JSONObject data) {
         String type = data.getString("type");
-        CustomerBusinessInfoVO customerBusinessInfoVO=null;
+        CustomerProfilesVO customerProfilesVO=null;
         long curTime = System.currentTimeMillis();
         try {
-            customerBusinessInfoVO = getRawData(data, DATA_BASE, T_CAR, CustomerBusinessInfoVO.class);
-            if(customerBusinessInfoVO==null){
+            customerProfilesVO = getRawData(data, DATA_BASE, T_CAR, CustomerProfilesVO.class);
+            if(customerProfilesVO==null){
                 return;
             }
-            log.info("处理客户经营信息：customerBusinessInfoVO="+customerBusinessInfoVO);
-            String customerId = customerBusinessInfoVO.getCustomerId();
+            log.info("处理客户档案信息：customerProfilesVO="+customerProfilesVO);
+            String customerId = customerProfilesVO.getId();
             Map<String, Object> stringObjectMap = shopESService.boolQueryByCustomerId(customerId);
             String shopId = (String)stringObjectMap.get("id");
             StoreDataQueryReq storeDataQueryReq=new StoreDataQueryReq();
@@ -57,11 +57,9 @@ public class CustomerBusinessInfoMessageHandler extends BaseMessageHandler imple
                 }
             }
         } catch (Exception e) {
-            log.error("处理客户经营信息{}data=" + data + ",customerBusinessInfoVO=" + customerBusinessInfoVO, e);
+            log.error("处理客户档案信息{}data=" + data + ",customerProfilesVO=" + customerProfilesVO, e);
         }finally {
-            log.info("CustomerBusinessInfoMessageHandler--处理客户经营信息cost-time:{}",System.currentTimeMillis()-curTime);
+            log.info("CustomerProfilesMessageHandler--处理客户档案信息cost-time:{}",System.currentTimeMillis()-curTime);
         }
     }
-
-
 }

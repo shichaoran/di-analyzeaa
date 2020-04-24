@@ -5,8 +5,6 @@ import com.vd.canary.data.common.es.model.ShopTO;
 import com.vd.canary.data.common.es.service.impl.ShopESServiceImpl;
 import com.vd.canary.data.constants.Constant;
 import com.vd.canary.data.repository.es.dto.StoreInfoDTO;
-import com.vd.canary.data.util.HttpClientUtils;
-import com.vd.canary.obmp.customer.api.feign.data.DataFeignClient;
 import com.vd.canary.obmp.customer.api.request.customer.store.StoreDataQueryReq;
 import lombok.extern.slf4j.Slf4j;
 
@@ -31,10 +29,7 @@ public class StoreInfoMessageHandler extends BaseMessageHandler implements BaseH
 
     @Autowired
     private ShopDataHandler shopDataHandler;
-    @Autowired
-    private HttpClientUtils httpClientUtils;
-    @Autowired
-    private DataFeignClient dataFeignClient;
+
 
     @Override
     public void handler(JSONObject data) {

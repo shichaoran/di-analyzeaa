@@ -14,6 +14,7 @@ import com.vd.canary.obmp.customer.api.request.customer.store.StoreDataQueryReq;
 import com.vd.canary.obmp.customer.api.response.agreement.AgreementVO;
 import com.vd.canary.obmp.customer.api.response.customer.StoreDataInfoResp;
 import com.vd.canary.obmp.customer.api.response.customer.vo.CustomerBusinessInfoVO;
+import com.vd.canary.obmp.customer.api.response.customer.vo.CustomerProfilesVO;
 import com.vd.canary.obmp.customer.api.response.customer.vo.store.StoreInfoVO;
 import com.vd.canary.obmp.customer.api.response.customer.vo.store.StoreLoopBannerVO;
 import com.vd.canary.obmp.customer.api.response.customer.vo.store.StoreMediaVO;
@@ -62,6 +63,7 @@ public class ShopDataHandler {
             List<StoreLoopBannerVO> storeLoopBannerVOs = storeDataInfoResp.getStoreLoopBannerVO();
             StoreMediaVO storeMediaVO = storeDataInfoResp.getStoreMediaVO();
             StoreTemplateVO storeTemplateVO = storeDataInfoResp.getStoreTemplateVO();
+            CustomerProfilesVO customerProfilesVO = storeDataInfoResp.getCustomerProfilesVO();
             if(storeInfoVO!=null){
                 shopTO.setId(storeInfoVO.getId());
                 shopTO.setName(storeInfoVO.getName());
@@ -100,6 +102,9 @@ public class ShopDataHandler {
             }
             if(ObjectUtil.isNotEmpty(storeMediaVO)){
                 shopTO.setMediaUrl(storeMediaVO.getMediaUrl());
+            }
+            if(ObjectUtil.isNotEmpty(customerProfilesVO)){
+                shopTO.setLogoImageUrl(customerProfilesVO.getLogoImageUrl());
             }
         } catch (Exception e) {
             e.printStackTrace();
