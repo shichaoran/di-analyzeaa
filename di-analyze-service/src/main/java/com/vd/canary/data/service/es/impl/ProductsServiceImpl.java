@@ -43,6 +43,7 @@ public class ProductsServiceImpl implements ProductsService {
         ProductsRes productsRes = new ProductsRes();
         log.info("getProductsByKey,productsReq:" + JSONObject.toJSON(productsReq).toString());
         ESPageRes esPageRes = null;
+        boolean existsShopFlag = false;
         // 搜索是否能精准定位到店铺
         List<Map<String, Object>> existsShop = productESServiceImpl.boolQueryByExistsShopKeyword(productsReq);
         if(existsShop != null && existsShop.size() == 1){
@@ -58,11 +59,14 @@ public class ProductsServiceImpl implements ProductsService {
 
             if( existsShopMap.containsKey("storeId") && existsShopMap.get("storeId") != null ) esPageRes =
                     productESServiceImpl.allProductByStoreId(productsReq.getPageNum(), productsReq.getPageSize(),existsShopMap.get("storeId").toString());
-
+            existsShopFlag = true;
         }
 
-        // 商品关键字搜索
-        esPageRes = productESServiceImpl.boolQueryByKeyword(productsReq.getPageNum(), productsReq.getPageSize(), productsReq);
+        if (!existsShopFlag){
+            // 商品关键字搜索
+            esPageRes = productESServiceImpl.boolQueryByKeyword(productsReq.getPageNum(), productsReq.getPageSize(), productsReq);
+        }
+
         if (esPageRes!=null) {
             List<Map<String, Object>> recordList = esPageRes.getRecordList();
             if (recordList != null && recordList.size() > 0) {

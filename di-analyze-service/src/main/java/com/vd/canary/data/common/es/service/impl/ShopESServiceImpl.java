@@ -39,10 +39,10 @@ import org.springframework.stereotype.Service;
 public class ShopESServiceImpl implements ShopESService {
 
     // 索引
-    private String indexName="shopindex";
+    private String indexName="shopindex_test";
 
     //类型
-    private String esType="shoptype";
+    private String esType="shoptype_test";
 
     // 创建索引
     public String createIndex() {

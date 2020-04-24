@@ -39,10 +39,10 @@ import org.springframework.stereotype.Service;
 public class ProductESServiceImpl implements ProductESService {
 
     // 索引
-    private String indexName = "productindex_dev";
+    private String indexName = "productindex_test";
 
     //类型
-    private String esType = "producttype_dev";
+    private String esType = "producttype_test";
 
     // 创建索引
     public String createIndex() {
@@ -266,7 +266,7 @@ public class ProductESServiceImpl implements ProductESService {
         }
 
         if (req.getSpuNames() != null && req.getSpuNames().size() > 0) {//spu名称
-            boolQuery.must(QueryBuilders.termsQuery("proSkuSpuNames", req.getSpuNames()));
+            boolQuery.must(QueryBuilders.termsQuery("proSkuSpuName", req.getSpuNames()));
         }
         if (req.getBBrandName() != null && req.getBBrandName().size() > 0) {//品牌
             boolQuery.must(QueryBuilders.termsQuery("proSkuBrandName", req.getBBrandName()));
