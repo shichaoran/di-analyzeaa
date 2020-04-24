@@ -63,8 +63,9 @@ public class StoreProductRelations implements Function {
             esMap.put("storeId",binlogMap.get("store_id"));
             try {
                 Map<String, Object> shopEsRes = shopESServiceImpl.findById(binlogMap.get("store_id").toString());
-                log.info("StoreProductRelations.performES,reSetValue.shopEsRes={}.", JSONUtil.toJSON(shopEsRes).toJSONString());
+
                 if(shopEsRes != null){
+                    log.info("StoreProductRelations.performES,reSetValue.shopEsRes={}.", JSONUtil.toJSON(shopEsRes).toJSONString());
                     esMap.put("storeId",shopEsRes.get("id"));
                     esMap.put("categoryId",""); // 暂时不好处理
                     esMap.put("storeName",shopEsRes.get("name"));
