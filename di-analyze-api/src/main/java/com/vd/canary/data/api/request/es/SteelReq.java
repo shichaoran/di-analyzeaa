@@ -21,9 +21,16 @@ public class SteelReq extends RequestPageBO {
      * 商品二级目录
      * 商品三级目录
      */
-    private String OneCategoryNameF;
-    private String TwoCategoryNameF;
-    private String ThreeCategoryNameF;
+    //private String OneCategoryNameF;
+    //private String TwoCategoryNameF;
+    //private String ThreeCategoryNameF;
+    private String oneFrontCategory;
+
+    private String twoFrontCategory;
+
+    private String threeFrontCategory;
+
+
     /**
      * 品牌
      */

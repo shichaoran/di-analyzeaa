@@ -20,7 +20,7 @@ import javax.validation.Valid;
 
 
 @FeignClient(value = "canary-dataanalyze",
-        contextId = "productsFeign",
+        contextId = "steelFeign",
         decode404 = true,
         fallbackFactory = SteelServiceFeignFallback.class)
 public interface SteelServiceFeign extends Feign {

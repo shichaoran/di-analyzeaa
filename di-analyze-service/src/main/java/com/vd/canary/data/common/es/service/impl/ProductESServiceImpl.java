@@ -271,14 +271,14 @@ public class ProductESServiceImpl implements ProductESService {
         if (req.getBBrandName() != null && req.getBBrandName().size() > 0) {//品牌
             boolQuery.must(QueryBuilders.termsQuery("proSkuBrandName", req.getBBrandName()));
         }
-        if (req.getThreeCategoryNameF() != null) {//三级分类
-            boolQuery.must(QueryBuilders.termsQuery("fThreeCategoryName", req.getThreeCategoryNameF()));
+        if (req.getOneFrontCategory() != null) {//三级分类
+            boolQuery.must(QueryBuilders.termsQuery("fThreeCategoryName", req.getOneFrontCategory()));
         }
-        if (req.getTwoCategoryNameF() != null) {//二级分类
-            boolQuery.must(QueryBuilders.termsQuery("fTwoCategoryName", req.getTwoCategoryNameF()));
+        if (req.getTwoFrontCategory() != null) {//二级分类
+            boolQuery.must(QueryBuilders.termsQuery("fTwoCategoryName", req.getTwoFrontCategory()));
         }
-        if (req.getOneCategoryNameF() != null) {//一级分类
-            boolQuery.must(QueryBuilders.termsQuery("fOneCategoryName", req.getOneCategoryNameF()));
+        if (req.getThreeFrontCategory() != null) {//一级分类
+            boolQuery.must(QueryBuilders.termsQuery("fOneCategoryName", req.getThreeFrontCategory()));
         }
         if (req.getSkuRegionalName() != null) { //供货区域
             boolQuery.must(QueryBuilders.termsQuery("regionalName", req.getSkuRegionalName()));
