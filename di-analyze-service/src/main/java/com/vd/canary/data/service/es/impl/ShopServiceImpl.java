@@ -125,13 +125,13 @@ public class ShopServiceImpl implements ShopService {
                 }
                 Object businessBrand = stringObjectMap.get("businessBrand");
                 if(ObjectUtil.isNotEmpty(businessBrand)){
-                    List<String> businessBrandList =StringUtil.splitToStringList((String) businessBrand,",");
+                    List<String> businessBrandList = (List<String>)(businessBrand);
                     brandsSet.addAll(businessBrandList);
                     shopVo.setBusinessBrand(businessBrandList);
                 }
                 Object businessCategory = stringObjectMap.get("businessCategory");
                 if(ObjectUtil.isNotEmpty(businessCategory)){
-                    List<String> businessCategoryList =StringUtil.splitToStringList((String) businessCategory,",");
+                    List<String> businessCategoryList =(List<String>)(businessCategory);
                     categoriesSet.addAll(businessCategoryList);
                     shopVo.setBusinessBrand(  businessCategoryList);
                 }
