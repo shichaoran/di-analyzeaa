@@ -25,8 +25,10 @@ import com.vd.canary.data.common.es.service.impl.ShopESServiceImpl;
 import com.vd.canary.data.service.es.ShopService;
 import com.vd.canary.data.util.StringUtil;
 import com.vd.canary.utils.DateUtil;
+import com.vd.canary.utils.JSONUtil;
 import com.vd.canary.utils.ObjectUtil;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,6 +39,7 @@ import org.springframework.stereotype.Service;
  */
 
 @Service
+@Slf4j
 public class ShopServiceImpl implements ShopService {
     @Autowired
     public ShopESServiceImpl shopESService;
@@ -125,15 +128,22 @@ public class ShopServiceImpl implements ShopService {
                 }
                 Object businessBrand = stringObjectMap.get("businessBrand");
                 if(ObjectUtil.isNotEmpty(businessBrand)){
-                    List<String> businessBrandList = (List<String>)(businessBrand);
-                    brandsSet.addAll(businessBrandList);
-                    shopVo.setBusinessBrand(businessBrandList);
+                    log.info("businessBrand"+businessBrand.toString());
+                    if (com.vd.canary.utils.StringUtil.isNotEmpty(JSONUtil.toJSONString(businessBrand))) {
+                        List<String> businessBrandList =JSONArray.parseArray(JSONUtil.toJSONString(businessBrand),String.class);
+                        brandsSet.addAll(businessBrandList);
+                        shopVo.setBusinessBrand(businessBrandList);
+                    }
                 }
                 Object businessCategory = stringObjectMap.get("businessCategory");
                 if(ObjectUtil.isNotEmpty(businessCategory)){
-                    List<String> businessCategoryList =(List<String>)(businessCategory);
-                    categoriesSet.addAll(businessCategoryList);
-                    shopVo.setBusinessBrand(  businessCategoryList);
+                    log.info("businessCategory"+businessCategory.toString());
+                    if (com.vd.canary.utils.StringUtil.isNotEmpty(JSONUtil.toJSONString(businessCategory))) {
+                        List<String> businessCategoryList =JSONArray.parseArray(JSONUtil.toJSONString(businessCategory),String.class);
+                        categoriesSet.addAll(businessCategoryList);
+                        shopVo.setBusinessBrand(  businessCategoryList);
+                    }
+
                 }
                 Object imageBaner = stringObjectMap.get("imageBanerJson");
                 if(ObjectUtil.isNotEmpty(imageBaner)){
