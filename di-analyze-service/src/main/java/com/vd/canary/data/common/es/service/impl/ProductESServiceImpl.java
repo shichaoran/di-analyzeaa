@@ -39,10 +39,10 @@ import org.springframework.stereotype.Service;
 public class ProductESServiceImpl implements ProductESService {
 
     // 索引
-    private String indexName = "productindex";
+    private String indexName = "productindex_dev";
 
     //类型
-    private String esType = "producttype";
+    private String esType = "producttype_dev";
 
     // 创建索引
     public String createIndex() {
@@ -304,10 +304,37 @@ public class ProductESServiceImpl implements ProductESService {
         }
         BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
         if (StringUtils.isNotBlank(req.getKey())){
-            boolQuery.must(QueryBuilders.wildcardQuery("storeName", "*"+req.getKey()+"*"));
+            //boolQuery.must(QueryBuilders.wildcardQuery("storeName", "*"+req.getKey()+"*"));
+            //boolQuery.must(QueryBuilders.matchQuery("storeName", "*"+req.getKey()+"*" ));
+            boolQuery.must(QueryBuilders.matchPhraseQuery("storeName", req.getKey() ));
         }
         List<Map<String, Object>> list = ElasticsearchUtil.searchByQuery(indexName,boolQuery);
         return list;
+    }
+
+    // 通过指定店铺搜索该店铺下所有商品 分页
+    public ESPageRes allProductByStoreId(Integer pageNumber, Integer pageSize, String stroreId) {
+        if (stroreId == null) {
+            List<Map<String, Object>> recordList = new ArrayList<>();
+            return new ESPageRes(0, 0, 0, recordList);
+        }
+        if (pageNumber == null || pageNumber < Constant.ES_DEFAULT_PAGE_NUMBER) {
+            pageNumber = Constant.ES_DEFAULT_PAGE_NUMBER;
+        }
+        if (pageSize == null || pageSize <= 0) {
+            pageSize = Constant.ES_PAGE_SIZE;
+        }
+        String fields = null;
+        String sortField = null;
+        String sortTpye = null;
+        String highlightField = null;
+        BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
+
+        boolQuery.mustNot(QueryBuilders.termQuery("storeId",stroreId));
+
+        ESPageRes esPageRes = ElasticsearchUtil.searchDataPage(indexName, pageNumber, pageSize, boolQuery, fields, sortField, sortTpye, highlightField);
+        return esPageRes;
+
     }
 
     /**
@@ -567,7 +594,10 @@ public class ProductESServiceImpl implements ProductESService {
                         builder.endObject();
                         builder.startObject("shelvesState"); { builder.field("type", "keyword"); }
                         builder.endObject();
-
+                        builder.startObject("remark1"); { builder.field("type", "keyword"); }
+                        builder.endObject();
+                        builder.startObject("remark2"); { builder.field("type", "keyword"); }
+                        builder.endObject();
                     }
                     builder.endObject();
                 }

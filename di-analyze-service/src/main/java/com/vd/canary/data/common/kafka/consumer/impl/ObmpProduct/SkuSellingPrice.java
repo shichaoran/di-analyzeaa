@@ -83,7 +83,7 @@ public class SkuSellingPrice implements Function {
     }
 
     public void updateShopIndexProduct(Map<String, Object> esProductMap){
-        if(esProductMap == null ){
+        if(esProductMap == null && esProductMap.get("storeId") == null){
             return;
         }
         String storeId = esProductMap.get("storeId").toString();
@@ -132,6 +132,8 @@ public class SkuSellingPrice implements Function {
                 LocalDateTime t = LocalDateTime.parse(productMap.get("skuGmtCreateTime").toString(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
                 shopProduct.setCrateDate(t);
             }
+
+            if(productMap.containsKey("proSkuSpuId") && productMap.get("proSkuSpuId") != null) shopProduct.setProSkuSpuId(productMap.get("proSkuSpuId").toString());
 
             shopProductRes.add(shopProduct);
         }

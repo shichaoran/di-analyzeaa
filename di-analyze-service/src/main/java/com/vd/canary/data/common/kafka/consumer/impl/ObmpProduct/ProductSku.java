@@ -107,8 +107,8 @@ public class ProductSku implements Function {
                     log.info("ProductSku.reSetValue,brand_id.res={}.",JSONUtil.toJSON(res).toJSONString());
                     if(res != null){
                         BrandManagementResp pro = (BrandManagementResp) res.getData();
-                        log.info("ProductSku.reSetValue,brand_id.pro={}.",JSONUtil.toJSON(pro).toJSONString());
                         if(pro != null){
+                            log.info("ProductSku.reSetValue,brand_id.pro={}.",JSONUtil.toJSON(pro).toJSONString());
                             esMap.put("brandCode",pro.getBrandCode());
                             esMap.put("bBrandName",pro.getBrandName());
                             esMap.put("brandLoge",pro.getBrandLogo());

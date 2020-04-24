@@ -85,7 +85,7 @@ public class StoreProductRelations implements Function {
             }
 
         }
-        if(binlogMap.containsKey("category_id")) esMap.put("categoryId",binlogMap.get("category_id"));
+        if(binlogMap.containsKey("category_id")) esMap.put("categoryId",binlogMap.get("category_id")); // 店铺分类id，暂时好像用处不大
         System.out.println("------------StoreProductRelations.reSetValue.json:"+esMap);
         return esMap;
     }

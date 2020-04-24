@@ -187,8 +187,8 @@ public class SkuAttributeRelations implements Function {
                             listMap.add(mapTemp);
                         }
                     }
-                    //esMap.put("spuAttributeMap",JSONUtil.toJSONString(listMap));
-                    esMap.put("attributeCode",JSONUtil.toJSONString(listMap)); // 目前暂时用这个索引，上线后切换到spuAttributeMap索引上；
+                    esMap.put("spuAttributeMap",JSONUtil.toJSONString(listMap));
+                    //esMap.put("attributeCode",JSONUtil.toJSONString(listMap)); // 目前暂时用这个索引，上线后切换到spuAttributeMap索引上；
                 }
             }
         }

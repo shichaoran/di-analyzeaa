@@ -42,19 +42,27 @@ public class ProductsServiceImpl implements ProductsService {
         ResponseBO<ProductsRes> res = new ResponseBO<ProductsRes>();
         ProductsRes productsRes = new ProductsRes();
         log.info("getProductsByKey,productsReq:" + JSONObject.toJSON(productsReq).toString());
+        ESPageRes esPageRes = null;
         // 搜索是否能精准定位到店铺
         List<Map<String, Object>> existsShop = productESServiceImpl.boolQueryByExistsShopKeyword(productsReq);
-        if(existsShop != null){
+        if(existsShop != null && existsShop.size() == 1){
             Map<String, Object> existsShopMap = existsShop.get(0);
             ProductsExistsShopRes productsExistsShopRes = new ProductsExistsShopRes();
-            productsExistsShopRes.setLogoImageUrl(existsShopMap.get("logoImageUrl").toString());
-            productsExistsShopRes.setStoreId(existsShopMap.get("storeId").toString());
-            productsExistsShopRes.setStoreName(existsShopMap.get("storeName").toString());
+            if( existsShopMap.containsKey("logoImageUrl") && existsShopMap.get("logoImageUrl") != null ) productsExistsShopRes.setLogoImageUrl(existsShopMap.get("logoImageUrl").toString());
+
+            if( existsShopMap.containsKey("storeId") && existsShopMap.get("storeId") != null ) productsExistsShopRes.setStoreId(existsShopMap.get("storeId").toString());
+
+            if( existsShopMap.containsKey("storeName") && existsShopMap.get("storeName") != null ) productsExistsShopRes.setStoreName(existsShopMap.get("storeName").toString());
+
             productsRes.setProductsExistsShopRes(productsExistsShopRes);
+
+            if( existsShopMap.containsKey("storeId") && existsShopMap.get("storeId") != null ) esPageRes =
+                    productESServiceImpl.allProductByStoreId(productsReq.getPageNum(), productsReq.getPageSize(),existsShopMap.get("storeId").toString());
+
         }
 
         // 商品关键字搜索
-        ESPageRes esPageRes = productESServiceImpl.boolQueryByKeyword(productsReq.getPageNum(), productsReq.getPageSize(), productsReq);
+        esPageRes = productESServiceImpl.boolQueryByKeyword(productsReq.getPageNum(), productsReq.getPageSize(), productsReq);
         if (esPageRes!=null) {
             List<Map<String, Object>> recordList = esPageRes.getRecordList();
             if (recordList != null && recordList.size() > 0) {
@@ -307,7 +315,9 @@ public class ProductsServiceImpl implements ProductsService {
 
             if(map.containsKey("spuTitle") && map.get("spuTitle") != null ) productSpuInfoResponse.setSpuTitle(map.get("spuTitle").toString());
 
-            if(map.containsKey("attributeCode") && map.get("attributeCode") != null ) productSpuInfoResponse.setSpuAttributeMapJson(map.get( "attributeCode").toString());
+            //if(map.containsKey("attributeCode") && map.get("attributeCode") != null ) productSpuInfoResponse.setSpuAttributeMapJson
+            // (map.get( "attributeCode").toString());
+            if(map.containsKey("spuAttributeMap") && map.get("spuAttributeMap") != null ) productSpuInfoResponse.setSpuAttributeMapJson(map.get( "spuAttributeMap").toString());
 
             ProductDetailsReq req = new ProductDetailsReq();
             req.setSpuId(productDetailsReq.getSpuId());
