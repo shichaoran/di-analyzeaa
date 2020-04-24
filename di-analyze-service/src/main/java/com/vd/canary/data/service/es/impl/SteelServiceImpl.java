@@ -133,6 +133,7 @@ public class SteelServiceImpl implements SteelService {
                         JSONArray array = JSONObject.parseArray(recordMap.get("attributeMap").toString());
 
                         if (array != null && array.size() > 0) {
+                            Map map = new HashMap();
                             for (int i=0;i<array.size();i++){
                                 if (array.getJSONObject(i).containsKey("attributeName") && array.getJSONObject(i).get("attributeType").equals("0") && array.getJSONObject(i).get("attributeName") != null){
                                     String attributeName =  array.getJSONObject(i).get("attributeName").toString();
@@ -140,7 +141,6 @@ public class SteelServiceImpl implements SteelService {
                                         JSONArray arr = JSONObject.parseArray(array.getJSONObject(i).get("attributeValue").toString());
                                         if (arr != null && arr.size() > 0) {
                                             for (int j = 0; j < arr.size(); j++) {
-                                                Map map = new HashMap();
                                                 if (arr.getJSONObject(j).containsKey("attributeValueId")) {
                                                     String attributeValueId = arr.getJSONObject(j).get("attributeValueId").toString();
                                                     if (arr.getJSONObject(j).containsKey("attributeValueName") ) {
@@ -158,9 +158,7 @@ public class SteelServiceImpl implements SteelService {
                                                             }
 
                                                         }
-
                                                         map.put(attributeValueId, attributeValueName);
-                                                        attributes.put(attributeName, map);
                                                         skuAttributes.put(attributeName,map);
                                                         steelVO.setSkuAttributes(skuAttributes);
                                                     }
@@ -168,6 +166,7 @@ public class SteelServiceImpl implements SteelService {
                                             }
                                         }
                                     }
+                                    attributes.put(attributeName, map);
                                 }
                             }
                         }
