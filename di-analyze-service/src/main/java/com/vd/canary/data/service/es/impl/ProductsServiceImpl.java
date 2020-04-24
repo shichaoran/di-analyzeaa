@@ -302,6 +302,8 @@ public class ProductsServiceImpl implements ProductsService {
 
             if(map.containsKey("spuTitle") && map.get("spuTitle") != null ) productSpuInfoResponse.setSpuTitle(map.get("spuTitle").toString());
 
+            if(map.containsKey("attributeCode") && map.get("attributeCode") != null ) productSpuInfoResponse.setSpuAttributeMapJson(map.get( "attributeCode").toString());
+
             ProductDetailsReq req = new ProductDetailsReq();
             req.setSpuId(productDetailsReq.getSpuId());
             req.setStoreId(productDetailsReq.getStoreId());
