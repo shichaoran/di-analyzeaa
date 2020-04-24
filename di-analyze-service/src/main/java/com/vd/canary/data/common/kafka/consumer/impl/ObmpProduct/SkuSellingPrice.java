@@ -83,7 +83,7 @@ public class SkuSellingPrice implements Function {
     }
 
     public void updateShopIndexProduct(Map<String, Object> esProductMap){
-        if(esProductMap == null && esProductMap.get("storeId") == null){
+        if(esProductMap == null || esProductMap.get("storeId") == null){
             return;
         }
         String storeId = esProductMap.get("storeId").toString();
