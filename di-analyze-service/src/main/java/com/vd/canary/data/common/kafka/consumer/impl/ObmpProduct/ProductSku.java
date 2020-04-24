@@ -207,21 +207,21 @@ public class ProductSku implements Function {
                             }
                         }
                     }
-                    esMap.put("fOneCategoryCode",fOneCategoryCode);
-                    esMap.put("fTwoCategoryCode",fTwoCategoryCode);
-                    esMap.put("fThreeCategoryCode",fThreeCategoryCode);
+                    esMap.put("fOneCategoryCode",JSONUtil.toJSONString(fOneCategoryCode));
+                    esMap.put("fTwoCategoryCode",JSONUtil.toJSONString(fTwoCategoryCode));
+                    esMap.put("fThreeCategoryCode",JSONUtil.toJSONString(fThreeCategoryCode) );
 
-                    esMap.put("fOneCategoryName",fOneCategoryName);
-                    esMap.put("fTwoCategoryName",fTwoCategoryName);
-                    esMap.put("fThreeCategoryName",fThreeCategoryName);
+                    esMap.put("fOneCategoryName",JSONUtil.toJSONString(fOneCategoryName) );
+                    esMap.put("fTwoCategoryName",JSONUtil.toJSONString(fTwoCategoryName) );
+                    esMap.put("fThreeCategoryName",JSONUtil.toJSONString(fThreeCategoryName) );
 
-                    esMap.put("oneCategoryCode",oneCategoryCode);
-                    esMap.put("twoCategoryCode",twoCategoryCode);
-                    esMap.put("threeCategoryCode",threeCategoryCode);
+                    esMap.put("oneCategoryCode",JSONUtil.toJSONString(oneCategoryCode) );
+                    esMap.put("twoCategoryCode",JSONUtil.toJSONString(twoCategoryCode) );
+                    esMap.put("threeCategoryCode",JSONUtil.toJSONString(threeCategoryCode) );
 
-                    esMap.put("oneCategoryName",oneCategoryName);
-                    esMap.put("twoCategoryName",twoCategoryName);
-                    esMap.put("threeCategoryName",threeCategoryName);
+                    esMap.put("oneCategoryName",JSONUtil.toJSONString(oneCategoryName) );
+                    esMap.put("twoCategoryName",JSONUtil.toJSONString(twoCategoryName));
+                    esMap.put("threeCategoryName",JSONUtil.toJSONString(threeCategoryName) );
 
                 }catch (Exception e) {
                     log.info("ProductSku.reSetValue,Exception:bigDataApiFeign.listByCondition .");
