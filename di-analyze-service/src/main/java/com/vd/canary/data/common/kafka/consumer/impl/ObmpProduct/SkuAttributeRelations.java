@@ -162,27 +162,35 @@ public class SkuAttributeRelations implements Function {
      * }]
      */
     public Map<String, Object> reSetSpuValue(Map<String, Object> esMap,Map<String,Object> binlogMap){
-        if(binlogMap.containsKey("spu_id") && binlogMap.get("spu_id") != null ) {
+        if(esMap.containsKey("proSkuSpuId") && esMap.get("proSkuSpuId") != null ) {
             List<Map<String,Object>> listMap = new ArrayList();
             SpuAttributeRelationsReq req = new SpuAttributeRelationsReq();
-            req.setSpuId(binlogMap.get("spu_id").toString());
-            ResponsePageBO<SpuAttributeVO> spuAttributeVOs = bigDataApiFeign.listSpuAttributeBySpuId(req);
-            for(int i = 0; i < 1; i ++){
-                //Map<String,Object> mapTemp = new HashMap<String, Object>();
-                //mapTemp.put("attributeType", 1);
-                //mapTemp.put("attributeId", 1);
-                //mapTemp.put("attributeName", name);
-                //List<Map<String,Object>> listSub = new ArrayList();
-                //for(int j = 0; j< 1; j ++){
-                //    Map<String,Object> valueMap = new HashMap<>();
-                //    valueMap.put("attributeValueId",respSub.getId());
-                //    valueMap.put("attributeValueName",respSub.getValueName());
-                //    listSub.add(valueMap);
-                //}
-                //mapTemp.put("attributeValue", JSONUtil.toJSONString(listSub));
-                //listMap.add(mapTemp);
+            req.setSpuId(esMap.get("proSkuSpuId").toString());
+            ResponseBO<List<SpuAttributeVO>> spuAttributeVOs = bigDataApiFeign.listBySpuId(req);
+            if(spuAttributeVOs != null && spuAttributeVOs.getData() != null) {
+                List<SpuAttributeVO> list = spuAttributeVOs.getData();
+                if(list != null && list.size() > 0){
+                    for(SpuAttributeVO spuAttributeVO : list){
+                        Map<String,Object> mapTemp = new HashMap<String, Object>();
+                        mapTemp.put("attributeType", spuAttributeVO.getType());
+                        mapTemp.put("attributeId", spuAttributeVO.getAttributeId());
+                        mapTemp.put("attributeName", spuAttributeVO.getAttributeName());
+                        if(spuAttributeVO.getAttributeValueList() != null && spuAttributeVO.getAttributeValueList().size() > 0){
+                            List<Map<String,Object>> listSub = new ArrayList();
+                            for(AttributeValueResp AttributeValueResp : spuAttributeVO.getAttributeValueList()){
+                                Map<String,Object> valueMap = new HashMap<>();
+                                valueMap.put("attributeValueId",AttributeValueResp.getId());
+                                valueMap.put("attributeValueName",AttributeValueResp.getValueName());
+                                listSub.add(valueMap);
+                            }
+                            mapTemp.put("attributeValue", JSONUtil.toJSONString(listSub));
+                            listMap.add(mapTemp);
+                        }
+                    }
+                    //esMap.put("spuAttributeMap",JSONUtil.toJSONString(listMap));
+                    esMap.put("attributeCode",JSONUtil.toJSONString(listMap)); // 目前暂时用这个索引，上线后切换到spuAttributeMap索引上；
+                }
             }
-            esMap.put("spuAttributeMap",JSONUtil.toJSONString(listMap));
         }
         System.out.println("------------SkuAttributeRelations.reSetSpuValue.json:"+esMap);
         return esMap;

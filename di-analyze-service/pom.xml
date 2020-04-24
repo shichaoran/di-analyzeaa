@@ -34,7 +34,7 @@
         <dependency>
             <groupId>com.vd.canary</groupId>
             <artifactId>canary-business-base-parent</artifactId>
-            <version>0.11.0</version>
+            <version>0.11.5</version>
         </dependency>
 
         <dependency>
