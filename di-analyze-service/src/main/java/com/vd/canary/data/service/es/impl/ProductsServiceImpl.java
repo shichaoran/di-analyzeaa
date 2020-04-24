@@ -10,6 +10,7 @@ import com.vd.canary.data.api.request.es.ThreeCategoryReq;
 import com.vd.canary.data.api.response.es.CategoryRes;
 import com.vd.canary.data.api.response.es.ProductSkuInfoVO;
 import com.vd.canary.data.api.response.es.ProductSpuInfoResponse;
+import com.vd.canary.data.api.response.es.ProductsExistsShopRes;
 import com.vd.canary.data.api.response.es.vo.CategoryVO;
 import com.vd.canary.data.common.es.helper.ESPageRes;
 import com.vd.canary.data.api.response.es.ProductsRes;
@@ -44,9 +45,12 @@ public class ProductsServiceImpl implements ProductsService {
         // 搜索是否能精准定位到店铺
         List<Map<String, Object>> existsShop = productESServiceImpl.boolQueryByExistsShopKeyword(productsReq);
         if(existsShop != null){
-
-            //productsRes.setExistsShop()
-            //existsShop
+            Map<String, Object> existsShopMap = existsShop.get(0);
+            ProductsExistsShopRes productsExistsShopRes = new ProductsExistsShopRes();
+            productsExistsShopRes.setLogoImageUrl(existsShopMap.get("logoImageUrl").toString());
+            productsExistsShopRes.setStoreId(existsShopMap.get("storeId").toString());
+            productsExistsShopRes.setStoreName(existsShopMap.get("storeName").toString());
+            productsRes.setProductsExistsShopRes(productsExistsShopRes);
         }
 
         // 商品关键字搜索

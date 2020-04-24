@@ -168,9 +168,9 @@ public class SkuAttributeRelations implements Function {
             req.setSpuId(binlogMap.get("spu_id").toString());
             ResponsePageBO<SpuAttributeVO> spuAttributeVOs = bigDataApiFeign.listSpuAttributeBySpuId(req);
             for(int i = 0; i < 1; i ++){
-                Map<String,Object> mapTemp = new HashMap<String, Object>();
-                mapTemp.put("attributeType", 1);
-                mapTemp.put("attributeId", 1);
+                //Map<String,Object> mapTemp = new HashMap<String, Object>();
+                //mapTemp.put("attributeType", 1);
+                //mapTemp.put("attributeId", 1);
                 //mapTemp.put("attributeName", name);
                 //List<Map<String,Object>> listSub = new ArrayList();
                 //for(int j = 0; j< 1; j ++){
@@ -180,7 +180,7 @@ public class SkuAttributeRelations implements Function {
                 //    listSub.add(valueMap);
                 //}
                 //mapTemp.put("attributeValue", JSONUtil.toJSONString(listSub));
-                listMap.add(mapTemp);
+                //listMap.add(mapTemp);
             }
             esMap.put("spuAttributeMap",JSONUtil.toJSONString(listMap));
         }

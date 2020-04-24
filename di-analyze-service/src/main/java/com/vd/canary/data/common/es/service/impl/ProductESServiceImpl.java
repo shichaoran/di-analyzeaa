@@ -565,8 +565,6 @@ public class ProductESServiceImpl implements ProductESService {
                         builder.endObject();
                         builder.startObject("isGmProduct"); { builder.field("type", "keyword"); }
                         builder.endObject();
-                        builder.startObject("isGmProduct"); { builder.field("type", "keyword"); }
-                        builder.endObject();
                         builder.startObject("shelvesState"); { builder.field("type", "keyword"); }
                         builder.endObject();
 

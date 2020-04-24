@@ -78,6 +78,7 @@ public class StoreProductRelations implements Function {
                     esMap.put("storeInfoStoreQrCode","");
                     esMap.put("gmtCreateTime",shopEsRes.get("boothScheduledTime")); // 暂时用入驻时间
                     esMap.put("boothScheduledTime",shopEsRes.get("boothScheduledTime"));
+                    esMap.put("logoImageUrl",shopEsRes.get("logoImageUrl"));
                 }
             }catch (IOException e) {
                 e.printStackTrace();

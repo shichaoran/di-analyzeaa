@@ -315,6 +315,8 @@ public class ShopESServiceImpl implements ShopESService {
                         builder.endObject();
                         builder.startObject("remark2"); { builder.field("type", "keyword"); }
                         builder.endObject();
+                        builder.startObject("logoImageUrl"); { builder.field("type", "keyword"); }
+                        builder.endObject();
                     }
                     builder.endObject();
                 }

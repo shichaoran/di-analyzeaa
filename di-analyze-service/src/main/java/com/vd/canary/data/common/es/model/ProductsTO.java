@@ -248,6 +248,8 @@ public class ProductsTO implements Serializable {
     //创建时间
     private Date gmtCreateTime;
     private Date boothScheduledTime; //入驻时间
+
+    private String logoImageUrl;
     /**
      * warehouse_management表    仓库管理
      */

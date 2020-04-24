@@ -28,7 +28,7 @@ public class ProductsRes implements Serializable {
 
     private List<ProductsDetailRes> productDetailRes; //商品详细列表
 
-    private String existsShop; // 是否有查询到精准的店铺信息
+    private ProductsExistsShopRes productsExistsShopRes; // 是否有查询到精准的店铺信息
 
     private Integer total;//总条数
 
