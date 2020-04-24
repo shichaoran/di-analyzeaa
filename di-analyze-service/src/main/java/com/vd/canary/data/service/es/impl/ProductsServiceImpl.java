@@ -292,7 +292,12 @@ public class ProductsServiceImpl implements ProductsService {
     public ResponseBO<ProductSpuInfoResponse>  getProductsDetail(@Valid ProductDetailsReq productDetailsReq) throws IOException {
         ResponseBO<ProductSpuInfoResponse> res = new ResponseBO<ProductSpuInfoResponse>();
         ProductSpuInfoResponse productSpuInfoResponse = new ProductSpuInfoResponse();
-        Map<String, Object> map = productESServiceImpl.findById(productDetailsReq.getSkuId());
+        //Map<String, Object> map = productESServiceImpl.findById(productDetailsReq.getSkuId());
+        List<Map<String, Object>> mapTemp = productESServiceImpl.boolQueryForProductDetail(productDetailsReq);
+        if(mapTemp == null && mapTemp.size() == 0){
+            return res;
+        }
+        Map<String, Object> map = mapTemp.get(0);
         if(map != null){
             if(map.containsKey("proSkuSpuId") && map.get("proSkuSpuId") != null ) productSpuInfoResponse.setSpuId(map.get("proSkuSpuId").toString());
 
