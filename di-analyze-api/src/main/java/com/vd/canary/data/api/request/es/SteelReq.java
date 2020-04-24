@@ -18,21 +18,18 @@ public class SteelReq extends RequestPageBO {
 
     /**
      * 商品一级目录
-     */
-    private String fOneCategoryName;
-    /**
      * 商品二级目录
-     */
-    private String fTwoCategoryName;
-
-    /**
      * 商品三级目录
      */
-    private String fThreeCategoryName;
+    private String OneCategoryNameF;
+    private String TwoCategoryNameF;
+    private String ThreeCategoryNameF;
     /**
      * 品牌
      */
     private List<String> bBrandName;
+
+
 
     /**
      * price为desc 或者 asc
