@@ -4,7 +4,7 @@ public class Constant {
 
     /* 分页参数 */
     public static Integer ES_PAGE_SIZE = 15;          // 每页数量
-    public static Integer ES_DEFAULT_PAGE_NUMBER = 0; // 默认当前页码
+    public static Integer ES_DEFAULT_PAGE_NUMBER = 1; // 默认当前页码
 
     /* 搜索模式 */
     public static String ES_SCORE_MODE_SUM = "sum"; // 权重分求和模式
