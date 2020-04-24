@@ -128,6 +128,8 @@ public class SteelServiceImpl implements SteelService {
                     steelVO.setSkuName(recordMap.containsKey("proSkuSkuName") ? recordMap.get("proSkuSkuName").toString() : "");
                     steelVO.setSpuID(recordMap.containsKey("proSkuSpuId") ? recordMap.get("proSkuSpuId").toString() : "");
                     steelVO.setSpuName(recordMap.containsKey("proSkuSpuName") ? recordMap.get("proSkuSpuName").toString() : "");
+                    steelVO.setSpuName(recordMap.containsKey("skuRegionalName") ? recordMap.get("skuRegionalName").toString() : "");
+
                     if(recordMap.containsKey("attributeMap")){
 //                        steelVO.setAttributeMapJson(recordMap.get("attributeMap").toString());
                         JSONArray array = JSONObject.parseArray(recordMap.get("attributeMap").toString());

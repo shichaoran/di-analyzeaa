@@ -49,4 +49,6 @@ public class SteelVO implements Serializable {
     private String fThreeCategoryName;
     //品牌
     private String brand;
+    //供货区域
+    private String skuRegionalName;
 }
