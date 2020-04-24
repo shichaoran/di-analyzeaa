@@ -52,4 +52,8 @@ public class ShopProductRes implements Serializable {
     private String priceType;
 
     private LocalDateTime crateDate;
+
+    private String proSkuSpuId;
+
+
 }

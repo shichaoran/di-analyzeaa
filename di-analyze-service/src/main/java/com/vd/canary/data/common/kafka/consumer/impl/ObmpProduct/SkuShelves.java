@@ -44,8 +44,8 @@ public class SkuShelves implements Function {
                 skuid = binlogMap.get("sku_id").toString();
                 try {
                     Map<String, Object> esMap = productESServiceImplTemp.findById(skuid);
-                    log.info("SkuShelves.performES,SkuShelves.esMap={}.", JSONUtil.toJSON(esMap).toJSONString());
                     if(esMap != null){
+                        log.info("SkuShelves.performES,SkuShelves.esMap={}.", JSONUtil.toJSON(esMap).toJSONString());
                         Map<String, Object> resjson = reSetValue(esMap, binlogMap);
                         productESServiceImplTemp.updateProduct(resjson);
                     }
