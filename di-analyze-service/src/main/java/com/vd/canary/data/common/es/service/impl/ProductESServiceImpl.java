@@ -272,16 +272,16 @@ public class ProductESServiceImpl implements ProductESService {
             boolQuery.must(QueryBuilders.termsQuery("proSkuBrandName", req.getBBrandName()));
         }
         if (req.getOneFrontCategory() != null) {//三级分类
-            boolQuery.must(QueryBuilders.termsQuery("fThreeCategoryName", req.getOneFrontCategory()));
+            boolQuery.must(QueryBuilders.matchPhraseQuery("fThreeCategoryName", req.getOneFrontCategory()));
         }
         if (req.getTwoFrontCategory() != null) {//二级分类
-            boolQuery.must(QueryBuilders.termsQuery("fTwoCategoryName", req.getTwoFrontCategory()));
+            boolQuery.must(QueryBuilders.matchPhraseQuery("fTwoCategoryName", req.getTwoFrontCategory()));
         }
         if (req.getThreeFrontCategory() != null) {//一级分类
-            boolQuery.must(QueryBuilders.termsQuery("fOneCategoryName", req.getThreeFrontCategory()));
+            boolQuery.must(QueryBuilders.matchPhraseQuery("fOneCategoryName", req.getThreeFrontCategory()));
         }
         if (req.getSkuRegionalName() != null) { //供货区域
-            boolQuery.must(QueryBuilders.termsQuery("regionalName", req.getSkuRegionalName()));
+            boolQuery.must(QueryBuilders.matchPhraseQuery("regionalName", req.getSkuRegionalName()));
         }
         if (StringUtils.isNotBlank(req.getPriceSort())) {
             sortField = "skuSellPriceJson"; // 商品定价信息，需要嵌套查询xxx.xxx
@@ -377,10 +377,10 @@ public class ProductESServiceImpl implements ProductESService {
             boolQuery.must(QueryBuilders.termsQuery("bBrandName", req.getBBrandName()));
         }
         if (req.getFThreeCategoryName() != null && req.getFThreeCategoryName().size() > 0) {//后台三级分类id
-            boolQuery.must(QueryBuilders.termsQuery("fThreeCategoryName", req.getFThreeCategoryName()));
+            boolQuery.must(QueryBuilders.matchPhraseQuery("fThreeCategoryName", req.getFThreeCategoryName()));
         }
         if (req.getBusinessAreaName() != null && req.getBusinessAreaName().size() > 0) { //供货区域id
-            boolQuery.must(QueryBuilders.termsQuery("skuRegionalName", req.getBusinessAreaName()));
+            boolQuery.must(QueryBuilders.matchPhraseQuery("skuRegionalName", req.getBusinessAreaName()));
         }
         if (StringUtils.isNotBlank(req.getPriceSort())) {
             sortField = "skuSellPriceJson.price"; // 商品定价信息，需要嵌套查询xxx.xxx
