@@ -134,6 +134,8 @@ public class ProductsServiceImpl implements ProductsService {
 
                     if(recordMap.containsKey("shelvesState") && recordMap.get("shelvesState") !=null) productsDetailRes.setShelvesState(recordMap.get("shelvesState").toString());
 
+                    if(recordMap.containsKey("fThreeCategoryName") && recordMap.get("fThreeCategoryName") !=null) productsDetailRes.setFThreeCategoryName(recordMap.get("fThreeCategoryName").toString());
+
                     productDetailResList.add(productsDetailRes);
 
                     categorys.put(recordMap.containsKey("fOneCategoryCode") ? recordMap.get("fOneCategoryCode").toString() : "", recordMap.containsKey("fOneCategoryName") ? recordMap.get("fOneCategoryName").toString() : "");
@@ -256,6 +258,8 @@ public class ProductsServiceImpl implements ProductsService {
                     if(recordMap.containsKey("isGmProduct") && recordMap.get("isGmProduct") !=null) productsDetailRes.setIsGmProduct(recordMap.get("isGmProduct").toString());
 
                     if(recordMap.containsKey("shelvesState") && recordMap.get("shelvesState") !=null) productsDetailRes.setShelvesState(recordMap.get("shelvesState").toString());
+
+                    if(recordMap.containsKey("fThreeCategoryName") && recordMap.get("fThreeCategoryName") !=null) productsDetailRes.setFThreeCategoryName(recordMap.get("fThreeCategoryName").toString());
 
                     productDetailResList.add(productsDetailRes);
 

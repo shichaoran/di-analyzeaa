@@ -77,7 +77,14 @@ public class SkuSellingPrice implements Function {
 
     public Map<String, Object> reSetValue(Map<String, Object> esMap,Map<String,Object> binlogMap){
         if(binlogMap.containsKey("price_type")) esMap.put("skuSellPriceType",binlogMap.get("price_type"));
-        if(binlogMap.containsKey("price_json")) esMap.put("skuSellPriceJson",binlogMap.get("price_json"));
+        if(binlogMap.containsKey("price_json")){
+            JSONArray array = JSONArray.parseArray(JSONUtil.toJSONString(binlogMap.get("price_json")));
+            JSONObject obj = (JSONObject)array.get(0);
+            obj.put("price",Double.parseDouble( obj.get("price").toString() ));
+            JSONArray jsonarray = new JSONArray();
+            jsonarray.add(obj);
+            esMap.put("skuSellPriceJson",JSONUtil.toJSONString(jsonarray) );
+        }
         System.out.println("------------SkuSellingPrice.reSetValue.json:"+esMap);
         return esMap;
     }
@@ -159,8 +166,18 @@ public class SkuSellingPrice implements Function {
 
         try {
             Map<String, Object> esShopMap = shopESService.findById(storeId);
-            esShopMap.put("businessCategory",businessCategory);
-            esShopMap.put("businessBrand",businessBrand);
+            if(businessCategory != null && businessCategory.size() > 0 ){
+                JSONArray array = JSONArray.parseArray(JSONUtil.toJSONString(businessCategory));
+                if(array != null){
+                    esShopMap.put("businessCategory", array);
+                }
+            }
+            if(businessBrand != null && businessBrand.size() > 0 ){
+                JSONArray array = JSONArray.parseArray(JSONUtil.toJSONString(businessBrand));
+                if(array != null){
+                    esShopMap.put("businessBrand",array);
+                }
+            }
             if(shopProductRes.size() >=3 ){
                 JSONArray array = JSONArray.parseArray(JSONUtil.toJSONString(shopProductRes.subList(0,2)));
                 esShopMap.put("shopProductRes",array);

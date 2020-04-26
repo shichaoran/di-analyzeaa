@@ -272,13 +272,16 @@ public class ProductESServiceImpl implements ProductESService {
             boolQuery.must(QueryBuilders.termsQuery("proSkuBrandName", req.getBBrandName()));
         }
         if (req.getOneFrontCategory() != null) {//三级分类
-            boolQuery.must(QueryBuilders.matchPhraseQuery("fThreeCategoryName", req.getOneFrontCategory()));
+            //boolQuery.must(QueryBuilders.matchPhraseQuery("fThreeCategoryName", req.getOneFrontCategory()));
+            boolQuery.must(QueryBuilders.matchQuery("fThreeCategoryName", req.getOneFrontCategory()));
         }
         if (req.getTwoFrontCategory() != null) {//二级分类
-            boolQuery.must(QueryBuilders.matchPhraseQuery("fTwoCategoryName", req.getTwoFrontCategory()));
+            //boolQuery.must(QueryBuilders.matchPhraseQuery("fTwoCategoryName", req.getTwoFrontCategory()));
+            boolQuery.must(QueryBuilders.matchQuery("fTwoCategoryName", req.getTwoFrontCategory()));
         }
         if (req.getThreeFrontCategory() != null) {//一级分类
-            boolQuery.must(QueryBuilders.matchPhraseQuery("fOneCategoryName", req.getThreeFrontCategory()));
+            //boolQuery.must(QueryBuilders.matchPhraseQuery("fOneCategoryName", req.getThreeFrontCategory()));
+            boolQuery.must(QueryBuilders.matchQuery("fOneCategoryName", req.getThreeFrontCategory()));
         }
         if (req.getSkuRegionalName() != null) { //供货区域
             boolQuery.must(QueryBuilders.matchPhraseQuery("regionalName", req.getSkuRegionalName()));
@@ -377,23 +380,29 @@ public class ProductESServiceImpl implements ProductESService {
                                                          "proSkuSpuName", "proSkuSkuName", "proSkuTitle", "proSkuSubTitle",
                                                          "fThreeCategoryName", "bBrandName", "brandShorthand") );
         }
-        //if (req.getProductBrandName() != null && req.getProductBrandName().size() > 0) {//品牌id 列表
-        //    //boolQuery.must(QueryBuilders.termsQuery("bBrandName", req.getProductBrandName()));
-        //    //String brandNameStr = "";
-        //
-        //    //boolQuery.should(QueryBuilders.termsQuery("bBrandName", String.join(",", req.getProductBrandName())));
-        //    BoolQueryBuilder query = QueryBuilders.boolQuery();
-        //    for(String brandName : req.getProductBrandName() ){
-        //        query.should(QueryBuilders.boolQuery().filter(QueryBuilders.matchPhraseQuery("bBrandName",brandName)));
-        //    }
-        //
-        //
-        //}
+        if (req.getProductBrandName() != null && req.getProductBrandName().size() > 0) {//品牌id 列表
+            BoolQueryBuilder query = QueryBuilders.boolQuery();
+            for(String brandName : req.getProductBrandName() ){
+                //query.should(QueryBuilders.boolQuery().filter(QueryBuilders.matchPhraseQuery("bBrandName",brandName)));
+                query.should(QueryBuilders.matchQuery("bBrandName",brandName));
+            }
+            boolQuery.must(query);
+        }
         if (req.getFrontThreeCategoryName() != null && req.getFrontThreeCategoryName().size() > 0) {//后台三级分类id 列表
-            boolQuery.must(QueryBuilders.matchPhraseQuery("fThreeCategoryName", req.getFrontThreeCategoryName()));
+            //boolQuery.must(QueryBuilders.matchPhraseQuery("fThreeCategoryName", req.getFrontThreeCategoryName()));
+            BoolQueryBuilder query = QueryBuilders.boolQuery();
+            for(String categoryName : req.getFrontThreeCategoryName() ){
+                query.should(QueryBuilders.matchQuery("fThreeCategoryName",categoryName));
+            }
+            boolQuery.must(query);
         }
         if (req.getBusinessAreaName() != null && req.getBusinessAreaName().size() > 0) { //供货区域id 列表
-            boolQuery.must(QueryBuilders.matchPhraseQuery("skuRegionalName", req.getBusinessAreaName()));
+            //boolQuery.must(QueryBuilders.matchPhraseQuery("skuRegionalName", req.getBusinessAreaName()));
+            BoolQueryBuilder query = QueryBuilders.boolQuery();
+            for(String areaName : req.getBusinessAreaName() ){
+                query.should(QueryBuilders.matchQuery("skuRegionalName",areaName));
+            }
+            boolQuery.must(query);
         }
         if (StringUtils.isNotBlank(req.getPriceSort())) {
             sortField = "skuSellPriceJson.price"; // 商品定价信息，需要嵌套查询xxx.xxx
