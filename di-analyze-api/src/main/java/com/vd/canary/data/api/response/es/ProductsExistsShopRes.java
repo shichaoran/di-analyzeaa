@@ -30,5 +30,8 @@ public class ProductsExistsShopRes implements Serializable {
 
     private String logoImageUrl;
 
+    private String boothCode;
+
+    private String memberOrder;
 
 }

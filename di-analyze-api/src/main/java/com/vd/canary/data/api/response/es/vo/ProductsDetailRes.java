@@ -76,4 +76,8 @@ public class ProductsDetailRes implements Serializable {
     //spuid
     private String proSkuSpuId;
 
+    private String isGmProduct;
+
+    private String shelvesState;
+
 }
