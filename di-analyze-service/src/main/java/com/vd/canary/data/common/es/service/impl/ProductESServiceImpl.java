@@ -216,6 +216,7 @@ public class ProductESServiceImpl implements ProductESService {
         if( req.getFThreeCategoryCode() != null){
             boolQuery.must(QueryBuilders.termQuery("fThreeCategoryCode.keyword", req.getFThreeCategoryCode() ));
         }
+        boolQuery.must(QueryBuilders.termQuery("shelvesState.keyword", "1" ));
         ESPageRes esPageRes = ElasticsearchUtil.searchDataPage(indexName, pageNumber, pageSize, boolQuery, fields, sortField, sortTpye, highlightField);
         return esPageRes;
     }
@@ -236,6 +237,7 @@ public class ProductESServiceImpl implements ProductESService {
         if(StringUtils.isNotBlank(req.getSkuId())){
             boolQuery.must(QueryBuilders.termQuery("skuId.keyword", req.getSkuId()));
         }
+        boolQuery.must(QueryBuilders.termQuery("shelvesState.keyword", "1" ));
         List<Map<String, Object>> list = ElasticsearchUtil.searchByQuery(indexName,boolQuery);
         return list;
     }
@@ -295,7 +297,7 @@ public class ProductESServiceImpl implements ProductESService {
             boolQuery.must(QueryBuilders.rangeQuery("skuSellPriceJson").gt(0));
             //boolQuery.mustNot();
         }
-
+        boolQuery.must(QueryBuilders.termQuery("shelvesState.keyword", "1" ));
         ESPageRes esPageRes = ElasticsearchUtil.searchDataPage(indexName, pageNumber, pageSize, boolQuery, fields, sortField, sortTpye, highlightField);
         return esPageRes;
     }
@@ -311,6 +313,7 @@ public class ProductESServiceImpl implements ProductESService {
             //boolQuery.must(QueryBuilders.matchQuery("storeName", "*"+req.getKey()+"*" ));
             boolQuery.must(QueryBuilders.matchPhraseQuery("storeName", req.getKey() ));
         }
+        boolQuery.must(QueryBuilders.termQuery("shelvesState.keyword", "1" ));
         List<Map<String, Object>> list = ElasticsearchUtil.searchByQuery(indexName,boolQuery);
         return list;
     }
@@ -334,7 +337,7 @@ public class ProductESServiceImpl implements ProductESService {
         BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
 
         boolQuery.mustNot(QueryBuilders.termQuery("storeId",stroreId));
-
+        boolQuery.must(QueryBuilders.termQuery("shelvesState.keyword", "1" ));
         ESPageRes esPageRes = ElasticsearchUtil.searchDataPage(indexName, pageNumber, pageSize, boolQuery, fields, sortField, sortTpye, highlightField);
         return esPageRes;
 
@@ -418,6 +421,7 @@ public class ProductESServiceImpl implements ProductESService {
             //boolQuery.must();
             boolQuery.must(QueryBuilders.matchQuery("boothBusinessBoothCode","[*"));
         }
+        boolQuery.must(QueryBuilders.termQuery("shelvesState.keyword", "1" ));
         if(StringUtils.isEmpty(req.getKey())){
             QueryBuilder queryBuilder = QueryBuilders.matchAllQuery();
             ESPageRes esPageRes = ElasticsearchUtil.searchDataPage(indexName, pageNumber, pageSize, queryBuilder, fields, sortField, sortTpye, highlightField);
