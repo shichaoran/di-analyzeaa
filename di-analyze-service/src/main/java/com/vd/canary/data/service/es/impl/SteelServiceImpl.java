@@ -262,8 +262,6 @@ public class SteelServiceImpl implements SteelService {
                                     List<String> fthreecategorynamelist = JSONArray.parseArray(JSONUtil.toJSONString(fThreeCategoryName), String.class);
                                     for (int i = 0; i < fthreecategorylist.size(); i++) {
                                         for (int j = 0; j < fthreecategorynamelist.size(); j++) {
-
-
                                             if (i == j) {
                                                 categorys.put(fthreecategorylist.get(i),fthreecategorynamelist.get(j));
                                             }

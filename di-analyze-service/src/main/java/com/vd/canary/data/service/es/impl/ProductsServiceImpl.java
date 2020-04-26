@@ -341,14 +341,14 @@ public class ProductsServiceImpl implements ProductsService {
 
                     Object fOneCategoryCode = recordMap.get("fOneCategoryCode");
                     Object fOneCategoryName = recordMap.get("fOneCategoryName");
-                    if (recordMap.containsKey("fOneCategoryCode")) {
+                    if (ObjectUtil.isNotEmpty(fOneCategoryCode)) {
                         log.info("fOneCategoryCode" + fOneCategoryCode.toString());
                         if (com.vd.canary.utils.StringUtil.isNotEmpty(JSONUtil.toJSONString(fOneCategoryCode))) {
-                            List<String> fonecategorylist = JSONArray.parseArray(JSON.toJSONString(fOneCategoryCode), String.class);
-                            if (recordMap.containsKey("fOneCategoryName")) {
+                            List<String> fonecategorylist = JSONArray.parseArray(JSONUtil.toJSONString(fOneCategoryCode), String.class);
+                            if (ObjectUtil.isNotEmpty(fOneCategoryName)) {
                                 log.info("fOneCategoryName" + fOneCategoryCode.toString());
                                 if (com.vd.canary.utils.StringUtil.isNotEmpty(JSONUtil.toJSONString(fOneCategoryName))) {
-                                    List<String> fonecategorynamelist = JSONArray.parseArray(JSON.toJSONString(fOneCategoryName), String.class);
+                                    List<String> fonecategorynamelist = JSONArray.parseArray(JSONUtil.toJSONString(fOneCategoryName), String.class);
                                     for (int i = 0; i < fonecategorylist.size(); i++) {
                                         for (int j = 0; j < fonecategorynamelist.size(); j++) {
                                             if (i == j) {
@@ -363,11 +363,11 @@ public class ProductsServiceImpl implements ProductsService {
 
                     Object fTwoCategoryCode = recordMap.get("fTwoCategoryCode");
                     Object fTwoCategoryName = recordMap.get("fTwoCategoryName");
-                    if (ObjectUtil.isNotEmpty(fTwoCategoryName)) {
+                    if (ObjectUtil.isNotEmpty(fTwoCategoryCode)) {
                         log.info("fTwoCategoryCode" + fTwoCategoryCode.toString());
                         if (com.vd.canary.utils.StringUtil.isNotEmpty(JSONUtil.toJSONString(fTwoCategoryCode))) {
                             List<String> ftwocategorylist = JSONArray.parseArray(JSONUtil.toJSONString(fTwoCategoryCode), String.class);
-                            if (ObjectUtil.isNotEmpty(fTwoCategoryCode)) {
+                            if (ObjectUtil.isNotEmpty(fTwoCategoryName)) {
                                 log.info("fTwoCategoryName" + fTwoCategoryName.toString());
                                 if (com.vd.canary.utils.StringUtil.isNotEmpty(JSONUtil.toJSONString(fTwoCategoryName))) {
                                     List<String> ftwocategorynamelist = JSONArray.parseArray(JSONUtil.toJSONString(fTwoCategoryName), String.class);
@@ -386,14 +386,14 @@ public class ProductsServiceImpl implements ProductsService {
 
                     Object fThreeCategoryCode = recordMap.get("fThreeCategoryCode");
                     Object fThreeCategoryName = recordMap.get("fThreeCategoryName");
-                    if (recordMap.containsKey("fThreeCategoryCode")) {
+                    if (ObjectUtil.isNotEmpty(fThreeCategoryCode)) {
                         log.info("fThreeCategoryCode" + fThreeCategoryCode.toString());
                         if (com.vd.canary.utils.StringUtil.isNotEmpty(JSONUtil.toJSONString(fThreeCategoryCode))) {
-                            List<String> fthreecategorylist = JSONArray.parseArray(JSON.toJSONString(fThreeCategoryCode), String.class);
-                            if (recordMap.containsKey("fThreeCategoryName")) {
+                            List<String> fthreecategorylist = JSONArray.parseArray(JSONUtil.toJSONString(fThreeCategoryCode), String.class);
+                            if (ObjectUtil.isNotEmpty(fThreeCategoryName)) {
                                 log.info("fThreeCategoryName" + fThreeCategoryName.toString());
                                 if (com.vd.canary.utils.StringUtil.isNotEmpty(JSONUtil.toJSONString(fThreeCategoryName))) {
-                                    List<String> fthreecategorynamelist = JSONArray.parseArray(JSON.toJSONString(fThreeCategoryName), String.class);
+                                    List<String> fthreecategorynamelist = JSONArray.parseArray(JSONUtil.toJSONString(fThreeCategoryName), String.class);
                                     for (int i = 0; i < fthreecategorylist.size(); i++) {
                                         for (int j = 0; j < fthreecategorynamelist.size(); j++) {
                                             if (i == j) {
@@ -564,6 +564,7 @@ public class ProductsServiceImpl implements ProductsService {
                     //if(map.containsKey("fThreeCategoryId")) categoryVO.setFThreeCategoryId(map.get("fThreeCategoryId").toString());
                     if(map.containsKey("fThreeCategoryCode")) categoryVO.setFThreeCategoryCode(map.get("fThreeCategoryCode").toString());
                     if(map.containsKey("fThreeCategoryName")) categoryVO.setFThreeCategoryName(map.get("fThreeCategoryName").toString());
+
                     maps.put(map.get("skuId").toString(),categoryVO);
                 }
             }
