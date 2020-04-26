@@ -16,11 +16,11 @@ public class ProductsBaseReq extends RequestPageBO  {
     /**
      * 品牌id
      */
-    private List<String> bBrandName;
+    private List<String> productBrandName;
     /**
      * 三级类目名称
      */
-    private List<String> fThreeCategoryName;
+    private List<String> frontThreeCategoryName;
     /**
      * 所在地
      */

@@ -55,6 +55,10 @@ public class ProductsServiceImpl implements ProductsService {
 
             if( existsShopMap.containsKey("storeName") && existsShopMap.get("storeName") != null ) productsExistsShopRes.setStoreName(existsShopMap.get("storeName").toString());
 
+            if( existsShopMap.containsKey("boothBusinessBoothCode") && existsShopMap.get("boothBusinessBoothCode") != null ) productsExistsShopRes.setBoothCode(existsShopMap.get("boothBusinessBoothCode").toString());
+
+            if( existsShopMap.containsKey("customerProfilesLevel") && existsShopMap.get("customerProfilesLevel") != null ) productsExistsShopRes.setMemberOrder(existsShopMap.get("customerProfilesLevel").toString());
+
             productsRes.setProductsExistsShopRes(productsExistsShopRes);
 
             if( existsShopMap.containsKey("storeId") && existsShopMap.get("storeId") != null ) esPageRes =
@@ -352,12 +356,16 @@ public class ProductsServiceImpl implements ProductsService {
 
                     if(submap.containsKey("regionalId") && submap.get("regionalId") !=null){
                         JSONArray array = JSONArray.parseArray(submap.get("regionalId").toString());
-                        productSkuInfoVO.setRegionalId(JSONObject.parseArray(array.toJSONString(), String.class));
+                        if( array != null){
+                            productSkuInfoVO.setRegionalId(JSONObject.parseArray(array.toJSONString(), String.class));
+                        }
                     }
 
                     if(submap.containsKey("skuRegionalName") && submap.get("skuRegionalName") !=null) {
                         JSONArray array = JSONArray.parseArray(submap.get("skuRegionalName").toString());
-                        productSkuInfoVO.setRegionalName(JSONObject.parseArray(array.toJSONString(), String.class));
+                        if(array != null){
+                            productSkuInfoVO.setRegionalName(JSONObject.parseArray(array.toJSONString(), String.class));
+                        }
                     }
 
                     if(submap.containsKey("warehouseId") && submap.get("warehouseId") != null ) productSkuInfoVO.setWarehouseId(submap.get("warehouseId").toString());

@@ -369,17 +369,30 @@ public class ProductESServiceImpl implements ProductESService {
         BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
         if (StringUtils.isNotBlank(req.getKey())) {// keyword 关键字搜索
             String escapeKey = QueryParser.escape(req.getKey());
+            /*boolQuery.must(QueryBuilders.multiMatchQuery(escapeKey,
+                                                         "proSkuSpuName", "proSkuSkuName", "proSkuTitle", "proSkuSubTitle",
+                                                         "threeCategoryName", "bBrandName", "brandShorthand").fuzziness(Fuzziness
+                                                         .AUTO));*/
             boolQuery.must(QueryBuilders.multiMatchQuery(escapeKey,
                                                          "proSkuSpuName", "proSkuSkuName", "proSkuTitle", "proSkuSubTitle",
-                                                         "threeCategoryName", "bBrandName", "brandShorthand").fuzziness(Fuzziness.AUTO));
+                                                         "fThreeCategoryName", "bBrandName", "brandShorthand") );
         }
-        if (req.getBBrandName() != null && req.getBBrandName().size() > 0) {//品牌id
-            boolQuery.must(QueryBuilders.termsQuery("bBrandName", req.getBBrandName()));
+        //if (req.getProductBrandName() != null && req.getProductBrandName().size() > 0) {//品牌id 列表
+        //    //boolQuery.must(QueryBuilders.termsQuery("bBrandName", req.getProductBrandName()));
+        //    //String brandNameStr = "";
+        //
+        //    //boolQuery.should(QueryBuilders.termsQuery("bBrandName", String.join(",", req.getProductBrandName())));
+        //    BoolQueryBuilder query = QueryBuilders.boolQuery();
+        //    for(String brandName : req.getProductBrandName() ){
+        //        query.should(QueryBuilders.boolQuery().filter(QueryBuilders.matchPhraseQuery("bBrandName",brandName)));
+        //    }
+        //
+        //
+        //}
+        if (req.getFrontThreeCategoryName() != null && req.getFrontThreeCategoryName().size() > 0) {//后台三级分类id 列表
+            boolQuery.must(QueryBuilders.matchPhraseQuery("fThreeCategoryName", req.getFrontThreeCategoryName()));
         }
-        if (req.getFThreeCategoryName() != null && req.getFThreeCategoryName().size() > 0) {//后台三级分类id
-            boolQuery.must(QueryBuilders.matchPhraseQuery("fThreeCategoryName", req.getFThreeCategoryName()));
-        }
-        if (req.getBusinessAreaName() != null && req.getBusinessAreaName().size() > 0) { //供货区域id
+        if (req.getBusinessAreaName() != null && req.getBusinessAreaName().size() > 0) { //供货区域id 列表
             boolQuery.must(QueryBuilders.matchPhraseQuery("skuRegionalName", req.getBusinessAreaName()));
         }
         if (StringUtils.isNotBlank(req.getPriceSort())) {
