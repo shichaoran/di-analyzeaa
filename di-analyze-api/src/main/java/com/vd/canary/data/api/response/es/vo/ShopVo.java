@@ -37,6 +37,7 @@ public class ShopVo implements Serializable {
     private LocalDateTime boothScheduledTime; //入驻时间
     //    会员等级
     private String memberOrder;
+    private String logoImageUrl;
 
 
 }

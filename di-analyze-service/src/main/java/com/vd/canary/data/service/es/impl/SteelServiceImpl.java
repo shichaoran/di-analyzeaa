@@ -18,6 +18,8 @@ import com.vd.canary.data.common.es.service.impl.ProductESServiceImpl;
 import com.vd.canary.data.constants.Constant;
 import com.vd.canary.data.service.es.SteelService;
 import com.vd.canary.utils.DateUtil;
+import com.vd.canary.utils.JSONUtil;
+import com.vd.canary.utils.ObjectUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.map.TransformedMap;
 import org.apache.commons.lang3.StringUtils;
@@ -129,6 +131,7 @@ public class SteelServiceImpl implements SteelService {
                     steelVO.setSpuID(recordMap.containsKey("proSkuSpuId") ? recordMap.get("proSkuSpuId").toString() : "");
                     steelVO.setSpuName(recordMap.containsKey("proSkuSpuName") ? recordMap.get("proSkuSpuName").toString() : "");
                     steelVO.setSpuName(recordMap.containsKey("skuRegionalName") ? recordMap.get("skuRegionalName").toString() : "");
+                    steelVO.setShopId(recordMap.containsKey("storeId") ? recordMap.get("storeId").toString() : "");
 
                     if(recordMap.containsKey("attributeMap")){
 //                        steelVO.setAttributeMapJson(recordMap.get("attributeMap").toString());
@@ -201,9 +204,78 @@ public class SteelServiceImpl implements SteelService {
                     }*/
                     steelVOS.add(steelVO);
 
-                    categorys.put(recordMap.containsKey("fOneCategoryCode") ? recordMap.get("fOneCategoryCode").toString() : "", recordMap.containsKey("fOneCategoryName") ? recordMap.get("fOneCategoryName").toString() : "");
-                    categorys.put(recordMap.containsKey("fThreeCategoryCode") ? recordMap.get("fThreeCategoryCode").toString() : "", recordMap.containsKey("fThreeCategoryName") ? recordMap.get("fThreeCategoryName").toString() : "");
-                    categorys.put(recordMap.containsKey("fTwoCategoryCode") ? recordMap.get("fTwoCategoryCode").toString() : "", recordMap.containsKey("fTwoCategoryName") ? recordMap.get("fTwoCategoryName").toString() : "");
+
+                    Object fOneCategoryCode = recordMap.get("fOneCategoryCode");
+                    Object fOneCategoryName = recordMap.get("fOneCategoryName");
+                    if (ObjectUtil.isNotEmpty(fOneCategoryCode)) {
+                        log.info("fOneCategoryCode" + fOneCategoryCode.toString());
+                        if (com.vd.canary.utils.StringUtil.isNotEmpty(JSONUtil.toJSONString(fOneCategoryCode))) {
+                            List<String> fonecategorylist = JSONArray.parseArray(JSONUtil.toJSONString(fOneCategoryCode), String.class);
+                            if (ObjectUtil.isNotEmpty(fOneCategoryName)) {
+                                log.info("fOneCategoryName" + fOneCategoryCode.toString());
+                                if (com.vd.canary.utils.StringUtil.isNotEmpty(JSONUtil.toJSONString(fOneCategoryName))) {
+                                    List<String> fonecategorynamelist = JSONArray.parseArray(JSONUtil.toJSONString(fOneCategoryName), String.class);
+                                    for (int i = 0; i < fonecategorylist.size(); i++) {
+                                        for (int j = 0; j < fonecategorynamelist.size(); j++) {
+                                            if (i == j) {
+                                                categorys.put(fonecategorylist.get(i), fonecategorynamelist.get(j));
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    Object fTwoCategoryCode = recordMap.get("fTwoCategoryCode");
+                    Object fTwoCategoryName = recordMap.get("fTwoCategoryName");
+                    if (ObjectUtil.isNotEmpty(fTwoCategoryCode)) {
+                        log.info("fTwoCategoryCode" + fTwoCategoryCode.toString());
+                        if (com.vd.canary.utils.StringUtil.isNotEmpty(JSONUtil.toJSONString(fTwoCategoryCode))) {
+                            List<String> ftwocategorylist = JSONArray.parseArray(JSONUtil.toJSONString(fTwoCategoryCode), String.class);
+                            if (ObjectUtil.isNotEmpty(fTwoCategoryName)) {
+                                log.info("fTwoCategoryName" + fTwoCategoryName.toString());
+                                if (com.vd.canary.utils.StringUtil.isNotEmpty(JSONUtil.toJSONString(fTwoCategoryName))) {
+                                    List<String> ftwocategorynamelist = JSONArray.parseArray(JSONUtil.toJSONString(fTwoCategoryName), String.class);
+                                    for (int i = 0; i < ftwocategorylist.size(); i++) {
+                                        for (int j = 0; j < ftwocategorynamelist.size(); j++) {
+                                            if (i == j) {
+                                                categorys.put(ftwocategorylist.get(i),ftwocategorynamelist.get(j));
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+
+                    Object fThreeCategoryCode = recordMap.get("fThreeCategoryCode");
+                    Object fThreeCategoryName = recordMap.get("fThreeCategoryName");
+                    if (ObjectUtil.isNotEmpty(fThreeCategoryCode)) {
+                        log.info("fThreeCategoryCode" + fThreeCategoryCode.toString());
+                        if (com.vd.canary.utils.StringUtil.isNotEmpty(JSONUtil.toJSONString(fThreeCategoryCode))) {
+                            List<String> fthreecategorylist = JSONArray.parseArray(JSONUtil.toJSONString(fThreeCategoryCode), String.class);
+                            if (ObjectUtil.isNotEmpty(fThreeCategoryName)) {
+                                log.info("fThreeCategoryName" + fThreeCategoryName.toString());
+                                if (com.vd.canary.utils.StringUtil.isNotEmpty(JSONUtil.toJSONString(fThreeCategoryName))) {
+                                    List<String> fthreecategorynamelist = JSONArray.parseArray(JSONUtil.toJSONString(fThreeCategoryName), String.class);
+                                    for (int i = 0; i < fthreecategorylist.size(); i++) {
+                                        for (int j = 0; j < fthreecategorynamelist.size(); j++) {
+                                            if (i == j) {
+                                                categorys.put(fthreecategorylist.get(i),fthreecategorynamelist.get(j));
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+
+
+
+
                     brands.put(recordMap.containsKey("proSkuBrandId") ? recordMap.get("proSkuBrandId").toString() : "", recordMap.containsKey("bBrandName") ? recordMap.get("bBrandName").toString() : "");
                     spuNames.put(recordMap.containsKey("proSkuSpuId") ? recordMap.get("proSkuSpuId").toString() : "", recordMap.containsKey("proSkuSpuName") ? recordMap.get("proSkuSpuName").toString() : "");
 
