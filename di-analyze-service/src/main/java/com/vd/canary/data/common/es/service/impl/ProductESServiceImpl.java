@@ -271,14 +271,14 @@ public class ProductESServiceImpl implements ProductESService {
         if (req.getBBrandName() != null && req.getBBrandName().size() > 0) {//品牌
             boolQuery.must(QueryBuilders.termsQuery("proSkuBrandName", req.getBBrandName()));
         }
-        if (req.getOneFrontCategory() != null) {//三级分类
-            boolQuery.must(QueryBuilders.matchPhraseQuery("fThreeCategoryName", req.getOneFrontCategory()));
+        if (req.getThreeFrontCategory() != null) {//三级分类
+            boolQuery.must(QueryBuilders.matchPhraseQuery("fThreeCategoryName", req.getThreeFrontCategory()));
         }
         if (req.getTwoFrontCategory() != null) {//二级分类
             boolQuery.must(QueryBuilders.matchPhraseQuery("fTwoCategoryName", req.getTwoFrontCategory()));
         }
-        if (req.getThreeFrontCategory() != null) {//一级分类
-            boolQuery.must(QueryBuilders.matchPhraseQuery("fOneCategoryName", req.getThreeFrontCategory()));
+        if (req.getOneFrontCategory() != null) {//一级分类
+            boolQuery.must(QueryBuilders.matchPhraseQuery("fOneCategoryName", req.getOneFrontCategory()));
         }
         if (req.getSkuRegionalName() != null) { //供货区域
             boolQuery.must(QueryBuilders.matchPhraseQuery("regionalName", req.getSkuRegionalName()));
