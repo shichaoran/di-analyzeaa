@@ -39,10 +39,10 @@ import org.springframework.stereotype.Service;
 public class ProductESServiceImpl implements ProductESService {
 
     // 索引
-    private String indexName = "productindex_test";
+    private String indexName = "productindex_dev";
 
     //类型
-    private String esType = "producttype_test";
+    private String esType = "producttype_dev";
 
     // 创建索引
     public String createIndex() {
@@ -259,29 +259,29 @@ public class ProductESServiceImpl implements ProductESService {
         BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
 
         if (req.getSpecCommands() != null && req.getSpecCommands().size() > 0) {//规格
-            boolQuery.must(QueryBuilders.termsQuery("attributeMapJson.attributeName", req.getSpecCommands()));
+            boolQuery.must(QueryBuilders.termQuery("attributeMapJson.attributeName", req.getSpecCommands()));
         }
         if (req.getSpecCommands() != null && req.getSpecCommands().size() > 0) {//规格
-            boolQuery.must(QueryBuilders.termsQuery("attributeMapJson.attributeValue.attributeValueName", req.getSpecCommands()));
+            boolQuery.must(QueryBuilders.termQuery("attributeMapJson.attributeValue.attributeValueName", req.getSpecCommands()));
         }
 
         if (req.getSpuNames() != null && req.getSpuNames().size() > 0) {//spu名称
-            boolQuery.must(QueryBuilders.termsQuery("proSkuSpuName", req.getSpuNames()));
+            boolQuery.must(QueryBuilders.termQuery("proSkuSpuName", req.getSpuNames()));
         }
         if (req.getBBrandName() != null && req.getBBrandName().size() > 0) {//品牌
             boolQuery.must(QueryBuilders.termsQuery("proSkuBrandName", req.getBBrandName()));
         }
         if (req.getOneFrontCategory() != null) {//三级分类
-            boolQuery.must(QueryBuilders.matchPhraseQuery("fThreeCategoryName", req.getOneFrontCategory()));
+            boolQuery.must(QueryBuilders.termQuery("fThreeCategoryName", req.getOneFrontCategory()));
         }
         if (req.getTwoFrontCategory() != null) {//二级分类
-            boolQuery.must(QueryBuilders.matchPhraseQuery("fTwoCategoryName", req.getTwoFrontCategory()));
+            boolQuery.must(QueryBuilders.termQuery("fTwoCategoryName", req.getTwoFrontCategory()));
         }
         if (req.getThreeFrontCategory() != null) {//一级分类
-            boolQuery.must(QueryBuilders.matchPhraseQuery("fOneCategoryName", req.getThreeFrontCategory()));
+            boolQuery.must(QueryBuilders.termQuery("fOneCategoryName", req.getThreeFrontCategory()));
         }
         if (req.getSkuRegionalName() != null) { //供货区域
-            boolQuery.must(QueryBuilders.matchPhraseQuery("regionalName", req.getSkuRegionalName()));
+            boolQuery.must(QueryBuilders.termQuery("regionalName", req.getSkuRegionalName()));
         }
         if (StringUtils.isNotBlank(req.getPriceSort())) {
             sortField = "skuSellPriceJson"; // 商品定价信息，需要嵌套查询xxx.xxx
@@ -377,10 +377,10 @@ public class ProductESServiceImpl implements ProductESService {
             boolQuery.must(QueryBuilders.termsQuery("bBrandName", req.getBBrandName()));
         }
         if (req.getFThreeCategoryName() != null && req.getFThreeCategoryName().size() > 0) {//后台三级分类id
-            boolQuery.must(QueryBuilders.matchPhraseQuery("fThreeCategoryName", req.getFThreeCategoryName()));
+            boolQuery.must(QueryBuilders.termsQuery("fThreeCategoryName", req.getFThreeCategoryName()));
         }
         if (req.getBusinessAreaName() != null && req.getBusinessAreaName().size() > 0) { //供货区域id
-            boolQuery.must(QueryBuilders.matchPhraseQuery("skuRegionalName", req.getBusinessAreaName()));
+            boolQuery.must(QueryBuilders.termsQuery("skuRegionalName", req.getBusinessAreaName()));
         }
         if (StringUtils.isNotBlank(req.getPriceSort())) {
             sortField = "skuSellPriceJson.price"; // 商品定价信息，需要嵌套查询xxx.xxx
