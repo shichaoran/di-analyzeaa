@@ -268,34 +268,32 @@ public class ProductESServiceImpl implements ProductESService {
         }
 
         if (req.getSpuNames() != null && req.getSpuNames().size() > 0) {//spu名称
-            boolQuery.must(QueryBuilders.termsQuery("proSkuSpuName", req.getSpuNames()));
+            boolQuery.must(QueryBuilders.matchQuery("proSkuSpuName", req.getSpuNames()));
         }
         if (req.getBBrandName() != null && req.getBBrandName().size() > 0) {//品牌
-            boolQuery.must(QueryBuilders.termsQuery("proSkuBrandName", req.getBBrandName()));
+            boolQuery.must(QueryBuilders.matchQuery("proSkuBrandName", req.getBBrandName()));
         }
-        if (req.getOneFrontCategory() != null) {//三级分类
+        if (StringUtils.isNotBlank(req.getOneFrontCategory()) ) {//三级分类
             //boolQuery.must(QueryBuilders.matchPhraseQuery("fThreeCategoryName", req.getOneFrontCategory()));
             boolQuery.must(QueryBuilders.matchQuery("fThreeCategoryName", req.getOneFrontCategory()));
         }
-        if (req.getTwoFrontCategory() != null) {//二级分类
+        if (StringUtils.isNotBlank(req.getTwoFrontCategory()) ) {//二级分类
             //boolQuery.must(QueryBuilders.matchPhraseQuery("fTwoCategoryName", req.getTwoFrontCategory()));
             boolQuery.must(QueryBuilders.matchQuery("fTwoCategoryName", req.getTwoFrontCategory()));
         }
-        if (req.getThreeFrontCategory() != null) {//一级分类
+        if (StringUtils.isNotBlank(req.getThreeFrontCategory()) ) {//一级分类
             //boolQuery.must(QueryBuilders.matchPhraseQuery("fOneCategoryName", req.getThreeFrontCategory()));
             boolQuery.must(QueryBuilders.matchQuery("fOneCategoryName", req.getThreeFrontCategory()));
         }
-        if (req.getSkuRegionalName() != null) { //供货区域
+        if (StringUtils.isNotBlank(req.getSkuRegionalName()) ) { //供货区域
             boolQuery.must(QueryBuilders.matchPhraseQuery("regionalName", req.getSkuRegionalName()));
         }
         if (StringUtils.isNotBlank(req.getPriceSort())) {
-            sortField = "skuSellPriceJson"; // 商品定价信息，需要嵌套查询xxx.xxx
+            sortField = "remark1";
             sortTpye = req.getPriceSort(); // 商品价格排序
         }
-        if (StringUtils.isNotBlank(req.getIsDiscussPrice())) {//是否议价，需要嵌套查询xxx.xxx
-            //boolQuery.must(QueryBuilders.rangeQuery("skuSellPriceJson").from(30).to(60).includeLower(true).includeUpper(true)); //适用价格区间查找
-            boolQuery.must(QueryBuilders.rangeQuery("skuSellPriceJson").gt(0));
-            //boolQuery.mustNot();
+        if (StringUtils.isNotBlank(req.getIsDiscussPrice()) && req.getIsDiscussPrice().equals("1")) {//是否议价 0-包含议价的商品，1-不含议价的商品
+            boolQuery.must(QueryBuilders.rangeQuery("remark1").gt(0));
         }
         boolQuery.must(QueryBuilders.termQuery("shelvesState.keyword", "1" ));
         ESPageRes esPageRes = ElasticsearchUtil.searchDataPage(indexName, pageNumber, pageSize, boolQuery, fields, sortField, sortTpye, highlightField);
@@ -412,7 +410,7 @@ public class ProductESServiceImpl implements ProductESService {
             sortTpye = req.getPriceSort(); // 商品价格排序
         }
         if (StringUtils.isNotBlank(req.getIsDiscussPrice()) && req.getIsDiscussPrice().equals("1")) {//是否议价 0-包含议价的商品，1-不含议价的商品
-            boolQuery.must(QueryBuilders.rangeQuery("remark1").gt(1));
+            boolQuery.must(QueryBuilders.rangeQuery("remark1").gt(0));
         }
         if (StringUtils.isNotBlank(req.getIsHaveHouse()) && req.getIsHaveHouse().equals("1")) {//是否入驻展厅 是否入驻 0-全部商品，1-入驻展厅的商品
             boolQuery.must(QueryBuilders.matchQuery("boothBusinessBoothCode","[*"));
