@@ -278,10 +278,7 @@ public class ProductsTO implements Serializable {
 
     private String shelvesState;  // 上架状态 1 上架
 
-
-
-
-    private String remark1;
+    private String remark1; // 目前用来存储价格，用来排序
 
     private String remark2;
 

@@ -358,10 +358,10 @@ public class ProductESServiceImpl implements ProductESService {
      * .should:                  : OR
      */
     public ESPageRes boolQueryByKeyword(Integer pageNumber, Integer pageSize, ProductsReq req) {
-        if (req == null) {
-            List<Map<String, Object>> recordList = new ArrayList<>();
-            return new ESPageRes(0, 0, 0, recordList);
-        }
+        //if (req == null) {
+        //    List<Map<String, Object>> recordList = new ArrayList<>();
+        //    return new ESPageRes(0, 0, 0, recordList);
+        //}
         if (pageNumber == null || pageNumber < Constant.ES_DEFAULT_PAGE_NUMBER) {
             pageNumber = Constant.ES_DEFAULT_PAGE_NUMBER;
         }
@@ -408,28 +408,26 @@ public class ProductESServiceImpl implements ProductESService {
             boolQuery.must(query);
         }
         if (StringUtils.isNotBlank(req.getPriceSort())) {
-            sortField = "skuSellPriceJson.price"; // 商品定价信息，需要嵌套查询xxx.xxx
+            sortField = "remark1";
             sortTpye = req.getPriceSort(); // 商品价格排序
         }
-        if (StringUtils.isNotBlank(req.getIsDiscussPrice()) && req.getIsDiscussPrice().equals("1")) {//是否议价，需要嵌套查询xxx.xxx 是否议价 0-包含议价的商品，1-不含议价的商品
-            //boolQuery.must(QueryBuilders.rangeQuery("skuSellPriceJson").from(30).to(60).includeLower(true).includeUpper(true)); //适用价格区间查找
-            //boolQuery.mustNot();
-            //boolQuery.must(QueryBuilders.rangeQuery("skuSellPriceJson.price").gt(0));
-            boolQuery.mustNot(QueryBuilders.termQuery("skuSellPriceJson.price","0"));
+        if (StringUtils.isNotBlank(req.getIsDiscussPrice()) && req.getIsDiscussPrice().equals("1")) {//是否议价 0-包含议价的商品，1-不含议价的商品
+            boolQuery.must(QueryBuilders.rangeQuery("remark1").gt(1));
         }
         if (StringUtils.isNotBlank(req.getIsHaveHouse()) && req.getIsHaveHouse().equals("1")) {//是否入驻展厅 是否入驻 0-全部商品，1-入驻展厅的商品
-            //boolQuery.must();
             boolQuery.must(QueryBuilders.matchQuery("boothBusinessBoothCode","[*"));
         }
         boolQuery.must(QueryBuilders.termQuery("shelvesState.keyword", "1" ));
-        if(StringUtils.isEmpty(req.getKey())){
+        /*if(StringUtils.isEmpty(req.getKey())){
             QueryBuilder queryBuilder = QueryBuilders.matchAllQuery();
             ESPageRes esPageRes = ElasticsearchUtil.searchDataPage(indexName, pageNumber, pageSize, queryBuilder, fields, sortField, sortTpye, highlightField);
             return esPageRes;
         }else{
             ESPageRes esPageRes = ElasticsearchUtil.searchDataPage(indexName, pageNumber, pageSize, boolQuery, fields, sortField, sortTpye, highlightField);
             return esPageRes;
-        }
+        }*/
+        ESPageRes esPageRes = ElasticsearchUtil.searchDataPage(indexName, pageNumber, pageSize, boolQuery, fields, sortField, sortTpye, highlightField);
+        return esPageRes;
 
     }
 

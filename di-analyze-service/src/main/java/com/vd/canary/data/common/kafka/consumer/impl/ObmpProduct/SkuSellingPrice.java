@@ -80,10 +80,16 @@ public class SkuSellingPrice implements Function {
         if(binlogMap.containsKey("price_json")){
             JSONArray array = JSONArray.parseArray(JSONUtil.toJSONString(binlogMap.get("price_json")));
             JSONObject obj = (JSONObject)array.get(0);
-            obj.put("price",Double.parseDouble( obj.get("price").toString() ));
             JSONArray jsonarray = new JSONArray();
             jsonarray.add(obj);
             esMap.put("skuSellPriceJson",JSONUtil.toJSONString(jsonarray) );
+
+            if(obj.containsKey("price") && obj.get("price") != null ){
+                esMap.put("remark1",Double.parseDouble( "0" ) );
+            }else{
+                //obj.put("price",Double.parseDouble( obj.get("price").toString() ));
+                esMap.put("remark1",Double.parseDouble( obj.get("price").toString() ) );
+            }
         }
         System.out.println("------------SkuSellingPrice.reSetValue.json:"+esMap);
         return esMap;
@@ -166,27 +172,32 @@ public class SkuSellingPrice implements Function {
 
         try {
             Map<String, Object> esShopMap = shopESService.findById(storeId);
-            if(businessCategory != null && businessCategory.size() > 0 ){
-                JSONArray array = JSONArray.parseArray(JSONUtil.toJSONString(businessCategory));
-                if(array != null){
-                    esShopMap.put("businessCategory", array);
+            if(esShopMap != null){
+                if(businessCategory != null && businessCategory.size() > 0 ){
+                    JSONArray array = JSONArray.parseArray(JSONUtil.toJSONString(businessCategory));
+                    if(array != null){
+                        esShopMap.put("businessCategory", array);
+                    }
                 }
-            }
-            if(businessBrand != null && businessBrand.size() > 0 ){
-                JSONArray array = JSONArray.parseArray(JSONUtil.toJSONString(businessBrand));
-                if(array != null){
-                    esShopMap.put("businessBrand",array);
+                if(businessBrand != null && businessBrand.size() > 0 ){
+                    try{
+                        JSONArray array = JSONArray.parseArray(JSONUtil.toJSONString(businessBrand));
+                        if(array != null){
+                            esShopMap.put("businessBrand",array);
+                        }
+                    }catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
+                if(shopProductRes.size() >=3 ){
+                    JSONArray array = JSONArray.parseArray(JSONUtil.toJSONString(shopProductRes.subList(0,2)));
+                    esShopMap.put("shopProductRes",array);
+                }else{
+                    JSONArray array = JSONArray.parseArray(JSONUtil.toJSONString(shopProductRes));
+                    esShopMap.put("shopProductRes",JSONUtil.toJSONString(array));
+                }
+                shopESService.updateShop(esShopMap);
             }
-            if(shopProductRes.size() >=3 ){
-                JSONArray array = JSONArray.parseArray(JSONUtil.toJSONString(shopProductRes.subList(0,2)));
-                esShopMap.put("shopProductRes",array);
-            }else{
-                JSONArray array = JSONArray.parseArray(JSONUtil.toJSONString(shopProductRes));
-                esShopMap.put("shopProductRes",array);
-            }
-
-            shopESService.updateShop(esShopMap);
         }catch (IOException e) {
             e.printStackTrace();
         }
