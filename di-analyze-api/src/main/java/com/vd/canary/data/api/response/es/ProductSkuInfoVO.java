@@ -49,4 +49,8 @@ public class ProductSkuInfoVO implements Serializable {
     private String warehouseName;
     //库存
     private String inventory;
+
+    private String isGmProduct;
+
+    private String shelvesState;
 }

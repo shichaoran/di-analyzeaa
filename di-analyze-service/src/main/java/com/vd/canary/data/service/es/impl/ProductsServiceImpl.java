@@ -130,6 +130,10 @@ public class ProductsServiceImpl implements ProductsService {
 
                     if(recordMap.containsKey("proSkuSpuId") && recordMap.get("proSkuSpuId") !=null) productsDetailRes.setProSkuSpuId(recordMap.get("proSkuSpuId").toString());
 
+                    if(recordMap.containsKey("isGmProduct") && recordMap.get("isGmProduct") !=null) productsDetailRes.setIsGmProduct(recordMap.get("isGmProduct").toString());
+
+                    if(recordMap.containsKey("shelvesState") && recordMap.get("shelvesState") !=null) productsDetailRes.setShelvesState(recordMap.get("shelvesState").toString());
+
                     productDetailResList.add(productsDetailRes);
 
                     categorys.put(recordMap.containsKey("fOneCategoryCode") ? recordMap.get("fOneCategoryCode").toString() : "", recordMap.containsKey("fOneCategoryName") ? recordMap.get("fOneCategoryName").toString() : "");
@@ -248,6 +252,10 @@ public class ProductsServiceImpl implements ProductsService {
                     if(recordMap.containsKey("attributeMap") && recordMap.get("attributeMap") !=null) productsDetailRes.setAttributeMapJson(recordMap.get("attributeMap").toString());
 
                     if(recordMap.containsKey("proSkuSpuId") && recordMap.get("proSkuSpuId") !=null) productsDetailRes.setProSkuSpuId(recordMap.get("proSkuSpuId").toString());
+
+                    if(recordMap.containsKey("isGmProduct") && recordMap.get("isGmProduct") !=null) productsDetailRes.setIsGmProduct(recordMap.get("isGmProduct").toString());
+
+                    if(recordMap.containsKey("shelvesState") && recordMap.get("shelvesState") !=null) productsDetailRes.setShelvesState(recordMap.get("shelvesState").toString());
 
                     productDetailResList.add(productsDetailRes);
 
@@ -373,6 +381,10 @@ public class ProductsServiceImpl implements ProductsService {
                     if(submap.containsKey("warehouseName") && submap.get("warehouseName") != null ) productSkuInfoVO.setWarehouseName(submap.get("warehouseName").toString());
 
                     if(submap.containsKey("inventory") && submap.get("inventory") != null ) productSkuInfoVO.setInventory(submap.get("inventory").toString());
+
+                    if(submap.containsKey("isGmProduct") && submap.get("isGmProduct") !=null) productSkuInfoVO.setIsGmProduct(submap.get("isGmProduct").toString());
+
+                    if(submap.containsKey("shelvesState") && submap.get("shelvesState") !=null) productSkuInfoVO.setShelvesState(submap.get("shelvesState").toString());
 
                     productSkuInfoVOS.add(productSkuInfoVO);
                 }
