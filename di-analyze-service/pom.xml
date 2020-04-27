@@ -30,6 +30,12 @@
             <artifactId>di-analyze-api</artifactId>
             <version>1.0.1-SNAPSHOT</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.jsoup/jsoup -->
+        <dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>1.12.1</version>
+        </dependency>
 
         <dependency>
             <groupId>com.vd.canary</groupId>
