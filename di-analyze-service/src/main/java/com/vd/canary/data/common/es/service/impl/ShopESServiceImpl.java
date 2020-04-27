@@ -161,11 +161,17 @@ public class ShopESServiceImpl implements ShopESService {
     }
 
     public void updateShop(Map<String,Object> map) throws IOException {
+        if (!ElasticsearchUtil.isIndexExist(indexName)) {
+            ElasticsearchUtil.createIndex(indexName, createIndexMapping( indexName));
+        }
         ElasticsearchUtil.updateData(map, indexName, map.get("id").toString());
         log.info("indexName:{},id:{},update shop,map{} .", indexName, map.get("id").toString(),map);
     }
 
     public Map<String, Object> findById(String id) throws IOException {
+        if (!ElasticsearchUtil.isIndexExist(indexName)) {
+            ElasticsearchUtil.createIndex(indexName, createIndexMapping( indexName));
+        }
         return ElasticsearchUtil.searchDataById(indexName, id);
     }
 
@@ -174,10 +180,18 @@ public class ShopESServiceImpl implements ShopESService {
         if(StringUtils.isEmpty(customerId) ){
             return new HashMap<>();
         }
+        if (!ElasticsearchUtil.isIndexExist(indexName)) {
+            ElasticsearchUtil.createIndex(indexName, createIndexMapping( indexName));
+        }
         BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
         boolQuery.must(QueryBuilders.termsQuery("customerId", customerId));
         List<Map<String, Object>> list = ElasticsearchUtil.searchByQuery(indexName,boolQuery);
-        return list.get(0);
+        if(CollectionUtils.isNotEmpty(list)){
+            return list.get(0);
+        }else{
+            return new HashMap<>();
+        }
+
     }
 
     /**
@@ -312,11 +326,15 @@ public class ShopESServiceImpl implements ShopESService {
                         builder.endObject();
                         builder.startObject("level"); { builder.field("type", "keyword"); }
                         builder.endObject();
+                        builder.startObject("logoImageUrl"); { builder.field("type", "keyword"); }
+                        builder.endObject();
                         builder.startObject("remark1"); { builder.field("type", "keyword"); }
                         builder.endObject();
                         builder.startObject("remark2"); { builder.field("type", "keyword"); }
                         builder.endObject();
-                        builder.startObject("logoImageUrl"); { builder.field("type", "keyword"); }
+                        builder.startObject("remark3"); { builder.field("type", "keyword"); }
+                        builder.endObject();
+                        builder.startObject("remark4"); { builder.field("type", "keyword"); }
                         builder.endObject();
                     }
                     builder.endObject();

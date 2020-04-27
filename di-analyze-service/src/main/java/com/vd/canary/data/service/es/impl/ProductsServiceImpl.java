@@ -559,15 +559,74 @@ public class ProductsServiceImpl implements ProductsService {
             for(Map<String, Object> map : result){
                 CategoryVO categoryVO = new CategoryVO();
                 if(map.containsKey("skuId")){
-                    //if(map.containsKey("fOneCategoryId")) categoryVO.setFOneCategoryId(map.get("fOneCategoryId").toString());
-                    if(map.containsKey("fOneCategoryCode")) categoryVO.setFOneCategoryCode(map.get("fOneCategoryCode").toString());
-                    if(map.containsKey("fOneCategoryName")) categoryVO.setFOneCategoryName(map.get("fOneCategoryName").toString());
-                    //if(map.containsKey("fTwoCategoryId")) categoryVO.setFTwoCategoryId(map.get("fTwoCategoryId").toString());
-                    if(map.containsKey("fTwoCategoryCode")) categoryVO.setFTwoCategoryCode(map.get("fTwoCategoryCode").toString());
-                    if(map.containsKey("fTwoCategoryName")) categoryVO.setFTwoCategoryName(map.get("fTwoCategoryName").toString());
-                    //if(map.containsKey("fThreeCategoryId")) categoryVO.setFThreeCategoryId(map.get("fThreeCategoryId").toString());
-                    if(map.containsKey("fThreeCategoryCode")) categoryVO.setFThreeCategoryCode(map.get("fThreeCategoryCode").toString());
-                    if(map.containsKey("fThreeCategoryName")) categoryVO.setFThreeCategoryName(map.get("fThreeCategoryName").toString());
+
+                    Object fOneCategoryCode = map.get("fOneCategoryCode");
+                    Object fOneCategoryName = map.get("fOneCategoryName");
+                    Object fTwoCategoryCode = map.get("fTwoCategoryCode");
+                    Object fTwoCategoryName = map.get("fTwoCategoryName");
+                    Object fThreeCategoryCode = map.get("fThreeCategoryCode");
+                    Object fThreeCategoryName = map.get("fThreeCategoryName");
+                    if (ObjectUtil.isNotEmpty(fOneCategoryCode)) {
+                        log.info("fOneCategoryCode" + fOneCategoryCode.toString());
+                        if (com.vd.canary.utils.StringUtil.isNotEmpty(JSONUtil.toJSONString(fOneCategoryCode))) {
+                            List<String> fonecategorylist = JSONArray.parseArray(JSONUtil.toJSONString(fOneCategoryCode), String.class);
+                                    for (int i = 0; i < fonecategorylist.size(); i++) {
+                                        categoryVO.setOneCategoryCode(fonecategorylist.get(i));
+                                            }
+                                        }
+                                    }
+                    if (ObjectUtil.isNotEmpty(fOneCategoryName)) {
+                        log.info("fOneCategoryName" + fOneCategoryName.toString());
+                        if (com.vd.canary.utils.StringUtil.isNotEmpty(JSONUtil.toJSONString(fOneCategoryName))) {
+                            List<String> fonecategorylist = JSONArray.parseArray(JSONUtil.toJSONString(fOneCategoryName), String.class);
+                            for (int i = 0; i < fonecategorylist.size(); i++) {
+                                categoryVO.setOneCategoryName(fonecategorylist.get(i));
+                            }
+                        }
+                    }
+                    if (ObjectUtil.isNotEmpty(fTwoCategoryCode)) {
+                        log.info("fTwoCategoryCode" + fTwoCategoryCode.toString());
+                        if (com.vd.canary.utils.StringUtil.isNotEmpty(JSONUtil.toJSONString(fTwoCategoryCode))) {
+                            List<String> ftwocategorylist = JSONArray.parseArray(JSONUtil.toJSONString(fTwoCategoryCode), String.class);
+                            for (int i = 0; i < ftwocategorylist.size(); i++) {
+                                categoryVO.setTwoCategoryCode(ftwocategorylist.get(i));
+                            }
+                        }
+                    }
+                    if (ObjectUtil.isNotEmpty(fTwoCategoryName)) {
+                        log.info("fTwoCategoryName" + fTwoCategoryName.toString());
+                        if (com.vd.canary.utils.StringUtil.isNotEmpty(JSONUtil.toJSONString(fTwoCategoryName))) {
+                            List<String> ftwocategorylist = JSONArray.parseArray(JSONUtil.toJSONString(fTwoCategoryName), String.class);
+                            for (int i = 0; i < ftwocategorylist.size(); i++) {
+                                categoryVO.setTwoCategoryName(ftwocategorylist.get(i));
+                            }
+                        }
+                    }
+                    if (ObjectUtil.isNotEmpty(fThreeCategoryCode)) {
+                        log.info("fThreeCategoryCode" + fThreeCategoryCode.toString());
+                        if (com.vd.canary.utils.StringUtil.isNotEmpty(JSONUtil.toJSONString(fThreeCategoryCode))) {
+                            List<String> fthreecategorylist = JSONArray.parseArray(JSONUtil.toJSONString(fThreeCategoryCode), String.class);
+                            for (int i = 0; i < fthreecategorylist.size(); i++) {
+                                categoryVO.setThreeCategoryCode(fthreecategorylist.get(i));
+                            }
+                        }
+                    }
+                    if (ObjectUtil.isNotEmpty(fThreeCategoryName)) {
+                        log.info("fThreeCategoryName" + fThreeCategoryName.toString());
+                        if (com.vd.canary.utils.StringUtil.isNotEmpty(JSONUtil.toJSONString(fThreeCategoryName))) {
+                            List<String> fthreecategorylist = JSONArray.parseArray(JSONUtil.toJSONString(fThreeCategoryName), String.class);
+                            for (int i = 0; i < fthreecategorylist.size(); i++) {
+                                categoryVO.setThreeCategoryName(fthreecategorylist.get(i));
+                            }
+                        }
+                    }
+
+//                    if(map.containsKey("fOneCategoryCode")) categoryVO.setFOneCategoryCode(map.get("fOneCategoryCode").toString());
+//                    if(map.containsKey("fOneCategoryName")) categoryVO.setFOneCategoryName(map.get("fOneCategoryName").toString());
+//                    if(map.containsKey("fTwoCategoryCode")) categoryVO.setFTwoCategoryCode(map.get("fTwoCategoryCode").toString());
+//                    if(map.containsKey("fTwoCategoryName")) categoryVO.setFTwoCategoryName(map.get("fTwoCategoryName").toString());
+//                    if(map.containsKey("fThreeCategoryCode")) categoryVO.setFThreeCategoryCode(map.get("fThreeCategoryCode").toString());
+//                    if(map.containsKey("fThreeCategoryName")) categoryVO.setFThreeCategoryName(map.get("fThreeCategoryName").toString());
 
                     maps.put(map.get("skuId").toString(),categoryVO);
                 }

@@ -21,8 +21,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class KafkaConsumerForES {
 
-    //@KafkaListener(topics = {"test"})
-    @KafkaListener(topics = "test", id = "test_es", containerFactory = "batchFactory",concurrency="3" )
+    //@KafkaListener(topics = "test", id = "test_es", containerFactory = "batchFactory",concurrency="3" )
+    @KafkaListener(topics = {"test"})
     public void receive(String message){
         log.info("<------this is kafka consumer,topic = test, receive:"+message);
         log.debug(message);
@@ -85,7 +85,7 @@ public class KafkaConsumerForES {
             e.printStackTrace();
         }
     }*/
-    @KafkaListener(topics = "binglog_obmp_product_2r3p", id = "product_es1" )
+    @KafkaListener(topics = "binglog_obmp_product_2r3p" )
     public void listenProduct(String msg) throws IOException {
 
         log.info("<------this is kafka consumer,topic = binglog_obmp_product_2r3p, msg = {}",msg);
@@ -148,7 +148,7 @@ public class KafkaConsumerForES {
             e.printStackTrace();
         }
     }*/
-    @KafkaListener(topics = "binglog_obmp_customer_2r3p", id = "customer_es" )
+    @KafkaListener(topics = "binglog_obmp_customer_2r3p" )
     public void listenCustomer(String msg) throws IOException {
         log.info("<------this is kafka consumer,topic = binglog_obmp_customer_2r3p, msg = {}", msg);
         JSONObject jsonMap = JSONObject.parseObject(msg);

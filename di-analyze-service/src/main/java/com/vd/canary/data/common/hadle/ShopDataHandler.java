@@ -69,9 +69,11 @@ public class ShopDataHandler {
                 shopTO.setName(storeInfoVO.getName());
                 shopTO.setCustomerId(storeInfoVO.getCustomerId()+"");
                 LocalDateTime gmtCreateTime = storeInfoVO.getGmtCreateTime();
-                DateTimeFormatter df = DateTimeFormatter.ofPattern(LocalDateUtil.DEFAULT_PATTERN_TO_SECOND);
-                String format = df.format(gmtCreateTime);
-                shopTO.setBoothScheduledTime(format);
+                if(gmtCreateTime != null){
+                    DateTimeFormatter df = DateTimeFormatter.ofPattern(LocalDateUtil.DEFAULT_PATTERN_TO_SECOND);
+                    String format = df.format(gmtCreateTime);
+                    shopTO.setBoothScheduledTime(format);
+                }
             }
             if(CollectionUtil.isNotEmpty(agreementVOs)){
                 List<String> boothCodeList = agreementVOs.stream()

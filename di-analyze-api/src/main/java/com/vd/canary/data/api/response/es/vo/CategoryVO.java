@@ -12,24 +12,18 @@ import java.io.Serializable;
 @ToString
 public class CategoryVO implements Serializable {
 
-    //前台一级分类id
-    private String fOneCategoryId;
     //前台一级分类code
-    private String fOneCategoryCode;
+    private String oneCategoryCode;
     //前台一级分类
-    private String fOneCategoryName;
-    //前台二级分类id
-    private String fTwoCategoryId;
+    private String oneCategoryName;
     //前台二级分类code
-    private String fTwoCategoryCode;
+    private String twoCategoryCode;
     //前台二级分类
-    private String fTwoCategoryName;
-    //前台三级分类id
-    private String fThreeCategoryId;
+    private String twoCategoryName;
     //前台三级分类code
-    private String fThreeCategoryCode;
+    private String threeCategoryCode;
     //前台三级分类
-    private String fThreeCategoryName;
+    private String threeCategoryName;
 
 
 }

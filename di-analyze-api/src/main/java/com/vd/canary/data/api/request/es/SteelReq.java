@@ -60,4 +60,7 @@ public class SteelReq extends RequestPageBO {
     private List<String> spuNames;
 
     private List<SpecCommand> specCommands;
+
+    // 会员级别，用来过滤议价  目前未使用(prive)  60尊享会员(vipPrice)  40普通会员&50vip会员(referencePrice)
+    private String memberLevel;
 }

@@ -130,8 +130,8 @@ public class ProductSku implements Function {
                     log.info("ProductSku.reSetValue,spu_id.res={}.",JSONUtil.toJSON(res).toJSONString());
                     if(res != null){
                         ProductSpuDetailResp pro = (ProductSpuDetailResp) res.getData();
-                        log.info("ProductSku.reSetValue,spu_id.pro={}.",JSONUtil.toJSON(pro).toJSONString());
                         if(pro != null){
+                            log.info("ProductSku.reSetValue,spu_id.pro={}.",JSONUtil.toJSON(pro).toJSONString());
                             esMap.put("spuState",pro.getSpuState());
                             esMap.put("proSpuSpuPic",JSONUtils.fromListByFastJson(pro.getSpuPic()));
                             esMap.put("spuTitle",pro.getSpuTitle());

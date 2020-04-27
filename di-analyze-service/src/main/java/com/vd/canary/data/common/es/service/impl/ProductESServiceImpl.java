@@ -154,17 +154,26 @@ public class ProductESServiceImpl implements ProductESService {
         saveOrUpdateProduct(product);
     }
     public void updateProduct(Map<String,Object> map) throws IOException {
+        if (!ElasticsearchUtil.isIndexExist(indexName)) {
+            ElasticsearchUtil.createIndex(indexName, createIndexMapping( indexName));
+        }
         ElasticsearchUtil.updateData(map, indexName, map.get("skuId").toString());
         log.info("indexName:{},skuid:{},update product,map{} .", indexName, map.get("skuId").toString(),map);
     }
 
     // 通过id获取数据
     public Map<String, Object> findById(String id) throws IOException {
+        if (!ElasticsearchUtil.isIndexExist(indexName)) {
+            ElasticsearchUtil.createIndex(indexName, createIndexMapping( indexName));
+        }
         return ElasticsearchUtil.searchDataById(indexName, id);
     }
 
     // 通过 skuid 数组列表返回查询结果，不分页
     public List<Map<String, Object>> findByIds(CategoryReq categoryReq) {
+        if (!ElasticsearchUtil.isIndexExist(indexName)) {
+            ElasticsearchUtil.createIndex(indexName, createIndexMapping( indexName));
+        }
         List<Map<String, Object>> result = Lists.newArrayList();
         if(categoryReq == null || categoryReq.getSkuIdList().size() == 0){
             return result;
@@ -268,34 +277,47 @@ public class ProductESServiceImpl implements ProductESService {
         }
 
         if (req.getSpuNames() != null && req.getSpuNames().size() > 0) {//spu名称
-            boolQuery.must(QueryBuilders.termsQuery("proSkuSpuName", req.getSpuNames()));
+            boolQuery.must(QueryBuilders.matchQuery("proSkuSpuName", req.getSpuNames()));
         }
         if (req.getBBrandName() != null && req.getBBrandName().size() > 0) {//品牌
-            boolQuery.must(QueryBuilders.termsQuery("proSkuBrandName", req.getBBrandName()));
+            //boolQuery.must(QueryBuilders.matchQuery("proSkuBrandName", req.getBBrandName()));
+            boolQuery.must(QueryBuilders.matchQuery("businessBrand", req.getBBrandName()));
         }
-        if (req.getOneFrontCategory() != null) {//三级分类
+        if (StringUtils.isNotBlank(req.getOneFrontCategory()) ) {//三级分类
             //boolQuery.must(QueryBuilders.matchPhraseQuery("fThreeCategoryName", req.getOneFrontCategory()));
             boolQuery.must(QueryBuilders.matchQuery("fThreeCategoryName", req.getOneFrontCategory()));
         }
-        if (req.getTwoFrontCategory() != null) {//二级分类
+        if (StringUtils.isNotBlank(req.getTwoFrontCategory()) ) {//二级分类
             //boolQuery.must(QueryBuilders.matchPhraseQuery("fTwoCategoryName", req.getTwoFrontCategory()));
             boolQuery.must(QueryBuilders.matchQuery("fTwoCategoryName", req.getTwoFrontCategory()));
         }
-        if (req.getThreeFrontCategory() != null) {//一级分类
+        if (StringUtils.isNotBlank(req.getThreeFrontCategory()) ) {//一级分类
             //boolQuery.must(QueryBuilders.matchPhraseQuery("fOneCategoryName", req.getThreeFrontCategory()));
             boolQuery.must(QueryBuilders.matchQuery("fOneCategoryName", req.getThreeFrontCategory()));
         }
-        if (req.getSkuRegionalName() != null) { //供货区域
+        if (StringUtils.isNotBlank(req.getSkuRegionalName()) ) { //供货区域
             boolQuery.must(QueryBuilders.matchPhraseQuery("regionalName", req.getSkuRegionalName()));
         }
         if (StringUtils.isNotBlank(req.getPriceSort())) {
-            sortField = "skuSellPriceJson"; // 商品定价信息，需要嵌套查询xxx.xxx
-            sortTpye = req.getPriceSort(); // 商品价格排序
+            if(StringUtils.isNotBlank(req.getMemberLevel()) && req.getMemberLevel().equals(40)){
+                sortField = "price";
+                sortTpye = req.getPriceSort(); // 商品价格排序
+            }else if(StringUtils.isNotBlank(req.getMemberLevel()) && req.getMemberLevel().equals(50)){
+                sortField = "vipPrice";
+                sortTpye = req.getPriceSort(); // 商品价格排序
+            }else if(StringUtils.isNotBlank(req.getMemberLevel()) && req.getMemberLevel().equals(60)){
+                sortField = "referencePrice";
+                sortTpye = req.getPriceSort(); // 商品价格排序
+            }
         }
-        if (StringUtils.isNotBlank(req.getIsDiscussPrice())) {//是否议价，需要嵌套查询xxx.xxx
-            //boolQuery.must(QueryBuilders.rangeQuery("skuSellPriceJson").from(30).to(60).includeLower(true).includeUpper(true)); //适用价格区间查找
-            boolQuery.must(QueryBuilders.rangeQuery("skuSellPriceJson").gt(0));
-            //boolQuery.mustNot();
+        if (StringUtils.isNotBlank(req.getIsDiscussPrice()) && req.getIsDiscussPrice().equals("1")) {//是否议价 0-包含议价的商品，1-不含议价的商品
+            if(StringUtils.isNotBlank(req.getMemberLevel()) && req.getMemberLevel().equals(40)){
+                boolQuery.must(QueryBuilders.rangeQuery("price").gt(0));
+            }else if(StringUtils.isNotBlank(req.getMemberLevel()) && req.getMemberLevel().equals(50)){
+                boolQuery.must(QueryBuilders.rangeQuery("vipPrice").gt(0));
+            }else if(StringUtils.isNotBlank(req.getMemberLevel()) && req.getMemberLevel().equals(60)){
+                boolQuery.must(QueryBuilders.rangeQuery("referencePrice").gt(0));
+            }
         }
         boolQuery.must(QueryBuilders.termQuery("shelvesState.keyword", "1" ));
         ESPageRes esPageRes = ElasticsearchUtil.searchDataPage(indexName, pageNumber, pageSize, boolQuery, fields, sortField, sortTpye, highlightField);
@@ -358,10 +380,6 @@ public class ProductESServiceImpl implements ProductESService {
      * .should:                  : OR
      */
     public ESPageRes boolQueryByKeyword(Integer pageNumber, Integer pageSize, ProductsReq req) {
-        if (req == null) {
-            List<Map<String, Object>> recordList = new ArrayList<>();
-            return new ESPageRes(0, 0, 0, recordList);
-        }
         if (pageNumber == null || pageNumber < Constant.ES_DEFAULT_PAGE_NUMBER) {
             pageNumber = Constant.ES_DEFAULT_PAGE_NUMBER;
         }
@@ -408,28 +426,40 @@ public class ProductESServiceImpl implements ProductESService {
             boolQuery.must(query);
         }
         if (StringUtils.isNotBlank(req.getPriceSort())) {
-            sortField = "skuSellPriceJson.price"; // 商品定价信息，需要嵌套查询xxx.xxx
-            sortTpye = req.getPriceSort(); // 商品价格排序
+            if(StringUtils.isNotBlank(req.getMemberLevel()) && req.getMemberLevel().equals(40)){
+                sortField = "price";
+                sortTpye = req.getPriceSort(); // 商品价格排序
+            }else if(StringUtils.isNotBlank(req.getMemberLevel()) && req.getMemberLevel().equals(50)){
+                sortField = "vipPrice";
+                sortTpye = req.getPriceSort(); // 商品价格排序
+            }else if(StringUtils.isNotBlank(req.getMemberLevel()) && req.getMemberLevel().equals(60)){
+                sortField = "referencePrice";
+                sortTpye = req.getPriceSort(); // 商品价格排序
+            }
         }
-        if (StringUtils.isNotBlank(req.getIsDiscussPrice()) && req.getIsDiscussPrice().equals("1")) {//是否议价，需要嵌套查询xxx.xxx 是否议价 0-包含议价的商品，1-不含议价的商品
-            //boolQuery.must(QueryBuilders.rangeQuery("skuSellPriceJson").from(30).to(60).includeLower(true).includeUpper(true)); //适用价格区间查找
-            //boolQuery.mustNot();
-            //boolQuery.must(QueryBuilders.rangeQuery("skuSellPriceJson.price").gt(0));
-            boolQuery.mustNot(QueryBuilders.termQuery("skuSellPriceJson.price","0"));
+        if (StringUtils.isNotBlank(req.getIsDiscussPrice()) && req.getIsDiscussPrice().equals("1")) {//是否议价 0-包含议价的商品，1-不含议价的商品
+            if(StringUtils.isNotBlank(req.getMemberLevel()) && req.getMemberLevel().equals(40)){
+                boolQuery.must(QueryBuilders.rangeQuery("price").gt(0));
+            }else if(StringUtils.isNotBlank(req.getMemberLevel()) && req.getMemberLevel().equals(50)){
+                boolQuery.must(QueryBuilders.rangeQuery("vipPrice").gt(0));
+            }else if(StringUtils.isNotBlank(req.getMemberLevel()) && req.getMemberLevel().equals(60)){
+                boolQuery.must(QueryBuilders.rangeQuery("referencePrice").gt(0));
+            }
         }
         if (StringUtils.isNotBlank(req.getIsHaveHouse()) && req.getIsHaveHouse().equals("1")) {//是否入驻展厅 是否入驻 0-全部商品，1-入驻展厅的商品
-            //boolQuery.must();
             boolQuery.must(QueryBuilders.matchQuery("boothBusinessBoothCode","[*"));
         }
         boolQuery.must(QueryBuilders.termQuery("shelvesState.keyword", "1" ));
-        if(StringUtils.isEmpty(req.getKey())){
+        /*if(StringUtils.isEmpty(req.getKey())){
             QueryBuilder queryBuilder = QueryBuilders.matchAllQuery();
             ESPageRes esPageRes = ElasticsearchUtil.searchDataPage(indexName, pageNumber, pageSize, queryBuilder, fields, sortField, sortTpye, highlightField);
             return esPageRes;
         }else{
             ESPageRes esPageRes = ElasticsearchUtil.searchDataPage(indexName, pageNumber, pageSize, boolQuery, fields, sortField, sortTpye, highlightField);
             return esPageRes;
-        }
+        }*/
+        ESPageRes esPageRes = ElasticsearchUtil.searchDataPage(indexName, pageNumber, pageSize, boolQuery, fields, sortField, sortTpye, highlightField);
+        return esPageRes;
 
     }
 
@@ -620,9 +650,19 @@ public class ProductESServiceImpl implements ProductESService {
                         builder.endObject();
                         builder.startObject("shelvesState"); { builder.field("type", "keyword"); }
                         builder.endObject();
+                        builder.startObject("price"); { builder.field("type", "double"); }
+                        builder.endObject();
+                        builder.startObject("vipPrice"); { builder.field("type", "double"); }
+                        builder.endObject();
+                        builder.startObject("referencePrice"); { builder.field("type", "double"); }
+                        builder.endObject();
                         builder.startObject("remark1"); { builder.field("type", "keyword"); }
                         builder.endObject();
                         builder.startObject("remark2"); { builder.field("type", "keyword"); }
+                        builder.endObject();
+                        builder.startObject("remark3"); { builder.field("type", "keyword"); }
+                        builder.endObject();
+                        builder.startObject("remark4"); { builder.field("type", "keyword"); }
                         builder.endObject();
                     }
                     builder.endObject();
