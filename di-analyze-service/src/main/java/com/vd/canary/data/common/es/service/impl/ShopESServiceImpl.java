@@ -177,7 +177,12 @@ public class ShopESServiceImpl implements ShopESService {
         BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
         boolQuery.must(QueryBuilders.termsQuery("customerId", customerId));
         List<Map<String, Object>> list = ElasticsearchUtil.searchByQuery(indexName,boolQuery);
-        return list.get(0);
+        if(CollectionUtils.isNotEmpty(list)){
+            return list.get(0);
+        }else{
+            return new HashMap<>();
+        }
+
     }
 
     /**
