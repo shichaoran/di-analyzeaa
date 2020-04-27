@@ -40,4 +40,7 @@ public class ProductsBaseReq extends RequestPageBO  {
      * 是否入驻 0-全部商品，1-入驻展厅的商品
      */
     private String isHaveHouse;
+
+    // 会员级别，用来过滤议价  目前未使用(prive)  60尊享会员(vipPrice)  40普通会员&50vip会员(referencePrice)
+    private String memberLevel;
 }

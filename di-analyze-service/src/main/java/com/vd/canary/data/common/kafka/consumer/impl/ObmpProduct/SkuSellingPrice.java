@@ -8,12 +8,9 @@ import com.vd.canary.data.common.es.model.ProductsTO;
 import com.vd.canary.data.common.es.service.impl.ProductESServiceImpl;
 import com.vd.canary.data.common.es.service.impl.ShopESServiceImpl;
 import com.vd.canary.data.common.kafka.consumer.impl.Function;
-import com.vd.canary.data.util.StringUtil;
 import com.vd.canary.utils.JSONUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -22,7 +19,6 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -72,7 +68,6 @@ public class SkuSellingPrice implements Function {
             }
         }
 
-
     }
 
     public Map<String, Object> reSetValue(Map<String, Object> esMap,Map<String,Object> binlogMap){
@@ -85,13 +80,23 @@ public class SkuSellingPrice implements Function {
             esMap.put("skuSellPriceJson",JSONUtil.toJSONString(jsonarray) );
 
             if(obj.containsKey("price") && obj.get("price") != null ){
-                esMap.put("remark1",Double.parseDouble( "0" ) );
+                esMap.put("price",Double.parseDouble( "0" ) );
             }else{
-                //obj.put("price",Double.parseDouble( obj.get("price").toString() ));
-                esMap.put("remark1",Double.parseDouble( obj.get("price").toString() ) );
+                esMap.put("price",Double.parseDouble( obj.get("price").toString() ) );
+            }
+
+            if(obj.containsKey("vipPrice") && obj.get("vipPrice") != null ){
+                esMap.put("vipPrice",Double.parseDouble( "0" ) );
+            }else{
+                esMap.put("vipPrice",Double.parseDouble( obj.get("vipPrice").toString() ) );
+            }
+
+            if(obj.containsKey("referencePrice") && obj.get("referencePrice") != null ){
+                esMap.put("referencePrice",Double.parseDouble( "0" ) );
+            }else{
+                esMap.put("referencePrice",Double.parseDouble( obj.get("referencePrice").toString() ) );
             }
         }
-        System.out.println("------------SkuSellingPrice.reSetValue.json:"+esMap);
         return esMap;
     }
 
@@ -173,28 +178,22 @@ public class SkuSellingPrice implements Function {
         try {
             Map<String, Object> esShopMap = shopESService.findById(storeId);
             if(esShopMap != null){
-                if(businessCategory != null && businessCategory.size() > 0 ){
-                    JSONArray array = JSONArray.parseArray(JSONUtil.toJSONString(businessCategory));
-                    if(array != null){
-                        esShopMap.put("businessCategory", array);
-                    }
+                JSONArray array = JSONArray.parseArray(JSONUtil.toJSONString(businessCategory));
+                if(array != null){
+                    esShopMap.put("businessCategory", array);
                 }
-                if(businessBrand != null && businessBrand.size() > 0 ){
-                    try{
-                        JSONArray array = JSONArray.parseArray(JSONUtil.toJSONString(businessBrand));
-                        if(array != null){
-                            esShopMap.put("businessBrand",array);
-                        }
-                    }catch (Exception e) {
-                        e.printStackTrace();
-                    }
+
+                JSONArray array1 = JSONArray.parseArray(JSONUtil.toJSONString(businessBrand));
+                if(array != null){
+                    esShopMap.put("businessBrand",array1);
                 }
+
                 if(shopProductRes.size() >=3 ){
-                    JSONArray array = JSONArray.parseArray(JSONUtil.toJSONString(shopProductRes.subList(0,2)));
-                    esShopMap.put("shopProductRes",array);
+                    JSONArray array2 = JSONArray.parseArray(JSONUtil.toJSONString(shopProductRes.subList(0,2)));
+                    esShopMap.put("shopProductRes",array2);
                 }else{
-                    JSONArray array = JSONArray.parseArray(JSONUtil.toJSONString(shopProductRes));
-                    esShopMap.put("shopProductRes",JSONUtil.toJSONString(array));
+                    JSONArray array3 = JSONArray.parseArray(JSONUtil.toJSONString(shopProductRes));
+                    esShopMap.put("shopProductRes",JSONUtil.toJSONString(array3));
                 }
                 shopESService.updateShop(esShopMap);
             }
@@ -203,29 +202,7 @@ public class SkuSellingPrice implements Function {
         }
     }
 
-
-    /*public static void main(String[] args) {
-        String[] regulation = {"诸葛亮","鲁班","xzcx","貂蝉","吕布"};
-        final List<String> regulationOrder = Arrays.asList(regulation);
-        String[] ordered = {"nice","貂蝉","诸葛亮","xzcx","吕布","貂蝉","鲁班","诸葛亮","貂蝉","鲁班","诸葛亮","hahahahah","adsad"};
-        List<String> orderedList = Arrays.asList(ordered);
-        Collections.sort(orderedList, new Comparator<String>()
-        {
-            public int compare(String o1, String o2)
-            {
-                int io1 = regulationOrder.indexOf(o1);
-                int io2 = regulationOrder.indexOf(o2);
-                if(io1 == -1){
-                    return 1;
-                }
-                if(io2 == -1){
-                    return -1;
-                }
-                return io1 - io2;
-            }
-        });
-        System.out.println(orderedList);
-    }*/
+    /*
     public static class Person {
         private String id;
         private String name;
@@ -267,12 +244,10 @@ public class SkuSellingPrice implements Function {
         plist.add(p3);
         System.out.println("排序前的结果：" + JSONObject.toJSON(plist).toString());
         Collections.sort(plist, new Comparator<Person>(){
-            /*
-             * int compare(Person p1, Person p2) 返回一个基本类型的整型，
-             * 返回负数表示：p1 小于p2，
-             * 返回0 表示：p1和p2相等，
-             * 返回正数表示：p1大于p2
-             */
+            // int compare(Person p1, Person p2) 返回一个基本类型的整型，
+            // 返回负数表示：p1 小于p2，
+            // 返回0 表示：p1和p2相等，
+            // 返回正数表示：p1大于p2
             public int compare(Person p1, Person p2) {
                 //按照Person的年龄进行升序排列
                 if(p1.getAge() < p2.getAge()){
@@ -285,7 +260,7 @@ public class SkuSellingPrice implements Function {
             }
         });
         System.out.println("排序后的结果："+JSONObject.toJSON(plist).toString());
-    }
+    } */
 
 
 }
